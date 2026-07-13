@@ -1,0 +1,18 @@
+[tools]
+hk = { version = "latest", postinstall = "hk install --mise", depends = "pkl" }
+node = { version = "latest", postinstall = "npx corepack enable" }
+
+[env]
+_.file = ".env"
+_.path = ["{{config_root}}/node_modules/.bin"]
+HK_MISE = 1
+
+[settings]
+experimental = true
+env_shell_expand = true
+
+[tasks.pnpm-install]
+description = "Installs dependencies with pnpm"
+run = "pnpm install"
+sources = ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "mise.toml"]
+outputs = ["node_modules/.pnpm/lock.yaml"]
