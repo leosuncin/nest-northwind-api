@@ -1,0 +1,31 @@
+services:
+  workspace:
+    image: mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie
+    command: sleep infinity
+    user: node
+    volumes:
+      - ..:/workspaces/nest-northwind-api:cached
+    network_mode: service:sql-server
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: mssql
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_PID: ${MSSQL_PID:-Developer}
+      MSSQL_LCID: 3082
+      MSSQL_ENABLE_HADR: "1"
+      MSSQL_AGENT_ENABLED: "true"
+      MSSQL_DB: ${MSSQL_DB:-northwind}
+      MSSQL_USER: ${MSSQL_USER:-instnwnd}
+      MSSQL_PASSWORD: ${MSSQL_PASSWORD}
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    volumes:
+      - sql-server-data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -h -1 -t 1 -C -b -U $${MSSQL_USER:-sa} -P $${MSSQL_PASSWORD:-MSSQL_SA_PASSWORD} -Q "SELECT name FROM sys.databases WHERE name = N'$${MSSQL_DB:-master}'"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  sql-server-data:
