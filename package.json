@@ -18,7 +18,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --selectProjects E2E",
     "test:watch": "jest --watch",
-    "typeorm": "typeorm-ts-node-commonjs -d data-source"
+    "typeorm": "typeorm-ts-node-commonjs -d data-source",
+    "typeorm-extension": "ts-node -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.mjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -60,6 +61,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typeorm-extension": "4.0.0-beta.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
