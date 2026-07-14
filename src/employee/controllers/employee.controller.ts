@@ -18,12 +18,13 @@ import {
 import { EmployeeService } from '../services/employee.service';
 import { CreateEmployee } from '../dto/create-employee.dto';
 import { UpdateEmployee } from '../dto/update-employee.dto';
-import { EmployeeFilter } from '../filters/employee.filter';
 import { EmployeePipe } from '../pipes/employee.pipe';
 import { Employee } from '../entities/employee.entity';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
 
 @Controller('employee')
-@UseFilters(EmployeeFilter)
+@UseFilters(EntityNotFoundFilter)
 @UseInterceptors(ClassSerializerInterceptor)
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
@@ -35,6 +36,7 @@ export class EmployeeController {
   }
 
   @Get()
+  @UseInterceptors(PaginationInterceptor)
   findAll(
     @Query('page', new ParseIntPipe({ optional: true })) page = 1,
     @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,

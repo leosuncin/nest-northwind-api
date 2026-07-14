@@ -6,12 +6,14 @@ import typeormOptions from './config/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmployeeModule } from './employee/employee.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, expandVariables: true }),
     TypeOrmModule.forRootAsync(typeormOptions.asProvider()),
     EmployeeModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
