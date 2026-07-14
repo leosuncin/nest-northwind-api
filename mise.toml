@@ -1,6 +1,7 @@
 [tools]
 hk = { version = "latest", postinstall = "hk install --mise", depends = "pkl" }
 node = { version = "latest", postinstall = "npx corepack enable" }
+opencode = "latest"
 
 [env]
 MSSQL_DB = "northwind"
