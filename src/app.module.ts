@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmployeeModule } from './employee/employee.module';
 import { SharedModule } from './shared/shared.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SharedModule } from './shared/shared.module';
     TypeOrmModule.forRootAsync(typeormOptions.asProvider()),
     EmployeeModule,
     SharedModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
