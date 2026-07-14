@@ -1,22 +1,26 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { TestBed } from '@suites/unit';
+import type { Mocked } from '@suites/doubles.jest';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 describe('AppController', () => {
-  let appController: AppController;
+  let controller: AppController;
+  let service: Mocked<AppService>;
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
-    }).compile();
+    const { unit, unitRef } = await TestBed.solitary(AppController).compile();
 
-    appController = app.get<AppController>(AppController);
+    controller = unit;
+    service = unitRef.get(AppService) as unknown as Mocked<AppService>;
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
-    });
+  test('given a request when getHello then it delegates to the service', () => {
+    service.getHello.mockReturnValue('Hello World!');
+
+    const result = controller.getHello();
+
+    expect(result).toBe('Hello World!');
+    expect(service.getHello).toHaveBeenCalled();
   });
 });

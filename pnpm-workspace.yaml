@@ -1,2 +1,4 @@
 allowBuilds:
+  '@suites/di.nestjs': true
+  '@suites/doubles.jest': true
   unrs-resolver: true

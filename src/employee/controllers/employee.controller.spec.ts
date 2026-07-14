@@ -1,21 +1,90 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { TestBed } from '@suites/unit';
+import type { Mocked } from '@suites/doubles.jest';
 
 import { EmployeeController } from './employee.controller';
 import { EmployeeService } from '../services/employee.service';
+import { CreateEmployee } from '../dto/create-employee.dto';
+import { UpdateEmployee } from '../dto/update-employee.dto';
+import { Employee } from '../entities/employee.entity';
 
 describe('EmployeeController', () => {
   let controller: EmployeeController;
+  let service: Mocked<EmployeeService>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [EmployeeController],
-      providers: [EmployeeService],
-    }).compile();
+    const { unit, unitRef } =
+      await TestBed.solitary(EmployeeController).compile();
 
-    controller = module.get<EmployeeController>(EmployeeController);
+    controller = unit;
+    service = unitRef.get(
+      EmployeeService,
+    ) as unknown as Mocked<EmployeeService>;
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  test('given a valid dto when create then it delegates to the service', async () => {
+    const createEmployee: CreateEmployee = {
+      firstName: 'John',
+      lastName: 'Doe',
+    };
+    const createdEmployee = { id: 1, ...createEmployee } as Employee;
+
+    service.create.mockResolvedValue(createdEmployee);
+
+    const result = await controller.create(createEmployee);
+
+    expect(result).toEqual(createdEmployee);
+    expect(service.create).toHaveBeenCalledWith(createEmployee);
+  });
+
+  test('given a page and limit when findAll then it delegates to the service', async () => {
+    const page = 2;
+    const limit = 5;
+    const employees: [Employee[], number] = [
+      [{ id: 1, firstName: 'John', lastName: 'Doe' }],
+      1,
+    ];
+
+    service.findAll.mockResolvedValue(employees);
+
+    const result = await controller.findAll(page, limit);
+
+    expect(result).toEqual(employees);
+    expect(service.findAll).toHaveBeenCalledWith(page, limit);
+  });
+
+  test('given an id when findOne then it delegates to the service', async () => {
+    const id = 1;
+    const employee = { id, firstName: 'John', lastName: 'Doe' } as Employee;
+
+    service.findOne.mockResolvedValue(employee);
+
+    const result = await controller.findOne(id);
+
+    expect(result).toEqual(employee);
+    expect(service.findOne).toHaveBeenCalledWith(id);
+  });
+
+  test('given an employee and changes when update then it delegates to the service', async () => {
+    const employee = { id: 1, firstName: 'John', lastName: 'Doe' } as Employee;
+    const changes: UpdateEmployee = { firstName: 'Jane' };
+    const updatedEmployee = { ...employee, ...changes };
+
+    service.update.mockResolvedValue(updatedEmployee);
+
+    const result = await controller.update(employee, changes);
+
+    expect(result).toEqual(updatedEmployee);
+    expect(service.update).toHaveBeenCalledWith(employee, changes);
+  });
+
+  test('given an employee when remove then it delegates to the service', async () => {
+    const employee = { id: 1, firstName: 'John', lastName: 'Doe' } as Employee;
+
+    service.remove.mockResolvedValue(employee);
+
+    const result = await controller.remove(employee);
+
+    expect(result).toEqual(employee);
+    expect(service.remove).toHaveBeenCalledWith(employee);
   });
 });
