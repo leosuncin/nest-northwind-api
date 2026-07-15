@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { EmployeeModule } from './employee/employee.module';
 import { SharedModule } from './shared/shared.module';
 import { CategoryModule } from './category/category.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CategoryModule } from './category/category.module';
     EmployeeModule,
     SharedModule,
     CategoryModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
