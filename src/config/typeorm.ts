@@ -5,12 +5,16 @@ import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export default registerAs('typeorm', (): TypeOrmModuleOptions => {
   const username = process.env.MSSQL_USER ?? 'instnwnd';
-  ok(
-    username === 'sa'
-      ? process.env.MSSQL_SA_PASSWORD
-      : process.env.MSSQL_PASSWORD,
-    'MSSQL_PASSWORD environment variable is not set',
-  );
+
+  if (!process.env.CI) {
+    ok(
+      username === 'sa'
+        ? process.env.MSSQL_SA_PASSWORD
+        : process.env.MSSQL_PASSWORD,
+      'MSSQL_PASSWORD environment variable is not set',
+    );
+  }
+
   const password =
     username === 'sa'
       ? process.env.MSSQL_SA_PASSWORD
