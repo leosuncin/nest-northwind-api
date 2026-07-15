@@ -27,6 +27,7 @@ const options: DataSourceOptions & SeederOptions = {
   subscribers: ['src/**/*.subscriber.ts'],
   migrations: ['src/database/migrations/*.ts'],
   seeds: ['src/database/seeds/*.seeder.ts'],
+  factories: ['src/database/factories/*.factory.ts'],
   options: {
     encrypt: false,
     trustServerCertificate: true,

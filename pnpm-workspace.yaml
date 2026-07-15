@@ -1,4 +1,7 @@
 allowBuilds:
   '@suites/di.nestjs': true
   '@suites/doubles.jest': true
+  cpu-features: true
+  protobufjs: true
+  ssh2: true
   unrs-resolver: true
