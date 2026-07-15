@@ -24,6 +24,19 @@ export default {
       moduleDirectories: ['node_modules', process.cwd()],
       moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths ?? {}),
       preset: 'ts-jest',
+      transform: {
+        '^.+\\.tsx?$': [
+          'ts-jest',
+          {
+            useESM: true,
+            tsconfig: {
+              module: 'ESNext',
+              moduleResolution: 'Bundler',
+            },
+          },
+        ],
+      },
+      extensionsToTreatAsEsm: ['.ts'],
       testTimeout: 30_000,
       rootDir: 'test',
       testEnvironment: 'node',

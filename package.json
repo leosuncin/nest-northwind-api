@@ -14,9 +14,9 @@
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
     "test": "jest --selectProjects DEFAULT",
-    "test:cov": "jest --coverage",
+    "test:cov": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --selectProjects E2E",
+    "test:e2e": "node --experimental-vm-modules node_modules/jest/bin/jest.js --selectProjects E2E",
     "test:watch": "jest --watch",
     "typeorm": "typeorm-ts-node-commonjs -d data-source",
     "typeorm-extension": "ts-node -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.mjs"
