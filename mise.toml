@@ -1,6 +1,6 @@
 [tools]
 hk = { version = "latest", postinstall = "hk install --mise", depends = "pkl" }
-node = { version = "latest", postinstall = "npx corepack enable" }
+node = { version = "latest", postinstall = "corepack enable", depends = "npm:corepack" }
 opencode = "latest"
 
 [env]
@@ -15,6 +15,10 @@ HK_MISE = 1
 [settings]
 experimental = true
 env_shell_expand = true
+node.corepack = true
+
+[hooks]
+postinstall = { task = "pnpm-install" }
 
 [tasks.pnpm-install]
 description = "Installs dependencies with pnpm"
