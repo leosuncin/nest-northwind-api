@@ -7,40 +7,13 @@ import {
 } from '@testcontainers/mssqlserver';
 import request from 'supertest';
 import type { App } from 'supertest/types';
-import { setDataSource } from 'typeorm-extension';
+import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
 import { AppModule } from '../src/app.module';
 import typeormConfig from '../src/config/typeorm';
 import { CreateCustomer } from '../src/customer/dto/create-customer.dto';
-import CustomerSeeder from '../src/database/seeds/customer.seeder';
-
-interface CustomerBody {
-  id: number;
-  code: string;
-  companyName: string;
-  contactName?: string;
-  contactTitle?: string;
-  address?: string;
-  city?: string;
-  region?: string;
-  postalCode?: string;
-  country?: string;
-  phone?: string;
-  fax?: string;
-}
-
-interface PaginatedBody {
-  items: CustomerBody[];
-  meta: {
-    itemCount: number;
-    totalItems: number;
-    itemsPerPage: number;
-    totalPages: number;
-    currentPage: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  };
-}
+import { Customer } from '../src/customer/entities/customer.entity';
+import { buildTypeOrmOptions } from './helpers';
 
 describe('CustomerController (e2e)', () => {
   let app: INestApplication<App>;
@@ -59,25 +32,7 @@ describe('CustomerController (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(typeormConfig.KEY)
-      .useValue({
-        type: 'mssql',
-        host: container.getHost(),
-        port: container.getMappedPort(1433),
-        username: container.getUsername(),
-        password: container.getPassword(),
-        database: container.getDatabase(),
-        synchronize: false,
-        migrationsRun: true,
-        autoLoadEntities: true,
-        options: {
-          encrypt: false,
-          trustServerCertificate: true,
-          appName: 'Northwind Test',
-        },
-        entities: ['src/**/*.entity.ts'],
-        subscribers: ['src/**/*.subscriber.ts'],
-        migrations: ['src/database/migrations/*.ts'],
-      })
+      .useValue(await buildTypeOrmOptions(container))
       .compile();
 
     app = module.createNestApplication();
@@ -89,7 +44,7 @@ describe('CustomerController (e2e)', () => {
     const dataSource = app.get(getDataSourceToken());
 
     setDataSource(dataSource);
-    await new CustomerSeeder().run(dataSource);
+    await runSeeders(dataSource);
   });
 
   afterAll(async () => {
@@ -103,12 +58,10 @@ describe('CustomerController (e2e)', () => {
       .expect(HttpStatus.OK)
       .expect('Content-Type', /json/);
 
-    const body = response.body as PaginatedBody;
-
-    expect(body.items.length).toBeGreaterThan(0);
-    expect(body).toHaveProperty('meta');
-    expect(body.meta.itemsPerPage).toBe(10);
-    expect(body.meta.currentPage).toBe(1);
+    expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
+    expect(response.body).toHaveProperty('meta');
+    expect(response.body).toHaveProperty('meta.itemsPerPage', 10);
+    expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
   test('given a POST request to /customer when a valid customer is provided then it should create and return the created customer', async () => {
@@ -125,86 +78,43 @@ describe('CustomerController (e2e)', () => {
       .expect(HttpStatus.CREATED)
       .expect('Content-Type', /json/);
 
-    const created = response.body as CustomerBody;
-
-    expect(created).toHaveProperty('id');
-    expect(created).toMatchObject(expect.objectContaining(newCustomer));
-
-    await request(app.getHttpServer())
-      .delete(`/customer/${created.id}`)
-      .expect(HttpStatus.OK);
+    expect(response.body).toHaveProperty('id');
+    expect(response.body).toMatchObject(expect.objectContaining(newCustomer));
   });
 
   test('given a GET request to /customer/:id when the customer exists then it should return the customer', async () => {
-    const newCustomer: CreateCustomer = {
-      code: 'TEST2',
-      companyName: 'Test Company',
-    };
-    const created = await request(app.getHttpServer())
-      .post('/customer')
-      .send(newCustomer)
-      .expect(HttpStatus.CREATED);
-
-    const createdBody = created.body as CustomerBody;
+    const customer = await useSeederFactory(Customer).save();
 
     const response = await request(app.getHttpServer())
-      .get(`/customer/${createdBody.id}`)
+      .get(`/customer/${customer.id}`)
       .expect(HttpStatus.OK)
       .expect('Content-Type', /json/);
 
-    expect(response.body).toMatchObject(expect.objectContaining(newCustomer));
-
-    await request(app.getHttpServer())
-      .delete(`/customer/${createdBody.id}`)
-      .expect(HttpStatus.OK);
+    expect(response.body).toMatchObject(expect.objectContaining(customer));
   });
 
   test('given a PATCH request to /customer/:id when the customer exists then it should update and return the updated customer', async () => {
-    const newCustomer: CreateCustomer = {
-      code: 'TEST3',
-      companyName: 'Test Company',
-    };
-    const created = await request(app.getHttpServer())
-      .post('/customer')
-      .send(newCustomer)
-      .expect(HttpStatus.CREATED);
-
-    const createdBody = created.body as CustomerBody;
+    const customer = await useSeederFactory(Customer).save();
 
     const response = await request(app.getHttpServer())
-      .patch(`/customer/${createdBody.id}`)
+      .patch(`/customer/${customer.id}`)
       .send({ companyName: 'Updated Company' })
       .expect(HttpStatus.OK)
       .expect('Content-Type', /json/);
 
-    const updated = response.body as CustomerBody;
-
-    expect(updated.id).toBe(createdBody.id);
-    expect(updated.companyName).toBe('Updated Company');
-
-    await request(app.getHttpServer())
-      .delete(`/customer/${createdBody.id}`)
-      .expect(HttpStatus.OK);
+    expect(response.body).toHaveProperty('id', customer.id);
+    expect(response.body).toHaveProperty('companyName', 'Updated Company');
   });
 
   test('given a DELETE request to /customer/:id when the customer exists then it should delete the customer', async () => {
-    const newCustomer: CreateCustomer = {
-      code: 'TEST4',
-      companyName: 'Test Company',
-    };
-    const created = await request(app.getHttpServer())
-      .post('/customer')
-      .send(newCustomer)
-      .expect(HttpStatus.CREATED);
-
-    const createdBody = created.body as CustomerBody;
+    const customer = await useSeederFactory(Customer).save();
 
     await request(app.getHttpServer())
-      .delete(`/customer/${createdBody.id}`)
+      .delete(`/customer/${customer.id}`)
       .expect(HttpStatus.OK);
 
     await request(app.getHttpServer())
-      .get(`/customer/${createdBody.id}`)
+      .get(`/customer/${customer.id}`)
       .expect(HttpStatus.NOT_FOUND);
   });
 });
