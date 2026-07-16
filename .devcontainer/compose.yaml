@@ -7,7 +7,7 @@ services:
       - ..:/workspaces/nest-northwind-api:cached
     network_mode: service:sql-server
   sql-server:
-    image: mcr.microsoft.com/mssql/server:2022-latest@sha256:fc010e5c955453eabc4a24d2f304103e26176fe89796b564f039c45e77a8ebc1
+    image: mcr.microsoft.com/mssql/server:2022-latest@sha256:ba4c8329f48fb8f02e1416be6a930ebfd71268caee78aa985f3af4315e457c89
     user: mssql
     environment:
       ACCEPT_EULA: Y
