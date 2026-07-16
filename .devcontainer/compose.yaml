@@ -1,13 +1,13 @@
 services:
   workspace:
-    image: mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie
+    image: mcr.microsoft.com/devcontainers/typescript-node:4-24-trixie@sha256:0cbad76d1987fd35fd78cbc58cbe8c2aa93a8daa45411e52c6c6b63ea2dae202
     command: sleep infinity
     user: node
     volumes:
       - ..:/workspaces/nest-northwind-api:cached
     network_mode: service:sql-server
   sql-server:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest@sha256:fc010e5c955453eabc4a24d2f304103e26176fe89796b564f039c45e77a8ebc1
     user: mssql
     environment:
       ACCEPT_EULA: Y
