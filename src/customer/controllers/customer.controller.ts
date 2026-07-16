@@ -52,14 +52,14 @@ export class CustomerController {
   @Patch(':id')
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   update(
-    @Param('id', CustomerPipe) customer: Customer,
+    @Param('id', ParseIntPipe, CustomerPipe) customer: Customer,
     @Body() updateCustomer: UpdateCustomer,
   ) {
     return this.customerService.update(customer, updateCustomer);
   }
 
   @Delete(':id')
-  remove(@Param('id', CustomerPipe) customer: Customer) {
+  remove(@Param('id', ParseIntPipe, CustomerPipe) customer: Customer) {
     return this.customerService.remove(customer);
   }
 }
