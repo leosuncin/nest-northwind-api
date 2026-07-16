@@ -1474,8 +1474,12 @@ async function upsert(
   });
 
   if (entity) {
-    const { id, code, ...partialEntity } = customer;
-    await repository.update({ code }, partialEntity);
+    const partialEntity = Object.fromEntries(
+      Object.entries(customer).filter(
+        ([key]) => key !== 'id' && key !== 'code',
+      ),
+    ) as Partial<Customer>;
+    await repository.update({ code: customer.code }, partialEntity);
   } else {
     await repository.insert(customer);
   }
