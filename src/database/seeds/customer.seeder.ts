@@ -1474,9 +1474,8 @@ async function upsert(
   });
 
   if (entity) {
-    repository.merge(entity, customer);
-
-    await repository.save(entity);
+    const { id, code, ...partialEntity } = customer;
+    await repository.update({ code }, partialEntity);
   } else {
     await repository.insert(customer);
   }
