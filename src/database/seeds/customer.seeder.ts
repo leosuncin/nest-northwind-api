@@ -1468,19 +1468,10 @@ async function upsert(
   repository: Repository<Customer>,
   customer: Customer,
 ): Promise<void> {
-  const entity = await repository.findOne({
-    where: { code: customer.code },
-    select: { id: true, code: true },
-  });
+  const { code, id: _, ...partialEntity } = customer;
+  const result = await repository.update({ code }, partialEntity);
 
-  if (entity) {
-    const partialEntity = Object.fromEntries(
-      Object.entries(customer).filter(
-        ([key]) => key !== 'id' && key !== 'code',
-      ),
-    ) as Partial<Customer>;
-    await repository.update({ code: customer.code }, partialEntity);
-  } else {
+  if (result.affected === 0) {
     await repository.insert(customer);
   }
 }
