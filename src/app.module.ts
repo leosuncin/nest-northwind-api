@@ -9,6 +9,7 @@ import { EmployeeModule } from './employee/employee.module';
 import { SharedModule } from './shared/shared.module';
 import { CategoryModule } from './category/category.module';
 import { CustomerModule } from './customer/customer.module';
+import { ShipperModule } from './shipper/shipper.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CustomerModule } from './customer/customer.module';
     SharedModule,
     CategoryModule,
     CustomerModule,
+    ShipperModule,
   ],
   controllers: [AppController],
   providers: [AppService],
