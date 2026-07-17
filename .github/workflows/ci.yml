@@ -68,7 +68,7 @@ jobs:
 
   e2e:
     name: E2E tests
-    needs: unit
+    needs: format-lint
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -89,3 +89,59 @@ jobs:
 
       - name: E2E tests
         run: pnpm test:e2e
+
+  migrations:
+    name: Migrations
+    needs: format-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          MSSQL_SA_PASSWORD: 'A1!${{ github.run_id }}a'
+          ACCEPT_EULA: 'Y'
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -h -1 -t 1 -C -b -U sa -P $MSSQL_SA_PASSWORD -Q 'SELECT 1'"
+          --health-interval 20s
+          --health-timeout 10s
+          --health-start-period 15s
+          --health-retries 10
+    env:
+      MSSQL_PORT: '1433'
+      MSSQL_DB: master
+      MSSQL_USER: sa
+      MSSQL_SA_PASSWORD: 'A1!${{ github.run_id }}a'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 26
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm ci
+
+      - name: Run migrations
+        run: pnpm typeorm migration:run
+
+      - name: Reverse migrations
+        run: |
+          set -euo pipefail
+          COUNT=$(ls src/database/migrations/*.ts | wc -l)
+          for i in $(seq 1 "$COUNT"); do
+            pnpm typeorm migration:revert
+          done
+
+      - name: Run seeds
+        run: |
+          pnpm typeorm migration:run
+          pnpm typeorm-extension seed:run
