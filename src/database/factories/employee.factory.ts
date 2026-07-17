@@ -1,6 +1,7 @@
 import { setSeederFactory } from 'typeorm-extension';
 
 import { Employee } from '../../employee/entities/employee.entity';
+import { roundDateToDay } from '../../shared/utils/date.utils';
 
 export const employeeFactory = setSeederFactory(Employee, (faker) => {
   const employee = new Employee();
@@ -14,12 +15,14 @@ export const employeeFactory = setSeederFactory(Employee, (faker) => {
     'Mrs.',
     'Dr.',
   ]);
-  employee.birthDate = faker.date.birthdate({
-    min: 1950,
-    max: 2000,
-    mode: 'year',
-  });
-  employee.hireDate = faker.date.past({ years: 10 });
+  employee.birthDate = roundDateToDay(
+    faker.date.birthdate({
+      min: 1950,
+      max: 2000,
+      mode: 'year',
+    }),
+  );
+  employee.hireDate = roundDateToDay(faker.date.past({ years: 10 }));
   employee.address = faker.location.streetAddress().substring(0, 60);
   employee.city = faker.location.city().substring(0, 15);
   employee.region = faker.location.state().substring(0, 15);
