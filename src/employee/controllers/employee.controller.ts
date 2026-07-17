@@ -22,6 +22,7 @@ import { EmployeePipe } from '../pipes/employee.pipe';
 import { Employee } from '../entities/employee.entity';
 import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
 import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
 
 @Controller('employee')
 @UseFilters(EntityNotFoundFilter)
@@ -38,8 +39,10 @@ export class EmployeeController {
   @Get()
   @UseInterceptors(PaginationInterceptor)
   findAll(
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
+    page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
+    limit = 10,
   ) {
     return this.employeeService.findAll(page, limit);
   }
