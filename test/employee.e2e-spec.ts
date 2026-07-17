@@ -7,17 +7,14 @@ import {
 } from '@testcontainers/mssqlserver';
 import request from 'supertest';
 import type { App } from 'supertest/types';
-import { runSeeders, setDataSource } from 'typeorm-extension';
+import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
 import { AppModule } from '../src/app.module';
 import typeormConfig from '../src/config/typeorm';
+import type { CreateEmployee } from '../src/employee/dto/create-employee.dto';
+import type { UpdateEmployee } from '../src/employee/dto/update-employee.dto';
 import { Employee } from '../src/employee/entities/employee.entity';
-import { CreateEmployeeTable1783971451030 } from '../src/database/migrations/1783971451030-create-employee-table';
-import EmployeeSeeder from '../src/database/seeds/employee.seeder';
-import { employeeFactory } from '../src/database/factories/employee.factory';
-import { CreateEmployee } from '../src/employee/dto/create-employee.dto';
-import { UpdateEmployee } from '../src/employee/dto/update-employee.dto';
-import { EmployeeService } from '../src/employee/services/employee.service';
+import { buildTypeOrmOptions } from './helpers';
 
 describe('EmployeeController (e2e)', () => {
   let app: INestApplication<App>;
@@ -36,29 +33,7 @@ describe('EmployeeController (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(typeormConfig.KEY)
-      .useValue({
-        type: 'mssql',
-        host: 'localhost',
-        port: container.getMappedPort(1433),
-        username: container.getUsername(),
-        password: container.getPassword(),
-        database: container.getDatabase(),
-        synchronize: false,
-        migrationsRun: true,
-        retryAttempts: 10,
-        retryDelay: 2000,
-        autoLoadEntities: true,
-        options: {
-          encrypt: false,
-          trustServerCertificate: true,
-          appName: 'Northwind Test',
-        },
-        entities: [Employee],
-        subscribers: [],
-        migrations: [CreateEmployeeTable1783971451030],
-        seeds: [EmployeeSeeder],
-        factories: [employeeFactory],
-      })
+      .useValue(await buildTypeOrmOptions(container))
       .compile();
 
     app = module.createNestApplication();
@@ -137,9 +112,10 @@ describe('EmployeeController (e2e)', () => {
   });
 
   test('given a GET request to /employee/:id when the employee exists then it should return the employee', async () => {
-    const employee = await app
-      .get(EmployeeService)
-      .create({ firstName: 'Jane', lastName: 'Doe' });
+    const employee = await useSeederFactory(Employee).save({
+      firstName: 'Jane',
+      lastName: 'Doe',
+    });
 
     const response = await request(app.getHttpServer())
       .get(`/employee/${employee.id}`)
@@ -147,13 +123,20 @@ describe('EmployeeController (e2e)', () => {
       .expect('Content-Type', /json/);
 
     delete employee.reportsTo;
-    expect(response.body).toMatchObject(expect.objectContaining(employee));
+    expect(response.body).toMatchObject(
+      expect.objectContaining({
+        ...employee,
+        birthDate: employee.birthDate?.toISOString().substring(0, 10),
+        hireDate: employee.hireDate?.toISOString().substring(0, 10),
+      }),
+    );
   });
 
   test('given a PATCH request to /employee/:id when the employee exists then it should update and return the updated employee', async () => {
-    const employee = await app
-      .get(EmployeeService)
-      .create({ firstName: 'Jane', lastName: 'Doe' });
+    const employee = await useSeederFactory(Employee).save({
+      firstName: 'Jane',
+      lastName: 'Doe',
+    });
     const updatedData: UpdateEmployee = {
       lastName: 'Smith',
       firstName: 'John',
@@ -170,9 +153,10 @@ describe('EmployeeController (e2e)', () => {
   });
 
   test('given a DELETE request to /employee/:id when the employee exists then it should delete the employee', async () => {
-    const employee = await app
-      .get(EmployeeService)
-      .create({ firstName: 'Jane', lastName: 'Doe' });
+    const employee = await useSeederFactory(Employee).save({
+      firstName: 'Jane',
+      lastName: 'Doe',
+    });
 
     await request(app.getHttpServer())
       .delete(`/employee/${employee.id}`)
