@@ -63,6 +63,18 @@ describe('SupplierController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
+  test('given a GET request to /supplier when page is zero then it returns a validation error', async () => {
+    await request(app.getHttpServer())
+      .get('/supplier?page=0')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a GET request to /supplier when limit is negative then it returns a validation error', async () => {
+    await request(app.getHttpServer())
+      .get('/supplier?limit=-1')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
   test('given a POST request to /supplier when a valid supplier is provided then it creates and returns it', async () => {
     const newSupplier: CreateSupplier = {
       companyName: 'Test Supplier',

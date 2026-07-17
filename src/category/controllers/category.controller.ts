@@ -22,6 +22,7 @@ import { Category } from '../entities/category.entity';
 import { CategoryPipe } from '../pipes/category.pipe';
 import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
 import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
 
 @Controller('category')
 @UseFilters(EntityNotFoundFilter)
@@ -38,8 +39,10 @@ export class CategoryController {
   @Get()
   @UseInterceptors(PaginationInterceptor)
   findAll(
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
+    page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
+    limit = 10,
   ) {
     return this.categoryService.findAll(page, limit);
   }

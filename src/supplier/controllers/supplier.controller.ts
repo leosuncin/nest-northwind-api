@@ -17,6 +17,7 @@ import {
 
 import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
 import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
 import { CreateSupplier } from '../dto/create-supplier.dto';
 import { UpdateSupplier } from '../dto/update-supplier.dto';
 import { Supplier } from '../entities/supplier.entity';
@@ -38,8 +39,10 @@ export class SupplierController {
   @Get()
   @UseInterceptors(PaginationInterceptor)
   findAll(
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit = 10,
+    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
+    page = 1,
+    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
+    limit = 10,
   ) {
     return this.supplierService.findAll(page, limit);
   }
