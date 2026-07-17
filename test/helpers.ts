@@ -4,7 +4,11 @@ import { pathToFileURL } from 'node:url';
 
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import type { StartedMSSQLServerContainer } from '@testcontainers/mssqlserver';
-import type { DataSourceOptions, MigrationInterface } from 'typeorm';
+import type {
+  DataSourceOptions,
+  MigrationInterface,
+  EntitySubscriberInterface,
+} from 'typeorm';
 import type {
   Seeder,
   SeederFactoryItem,
@@ -12,6 +16,7 @@ import type {
 } from 'typeorm-extension';
 
 type Migration = new () => MigrationInterface;
+type Subscriber = new () => EntitySubscriberInterface;
 type Seed = new () => Seeder;
 
 export async function buildTypeOrmOptions(
@@ -30,12 +35,28 @@ export async function buildTypeOrmOptions(
     migrations.push(Object.values(migration)[0]);
   }
 
+  const subscribers: Subscriber[] = [];
+
+  for await (const file of glob(
+    join(process.cwd(), 'src/**/*.subscriber.ts'),
+  )) {
+    const subscriber = (await import(pathToFileURL(file).href)) as Record<
+      string,
+      Subscriber
+    >;
+
+    subscribers.push(Object.values(subscriber)[0]);
+  }
+
   const seeds: Seed[] = [];
 
   for await (const file of glob(
     join(process.cwd(), 'src/database/seeds/*.seeder.ts'),
   )) {
-    const seed = (await import(pathToFileURL(file).href)) as { default: Seed };
+    const seed = (await import(pathToFileURL(file).href)) as {
+      default: Seed;
+      [fixture: string]: object;
+    };
 
     seeds.push(seed.default);
   }
@@ -67,7 +88,7 @@ export async function buildTypeOrmOptions(
       trustServerCertificate: true,
       appName: 'Northwind Test',
     },
-    subscribers: ['src/**/*.subscriber.ts'],
+    subscribers,
     migrations,
     seeds,
     factories,

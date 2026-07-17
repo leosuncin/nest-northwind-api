@@ -7,17 +7,14 @@ import {
 } from '@testcontainers/mssqlserver';
 import request from 'supertest';
 import type { App } from 'supertest/types';
-import { runSeeders, setDataSource } from 'typeorm-extension';
+import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
 import { AppModule } from '../src/app.module';
-import typeormConfig from '../src/config/typeorm';
+import type { CreateCategory } from '../src/category/dto/create-category.dto';
+import type { UpdateCategory } from '../src/category/dto/update-category.dto';
 import { Category } from '../src/category/entities/category.entity';
-import { CreateCategoryTable1783971500000 } from '../src/database/migrations/1783971500000-create-category-table';
-import CategorySeeder from '../src/database/seeds/category.seeder';
-import { categoryFactory } from '../src/database/factories/category.factory';
-import { CreateCategory } from '../src/category/dto/create-category.dto';
-import { UpdateCategory } from '../src/category/dto/update-category.dto';
-import { CategoryService } from '../src/category/services/category.service';
+import typeormConfig from '../src/config/typeorm';
+import { buildTypeOrmOptions } from './helpers';
 
 describe('CategoryController (e2e)', () => {
   let app: INestApplication<App>;
@@ -36,29 +33,7 @@ describe('CategoryController (e2e)', () => {
       imports: [AppModule],
     })
       .overrideProvider(typeormConfig.KEY)
-      .useValue({
-        type: 'mssql',
-        host: 'localhost',
-        port: container.getMappedPort(1433),
-        username: container.getUsername(),
-        password: container.getPassword(),
-        database: container.getDatabase(),
-        synchronize: false,
-        migrationsRun: true,
-        retryAttempts: 10,
-        retryDelay: 2000,
-        autoLoadEntities: true,
-        options: {
-          encrypt: false,
-          trustServerCertificate: true,
-          appName: 'Northwind Test',
-        },
-        entities: [Category],
-        subscribers: [],
-        migrations: [CreateCategoryTable1783971500000],
-        seeds: [CategorySeeder],
-        factories: [categoryFactory],
-      })
+      .useValue(await buildTypeOrmOptions(container))
       .compile();
 
     app = module.createNestApplication();
@@ -113,9 +88,9 @@ describe('CategoryController (e2e)', () => {
   });
 
   test('given a GET request to /category/:id when the category exists then it should return the category', async () => {
-    const category = await app
-      .get(CategoryService)
-      .create({ name: 'Junk food' });
+    const category = await useSeederFactory(Category).save({
+      name: 'Junk food',
+    });
 
     const response = await request(app.getHttpServer())
       .get(`/category/${category.id}`)
@@ -126,9 +101,9 @@ describe('CategoryController (e2e)', () => {
   });
 
   test('given a PATCH request to /category/:id when the category exists then it should update and return the updated category', async () => {
-    const category = await app
-      .get(CategoryService)
-      .create({ name: 'Junk food' });
+    const category = await useSeederFactory(Category).save({
+      name: 'Junk food',
+    });
     const updatedData: UpdateCategory = {
       name: 'Healthy food',
     };
@@ -144,9 +119,9 @@ describe('CategoryController (e2e)', () => {
   });
 
   test('given a DELETE request to /category/:id when the category exists then it should delete the category', async () => {
-    const category = await app
-      .get(CategoryService)
-      .create({ name: 'Junk food' });
+    const category = await useSeederFactory(Category).save({
+      name: 'Junk food',
+    });
 
     await request(app.getHttpServer())
       .delete(`/category/${category.id}`)
