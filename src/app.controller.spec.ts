@@ -1,5 +1,5 @@
 import { TestBed } from '@suites/unit';
-import type { Mocked } from '@suites/doubles.jest';
+import type { Mocked } from '@suites/doubles.vitest';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

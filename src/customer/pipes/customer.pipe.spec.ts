@@ -1,5 +1,5 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Mocked } from '@suites/doubles.jest';
+import type { Mocked } from '@suites/doubles.vitest';
 import { TestBed } from '@suites/unit';
 import type { Repository } from 'typeorm';
 

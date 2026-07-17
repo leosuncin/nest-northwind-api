@@ -1,7 +1,11 @@
+packages:
+  - '.'
+
 allowBuilds:
   '@suites/di.nestjs': true
-  '@suites/doubles.jest': true
+  '@suites/doubles.vitest': true
+  '@swc/core': true
   cpu-features: true
+  esbuild: true
   protobufjs: true
   ssh2: true
-  unrs-resolver: true

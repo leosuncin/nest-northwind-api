@@ -11,6 +11,10 @@ import { runSeeders, setDataSource } from 'typeorm-extension';
 
 import { AppModule } from '../src/app.module';
 import typeormConfig from '../src/config/typeorm';
+import { Employee } from '../src/employee/entities/employee.entity';
+import { CreateEmployeeTable1783971451030 } from '../src/database/migrations/1783971451030-create-employee-table';
+import EmployeeSeeder from '../src/database/seeds/employee.seeder';
+import { employeeFactory } from '../src/database/factories/employee.factory';
 import { CreateEmployee } from '../src/employee/dto/create-employee.dto';
 import { UpdateEmployee } from '../src/employee/dto/update-employee.dto';
 import { EmployeeService } from '../src/employee/services/employee.service';
@@ -41,17 +45,19 @@ describe('EmployeeController (e2e)', () => {
         database: container.getDatabase(),
         synchronize: false,
         migrationsRun: true,
+        retryAttempts: 10,
+        retryDelay: 2000,
         autoLoadEntities: true,
         options: {
           encrypt: false,
           trustServerCertificate: true,
           appName: 'Northwind Test',
         },
-        entities: ['src/**/*.entity.ts'],
-        subscribers: ['src/**/*.subscriber.ts'],
-        migrations: ['src/database/migrations/*.ts'],
-        seeds: ['src/database/seeds/*.seeder.ts'],
-        factories: ['src/database/factories/*.factory.ts'],
+        entities: [Employee],
+        subscribers: [],
+        migrations: [CreateEmployeeTable1783971451030],
+        seeds: [EmployeeSeeder],
+        factories: [employeeFactory],
       })
       .compile();
 

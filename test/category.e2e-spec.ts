@@ -11,6 +11,10 @@ import { runSeeders, setDataSource } from 'typeorm-extension';
 
 import { AppModule } from '../src/app.module';
 import typeormConfig from '../src/config/typeorm';
+import { Category } from '../src/category/entities/category.entity';
+import { CreateCategoryTable1783971500000 } from '../src/database/migrations/1783971500000-create-category-table';
+import CategorySeeder from '../src/database/seeds/category.seeder';
+import { categoryFactory } from '../src/database/factories/category.factory';
 import { CreateCategory } from '../src/category/dto/create-category.dto';
 import { UpdateCategory } from '../src/category/dto/update-category.dto';
 import { CategoryService } from '../src/category/services/category.service';
@@ -41,17 +45,19 @@ describe('CategoryController (e2e)', () => {
         database: container.getDatabase(),
         synchronize: false,
         migrationsRun: true,
+        retryAttempts: 10,
+        retryDelay: 2000,
         autoLoadEntities: true,
         options: {
           encrypt: false,
           trustServerCertificate: true,
           appName: 'Northwind Test',
         },
-        entities: ['src/**/*.entity.ts'],
-        subscribers: ['src/**/*.subscriber.ts'],
-        migrations: ['src/database/migrations/*.ts'],
-        seeds: ['src/database/seeds/*.seeder.ts'],
-        factories: ['src/database/factories/*.factory.ts'],
+        entities: [Category],
+        subscribers: [],
+        migrations: [CreateCategoryTable1783971500000],
+        seeds: [CategorySeeder],
+        factories: [categoryFactory],
       })
       .compile();
 

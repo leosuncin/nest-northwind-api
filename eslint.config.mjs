@@ -15,7 +15,7 @@ export default tseslint.config(
     languageOptions: {
       globals: {
         ...globals.node,
-        ...globals.jest,
+        ...globals.vitest,
       },
       sourceType: 'commonjs',
       parserOptions: {
@@ -39,6 +39,12 @@ export default tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
+    },
+  },
+  {
+    files: ['**/*.spec.ts', '**/*.e2e-spec.ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
     },
   },
 );
