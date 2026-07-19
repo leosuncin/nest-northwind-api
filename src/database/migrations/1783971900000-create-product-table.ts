@@ -3,10 +3,10 @@ import type { MigrationInterface, QueryRunner } from 'typeorm';
 export class CreateProductTable1783971900000 implements MigrationInterface {
   async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.sql`CREATE TABLE product (
-      id bigint IDENTITY (1, 1) NOT NULL PRIMARY KEY,
+      id bigint IDENTITY NOT NULL PRIMARY KEY,
       name varchar (40) NOT NULL,
-      supplierId bigint NULL,
-      categoryId bigint NULL,
+      supplierId bigint NOT NULL REFERENCES supplier (id),
+      categoryId bigint NOT NULL REFERENCES category (id),
       quantityPerUnit varchar (20) NULL,
       unitPrice money NULL DEFAULT (0) CHECK (unitPrice >= 0),
       unitsInStock int NULL DEFAULT (0) CHECK (unitsInStock >= 0),
