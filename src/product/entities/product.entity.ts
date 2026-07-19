@@ -1,4 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Check,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { Category } from '../../category/entities/category.entity';
+import { Supplier } from '../../supplier/entities/supplier.entity';
 
 @Entity()
 export class Product {
@@ -8,27 +18,33 @@ export class Product {
   @Column({ length: 40 })
   name!: string;
 
-  @Column({ type: 'bigint', nullable: true })
-  supplierId?: number;
+  @ManyToOne(() => Supplier, { nullable: false })
+  @JoinColumn({ name: 'supplierId' })
+  supplier!: Supplier;
 
-  @Column({ type: 'bigint', nullable: true })
-  categoryId?: number;
+  @ManyToOne(() => Category, { nullable: false })
+  @JoinColumn({ name: 'categoryId' })
+  category!: Category;
 
   @Column({ length: 20, nullable: true })
   quantityPerUnit?: string;
 
   @Column({ type: 'money', nullable: true, default: 0 })
-  unitPrice?: number;
+  @Check(`unitPrice">= 0`)
+  unitPrice = 0;
 
   @Column({ type: 'int', nullable: true, default: 0 })
-  unitsInStock?: number;
+  @Check(`unitsInStock >= 0`)
+  unitsInStock = 0;
 
   @Column({ type: 'int', nullable: true, default: 0 })
-  unitsOnOrder?: number;
+  @Check(`unitsOnOrder >= 0`)
+  unitsOnOrder = 0;
 
   @Column({ type: 'smallint', nullable: true, default: 0 })
-  reorderLevel?: number;
+  @Check(`reorderLevel >= 0`)
+  reorderLevel = 0;
 
   @Column({ type: 'bit', default: false })
-  discontinued!: boolean;
+  discontinued = false;
 }
