@@ -1,6 +1,89 @@
 import { setSeederFactory } from 'typeorm-extension';
 
 import { Product } from '../../product/entities/product.entity';
+import {
+  beverages,
+  condiments,
+  confections,
+  dairyProducts,
+  grainsCereals,
+  meatPoultry,
+  produce,
+  seafood,
+} from '../seeds/category.seeder';
+import {
+  auxJoyeuxEcclesiastiques,
+  bigfootBreweries,
+  cooperativaDeQuesosLasCabras,
+  escargotsNouveaux,
+  exoticLiquids,
+  foretsDerables,
+  formaggiFortiniSRL,
+  gaiPaturage,
+  gdayMate,
+  grandmaKellysHomestead,
+  heliSusswarenGmbHCoKG,
+  karkkiOy,
+  lekaTrading,
+  lyngbysild,
+  maMaison,
+  mayumis,
+  newEnglandSeafoodCannery,
+  newOrleansCajunDelights,
+  nordOstFischHandelsgesellschaftMbH,
+  norskeMeierier,
+  pastaButtiniSRL,
+  pavlovaLtd,
+  pbKnackebrodAB,
+  plutzerLebensmittelgrossmarkteAG,
+  refrescosAmericanasLTDA,
+  specialtyBiscuitsLtd,
+  svenskSjofoodaAB,
+  tokyoTraders,
+  zaanseSnoepfabriek,
+} from '../seeds/supplier.seeder';
+
+const categories = [
+  beverages,
+  condiments,
+  confections,
+  dairyProducts,
+  grainsCereals,
+  meatPoultry,
+  produce,
+  seafood,
+];
+const suppliers = [
+  auxJoyeuxEcclesiastiques,
+  bigfootBreweries,
+  cooperativaDeQuesosLasCabras,
+  escargotsNouveaux,
+  exoticLiquids,
+  foretsDerables,
+  formaggiFortiniSRL,
+  gaiPaturage,
+  gdayMate,
+  grandmaKellysHomestead,
+  heliSusswarenGmbHCoKG,
+  karkkiOy,
+  lekaTrading,
+  lyngbysild,
+  maMaison,
+  mayumis,
+  newEnglandSeafoodCannery,
+  newOrleansCajunDelights,
+  nordOstFischHandelsgesellschaftMbH,
+  norskeMeierier,
+  pastaButtiniSRL,
+  pavlovaLtd,
+  pbKnackebrodAB,
+  plutzerLebensmittelgrossmarkteAG,
+  refrescosAmericanasLTDA,
+  specialtyBiscuitsLtd,
+  svenskSjofoodaAB,
+  tokyoTraders,
+  zaanseSnoepfabriek,
+];
 
 export const productFactory = setSeederFactory(Product, (faker) => {
   const product = new Product();
@@ -18,6 +101,8 @@ export const productFactory = setSeederFactory(Product, (faker) => {
   product.unitsOnOrder = faker.number.int({ min: 0, max: 1000 });
   product.reorderLevel = faker.number.int({ min: 0, max: 32767 });
   product.discontinued = faker.datatype.boolean();
+  product.supplier = faker.helpers.arrayElement(suppliers);
+  product.category = faker.helpers.arrayElement(categories);
 
   return product;
 });
