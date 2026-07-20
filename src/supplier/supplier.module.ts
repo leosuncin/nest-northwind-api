@@ -11,6 +11,6 @@ import { IsExistingSupplierConstraint } from './validators/is-existing-supplier.
   imports: [TypeOrmModule.forFeature([Supplier]), SharedModule],
   controllers: [SupplierController],
   providers: [SupplierService, IsExistingSupplierConstraint],
-  exports: [IsExistingSupplierConstraint],
+  exports: [SupplierService, IsExistingSupplierConstraint],
 })
 export class SupplierModule {}
