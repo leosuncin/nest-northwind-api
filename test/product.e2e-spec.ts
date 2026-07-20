@@ -5,6 +5,8 @@ import {
   MSSQLServerContainer,
   type StartedMSSQLServerContainer,
 } from '@testcontainers/mssqlserver';
+import { useContainer } from 'class-validator';
+
 import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
@@ -35,6 +37,7 @@ describe('ProductController (e2e)', () => {
       .useValue(await buildTypeOrmOptions(container))
       .compile();
 
+    useContainer(module, { fallbackOnErrors: true });
     app = module.createNestApplication();
 
     await app.init();
@@ -79,17 +82,17 @@ describe('ProductController (e2e)', () => {
   });
 
   test('given a POST request to /product when a valid product is provided then it should create and return the created product', async () => {
-    const newProduct: CreateProduct = {
+    const newProduct = {
       name: 'Test Product',
-      supplierId: 1,
-      categoryId: 1,
+      supplier: 1,
+      category: 1,
       quantityPerUnit: '10 boxes',
       unitPrice: 9.99,
       unitsInStock: 10,
       unitsOnOrder: 0,
       reorderLevel: 5,
       discontinued: false,
-    };
+    } as unknown as CreateProduct;
 
     const response = await request(app.getHttpServer())
       .post('/product')
@@ -98,7 +101,11 @@ describe('ProductController (e2e)', () => {
       .expect('Content-Type', /json/);
 
     expect(response.body).toHaveProperty('id');
-    expect(response.body).toMatchObject(expect.objectContaining(newProduct));
+    expect(response.body).toMatchObject({
+      ...newProduct,
+      supplier: { id: '1' },
+      category: { id: '1' },
+    });
   });
 
   test('given a POST request to /product when name is missing then it should return a bad request', async () => {
@@ -129,10 +136,10 @@ describe('ProductController (e2e)', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /product when categoryId is not an integer then it should return a bad request', async () => {
+  test('given a POST request to /product when category is not an integer then it should return a bad request', async () => {
     await request(app.getHttpServer())
       .post('/product')
-      .send({ name: 'Test Product', categoryId: 'abc' })
+      .send({ name: 'Test Product', category: 'abc' })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
@@ -144,7 +151,21 @@ describe('ProductController (e2e)', () => {
       .expect(HttpStatus.OK)
       .expect('Content-Type', /json/);
 
-    expect(response.body).toMatchObject(expect.objectContaining(product));
+    expect(response.body).toMatchObject(
+      expect.objectContaining({
+        ...product,
+        category: {
+          ...product.category,
+          picture: product.category.picture ?? null,
+        },
+        supplier: {
+          ...product.supplier,
+          fax: product.supplier.fax ?? null,
+          region: product.supplier.region ?? null,
+          homePage: product.supplier.homePage ?? null,
+        },
+      }),
+    );
   });
 
   test('given a PATCH request to /product/:id when the product exists then it should update and return the updated product', async () => {
