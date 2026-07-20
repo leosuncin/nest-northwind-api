@@ -39,4 +39,10 @@ export class CategoryService {
   remove(category: Category) {
     return this.categoryRepository.remove(category);
   }
+
+  async exists(id: Category['id']) {
+    const count = await this.categoryRepository.countBy({ id });
+
+    return count > 0;
+  }
 }
