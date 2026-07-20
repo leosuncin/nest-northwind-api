@@ -1,13 +1,26 @@
-import { Injectable, PipeTransform } from '@nestjs/common';
+import {
+  type ArgumentMetadata,
+  Injectable,
+  type PipeTransform,
+} from '@nestjs/common';
 
-import { Supplier } from '../entities/supplier.entity';
+import type { Supplier } from '../entities/supplier.entity';
 import { SupplierService } from '../services/supplier.service';
 
 @Injectable()
 export class SupplierPipe implements PipeTransform {
   constructor(private readonly supplierService: SupplierService) {}
 
-  transform(value: Supplier['id']) {
-    return this.supplierService.findOne(value);
+  async transform(value: unknown, metadata: ArgumentMetadata) {
+    if (metadata.type === 'param') {
+      return this.supplierService.findOne(value as Supplier['id']);
+    }
+
+    if (typeof value === 'object' && value !== null && 'supplier' in value) {
+      (value as { supplier: Supplier }).supplier =
+        await this.supplierService.findOne(value.supplier as Supplier['id']);
+    }
+
+    return value;
   }
 }

@@ -22,15 +22,27 @@ describe('SupplierPipe', () => {
     ) as unknown as Mocked<Repository<Supplier>>;
   });
 
-  test('given a supplier id when transform then it returns the supplier from the service', async () => {
+  test('given a param type when the value is an id then it transforms it to a supplier', async () => {
     const id = 1;
     const supplier = { id, companyName: 'Test Supplier' } as Supplier;
 
-    repository.findOneByOrFail.mockResolvedValue(supplier);
+    void repository.findOneByOrFail.mockResolvedValue(supplier);
 
-    const result = await pipe.transform(id);
+    const result = await pipe.transform(id, { type: 'param' });
 
     expect(result).toEqual(supplier);
+    expect(repository.findOneByOrFail).toHaveBeenCalledWith({ id });
+  });
+
+  test("given a body type when the value is an object with the supplier's id then it transforms it to a supplier", async () => {
+    const id = 1;
+    const supplier = { id, companyName: 'Test Supplier' } as Supplier;
+
+    void repository.findOneByOrFail.mockResolvedValue(supplier);
+
+    const result = await pipe.transform({ supplier: id }, { type: 'body' });
+
+    expect(result).toEqual({ supplier });
     expect(repository.findOneByOrFail).toHaveBeenCalledWith({ id });
   });
 });
