@@ -26,11 +26,14 @@ describe('ProductPipe', () => {
     const id = 1;
     const product = { id } as Product;
 
-    repository.findOneByOrFail.mockResolvedValue(product);
+    repository.findOneOrFail.mockResolvedValue(product);
 
     const result = await pipe.transform(id);
 
     expect(result).toEqual(product);
-    expect(repository.findOneByOrFail).toHaveBeenCalledWith({ id });
+    expect(repository.findOneOrFail).toHaveBeenCalledWith({
+      where: { id },
+      relations: { category: true, supplier: true },
+    });
   });
 });

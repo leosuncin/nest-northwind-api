@@ -27,7 +27,10 @@ export class ProductService {
   }
 
   findOne(id: number) {
-    return this.productRepository.findOneByOrFail({ id });
+    return this.productRepository.findOneOrFail({
+      where: { id },
+      relations: { category: true, supplier: true },
+    });
   }
 
   update(product: Product, updateProduct: UpdateProduct) {
