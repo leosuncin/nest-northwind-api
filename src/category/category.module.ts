@@ -11,6 +11,6 @@ import { IsExistingCategoryConstraint } from './validators/is-existing-category.
   imports: [TypeOrmModule.forFeature([Category]), SharedModule],
   controllers: [CategoryController],
   providers: [CategoryService, IsExistingCategoryConstraint],
-  exports: [IsExistingCategoryConstraint],
+  exports: [CategoryService, IsExistingCategoryConstraint],
 })
 export class CategoryModule {}
