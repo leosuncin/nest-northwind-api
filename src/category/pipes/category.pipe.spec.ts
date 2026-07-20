@@ -18,7 +18,7 @@ describe('CategoryPipe', () => {
     ) as unknown as Mocked<CategoryService>;
   });
 
-  test('given a category id when transform then it returns the category from the service', async () => {
+  test('given a param type when the value is an id then it transforms it to a category', async () => {
     const id = 1;
     const category = {
       id,
@@ -26,11 +26,27 @@ describe('CategoryPipe', () => {
       picture: 'beverages.png',
     } as Category;
 
-    service.findOne.mockResolvedValue(category);
+    void service.findOne.mockResolvedValue(category);
 
-    const result = await pipe.transform(id);
+    const result = await pipe.transform(id, { type: 'param' });
 
     expect(result).toEqual(category);
+    expect(service.findOne).toHaveBeenCalledWith(id);
+  });
+
+  test("given a body type when the value is an object with the category's id then it transforms it to a category", async () => {
+    const id = 1;
+    const category = {
+      id,
+      name: 'Beverages',
+      picture: 'beverages.png',
+    } as Category;
+
+    void service.findOne.mockResolvedValue(category);
+
+    const result = await pipe.transform({ category: id }, { type: 'body' });
+
+    expect(result).toEqual({ category });
     expect(service.findOne).toHaveBeenCalledWith(id);
   });
 });
