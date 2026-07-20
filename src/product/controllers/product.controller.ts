@@ -23,6 +23,8 @@ import { UpdateProduct } from '../dto/update-product.dto';
 import { Product } from '../entities/product.entity';
 import { ProductPipe } from '../pipes/product.pipe';
 import { ProductService } from '../services/product.service';
+import { SupplierPipe } from '../../supplier/pipes/supplier.pipe';
+import { CategoryPipe } from '../../category/pipes/category.pipe';
 
 @Controller('product')
 @UseFilters(EntityNotFoundFilter)
@@ -31,7 +33,11 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+  @UsePipes(
+    new ValidationPipe({ transform: true, whitelist: true }),
+    CategoryPipe,
+    SupplierPipe,
+  )
   create(@Body() createProduct: CreateProduct) {
     return this.productService.create(createProduct);
   }
