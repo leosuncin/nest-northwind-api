@@ -39,4 +39,10 @@ export class SupplierService {
   remove(supplier: Supplier) {
     return this.supplierRepository.remove(supplier);
   }
+
+  async exists(id: Supplier['id']) {
+    const count = await this.supplierRepository.countBy({ id });
+
+    return count > 0;
+  }
 }
