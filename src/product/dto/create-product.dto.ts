@@ -5,10 +5,16 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
   MaxLength,
   Min,
 } from 'class-validator';
+
+import { IsExistingCategory } from '../../category/validators/is-existing-category.validator';
+import { IsExistingSupplier } from '../../supplier/validators/is-existing-supplier.validator';
+import { Supplier } from '../../supplier/entities/supplier.entity';
+import { Category } from '../../category/entities/category.entity';
 
 export class CreateProduct {
   @IsDefined()
@@ -19,11 +25,15 @@ export class CreateProduct {
 
   @IsOptional()
   @IsInt()
-  readonly supplierId?: number;
+  @IsPositive()
+  @IsExistingSupplier()
+  readonly supplier?: Supplier;
 
   @IsOptional()
   @IsInt()
-  readonly categoryId?: number;
+  @IsPositive()
+  @IsExistingCategory()
+  readonly category?: Category;
 
   @IsOptional()
   @IsString()
