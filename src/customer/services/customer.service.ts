@@ -39,4 +39,10 @@ export class CustomerService {
   remove(customer: Customer) {
     return this.customerRepository.remove(customer);
   }
+
+  async exists(id: Customer['id']) {
+    const count = await this.customerRepository.countBy({ id });
+
+    return count > 0;
+  }
 }
