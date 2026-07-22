@@ -39,4 +39,10 @@ export class ShipperService {
   remove(shipper: Shipper) {
     return this.shipperRepository.remove(shipper);
   }
+
+  async exists(id: Shipper['id']) {
+    const count = await this.shipperRepository.countBy({ id });
+
+    return count > 0;
+  }
 }
