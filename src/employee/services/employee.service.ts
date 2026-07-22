@@ -39,4 +39,10 @@ export class EmployeeService {
   remove(employee: Employee) {
     return this.employeeRepository.remove(employee);
   }
+
+  async exists(id: Employee['id']) {
+    const count = await this.employeeRepository.countBy({ id });
+
+    return count > 0;
+  }
 }

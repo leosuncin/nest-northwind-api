@@ -93,4 +93,15 @@ describe('EmployeeService', () => {
     expect(result).toEqual(employee);
     expect(repository.remove).toHaveBeenCalledWith(employee);
   });
+
+  test('given the employee id when the employee exist then it returns true', async () => {
+    const id = 1;
+
+    void repository.countBy.mockResolvedValue(1);
+
+    const result = await service.exists(1);
+
+    expect(result).toBe(true);
+    expect(repository.countBy).toHaveBeenCalledWith({ id });
+  });
 });
