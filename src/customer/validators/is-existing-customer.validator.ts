@@ -1,0 +1,40 @@
+import { Injectable } from '@nestjs/common';
+import {
+  type ValidationOptions,
+  ValidatorConstraint,
+  type ValidatorConstraintInterface,
+  registerDecorator,
+} from 'class-validator';
+
+import { isId } from '../../shared/utils/id.utils';
+import { Customer } from '../entities/customer.entity';
+import { CustomerService } from '../services/customer.service';
+
+@Injectable()
+@ValidatorConstraint({ name: 'IsExistingCustomer', async: true })
+export class IsExistingCustomerConstraint implements ValidatorConstraintInterface {
+  constructor(private customerService: CustomerService) {}
+
+  async validate(value: unknown): Promise<boolean> {
+    if (!isId<Customer>(value)) {
+      return false;
+    }
+
+    return this.customerService.exists(value);
+  }
+
+  defaultMessage(): string {
+    return 'Customer with id $value does not exist';
+  }
+}
+
+export const IsExistingCustomer =
+  (options?: ValidationOptions): PropertyDecorator =>
+  (object, propertyKey) => {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: String(propertyKey),
+      options,
+      validator: IsExistingCustomerConstraint,
+    });
+  };
