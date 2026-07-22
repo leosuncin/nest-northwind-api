@@ -7,6 +7,7 @@ import { SupplierModule } from '../supplier/supplier.module';
 import { ProductController } from './controllers/product.controller';
 import { Product } from './entities/product.entity';
 import { ProductService } from './services/product.service';
+import { IsExistingProductConstraint } from './validators/is-existing-product.validator';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProductService } from './services/product.service';
     SupplierModule,
   ],
   controllers: [ProductController],
-  providers: [ProductService],
+  providers: [ProductService, IsExistingProductConstraint],
+  exports: [IsExistingProductConstraint],
 })
 export class ProductModule {}

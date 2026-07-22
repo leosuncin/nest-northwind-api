@@ -42,4 +42,10 @@ export class ProductService {
   remove(product: Product) {
     return this.productRepository.remove(product);
   }
+
+  async exists(id: Product['id']) {
+    const count = await this.productRepository.countBy({ id });
+
+    return count > 0;
+  }
 }
