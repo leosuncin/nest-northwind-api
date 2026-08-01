@@ -121,8 +121,8 @@ importers:
         specifier: 4.2.0
         version: 4.2.0
       typeorm-extension:
-        specifier: 4.0.0-beta.1
-        version: 4.0.0-beta.1(@faker-js/faker@10.5.0)(typeorm@1.1.0(mssql@12.7.0(supports-color@8.1.1))(supports-color@8.1.1)(ts-node@10.9.2(@swc/core@1.15.47)(@types/node@24.13.3)(typescript@5.9.3)))
+        specifier: 4.0.0-beta.3
+        version: 4.0.0-beta.3(@faker-js/faker@10.5.0)(typeorm@1.1.0(mssql@12.7.0(supports-color@8.1.1))(supports-color@8.1.1)(ts-node@10.9.2(@swc/core@1.15.47)(@types/node@24.13.3)(typescript@5.9.3)))
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -3247,8 +3247,8 @@ packages:
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
-  typeorm-extension@4.0.0-beta.1:
-    resolution: {integrity: sha512-2GowaTeVO8P5VPDrkaf3KoXi6obbzLw48cNdxSNzWhL6ZF2usGPtFqqicoFIBMJE7YtQd7j1FumpIGa8vPik9g==}
+  typeorm-extension@4.0.0-beta.3:
+    resolution: {integrity: sha512-ogjg9k1LIqwgaCMa07vdl2H26R6lVlDyGOE5ZaNZIfFmIyyzTu8/vCwelmfinqGYOUxVO1BLgKZV4SlNInxltQ==}
     engines: {node: '>=22.0.0'}
     hasBin: true
     peerDependencies:
@@ -6846,7 +6846,7 @@ snapshots:
 
   typedarray@0.0.6: {}
 
-  typeorm-extension@4.0.0-beta.1(@faker-js/faker@10.5.0)(typeorm@1.1.0(mssql@12.7.0(supports-color@8.1.1))(supports-color@8.1.1)(ts-node@10.9.2(@swc/core@1.15.47)(@types/node@24.13.3)(typescript@5.9.3))):
+  typeorm-extension@4.0.0-beta.3(@faker-js/faker@10.5.0)(typeorm@1.1.0(mssql@12.7.0(supports-color@8.1.1))(supports-color@8.1.1)(ts-node@10.9.2(@swc/core@1.15.47)(@types/node@24.13.3)(typescript@5.9.3))):
     dependencies:
       '@faker-js/faker': 10.5.0
       citty: 0.2.2
