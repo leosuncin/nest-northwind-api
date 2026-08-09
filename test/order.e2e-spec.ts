@@ -1,0 +1,263 @@
+import { HttpStatus, type INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
+import {
+  MSSQLServerContainer,
+  type StartedMSSQLServerContainer,
+} from '@testcontainers/mssqlserver';
+import { useContainer } from 'class-validator';
+
+import request from 'supertest';
+import type { App } from 'supertest/types';
+import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+
+import { AppModule } from '../src/app.module';
+import typeormConfig from '../src/config/typeorm';
+import { CreateOrder } from '../src/order/dto/create-order.dto';
+import { Order } from '../src/order/entities/order.entity';
+import { OrderDetail } from '../src/order/entities/order-detail.entity';
+import { buildTypeOrmOptions } from './helpers';
+
+describe('OrderController (e2e)', () => {
+  let app: INestApplication<App>;
+  let container: StartedMSSQLServerContainer;
+
+  beforeAll(async () => {
+    container = await new MSSQLServerContainer(
+      'mcr.microsoft.com/mssql/server:2022-latest',
+    )
+      .acceptLicense()
+      .withEnvironment({ MSSQL_PID: 'Express' })
+      .withWaitForMessage(/.*Attribute synchronization manager initialized*/)
+      .start();
+
+    const module = await Test.createTestingModule({
+      imports: [AppModule],
+    })
+      .overrideProvider(typeormConfig.KEY)
+      .useValue(await buildTypeOrmOptions(container))
+      .compile();
+
+    useContainer(module, { fallbackOnErrors: true });
+    app = module.createNestApplication();
+
+    await app.init();
+  }, 60_000);
+
+  beforeEach(async () => {
+    const dataSource = app.get(getDataSourceToken());
+    setDataSource(dataSource);
+    await runSeeders(dataSource);
+  });
+
+  afterAll(async () => {
+    await app.close();
+    await container.stop();
+  });
+
+  test('given a GET request to /order when no params are provided then it should return a paginated list', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/order')
+      .expect(HttpStatus.OK)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
+    expect(response.body).toHaveProperty('meta');
+    expect(response.body).toHaveProperty('meta.itemsPerPage', 10);
+    expect(response.body).toHaveProperty('meta.currentPage', 1);
+  });
+
+  test('given a GET request to /order when page is zero then it should return a bad request', async () => {
+    await request(app.getHttpServer())
+      .get('/order')
+      .query({ page: 0 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a GET request to /order when limit is negative then it should return a bad request', async () => {
+    await request(app.getHttpServer())
+      .get('/order')
+      .query({ limit: -1 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a POST request to /order when a valid order is provided then it should create and return the created order', async () => {
+    const newOrder = {
+      customer: 1,
+      employee: 1,
+      orderDate: '1996-07-04T00:00:00.000Z',
+      requiredDate: '1996-08-01T00:00:00.000Z',
+      shippedDate: '1996-07-16T00:00:00.000Z',
+      shipVia: 1,
+      freight: 32.38,
+      shipName: 'Test Ship',
+      shipAddress: '123 Test St',
+      shipCity: 'TestCity',
+      shipRegion: 'TS',
+      shipPostalCode: '12345',
+      shipCountry: 'Testland',
+      details: [
+        {
+          product: 1,
+          unitPrice: 18,
+          quantity: 10,
+          discount: 0,
+        },
+      ],
+    } as unknown as CreateOrder;
+
+    const response = await request(app.getHttpServer())
+      .post('/order')
+      .send(newOrder)
+      .expect(HttpStatus.CREATED)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toHaveProperty('id');
+    expect(response.body).toMatchObject({
+      freight: 32.38,
+      shipName: 'Test Ship',
+    });
+  });
+
+  test('given a POST request to /order when customer is missing then it should return a bad request', async () => {
+    await request(app.getHttpServer())
+      .post('/order')
+      .send({ employee: 1 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a POST request to /order when employee is missing then it should return a bad request', async () => {
+    await request(app.getHttpServer())
+      .post('/order')
+      .send({ customer: 1 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a POST request to /order when freight is negative then it should return a bad request', async () => {
+    await request(app.getHttpServer())
+      .post('/order')
+      .send({ customer: 1, employee: 1, freight: -1 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a GET request to /order/:id when the order exists then it should return the order', async () => {
+    const order = await useSeederFactory(Order).save();
+
+    const response = await request(app.getHttpServer())
+      .get(`/order/${order.id}`)
+      .expect(HttpStatus.OK)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toMatchObject(
+      expect.objectContaining({
+        id: order.id,
+      }),
+    );
+  });
+
+  test('given a PATCH request to /order/:id when the order exists then it should update and return the updated order', async () => {
+    const order = await useSeederFactory(Order).save();
+
+    const response = await request(app.getHttpServer())
+      .patch(`/order/${order.id}`)
+      .send({ freight: 99.99, shipName: 'Updated Ship' })
+      .expect(HttpStatus.OK)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toHaveProperty('id', order.id);
+    expect(response.body).toHaveProperty('freight', 99.99);
+    expect(response.body).toHaveProperty('shipName', 'Updated Ship');
+  });
+
+  test('given a DELETE request to /order/:id when the order exists then it should delete the order', async () => {
+    const order = await useSeederFactory(Order).save();
+
+    await request(app.getHttpServer())
+      .delete(`/order/${order.id}`)
+      .expect(HttpStatus.OK);
+
+    await request(app.getHttpServer())
+      .get(`/order/${order.id}`)
+      .expect(HttpStatus.NOT_FOUND);
+  });
+
+  test('given a POST request to /order/:orderId/detail when a valid detail is provided then it should create it', async () => {
+    const order = await useSeederFactory(Order).save();
+
+    const newDetail = {
+      product: 1,
+      unitPrice: 18,
+      quantity: 5,
+      discount: 0,
+    };
+
+    const response = await request(app.getHttpServer())
+      .post(`/order/${order.id}/detail`)
+      .send(newDetail)
+      .expect(HttpStatus.CREATED)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toHaveProperty('orderId', order.id);
+    expect(response.body).toHaveProperty('productId', 1);
+  });
+
+  test('given a PATCH request to /order/:orderId/detail/:productId when the detail exists then it should update it', async () => {
+    const order = await useSeederFactory(Order).save();
+    const productId = 2;
+
+    const detail = await useSeederFactory(OrderDetail).save({
+      orderId: order.id,
+      productId,
+    });
+
+    const response = await request(app.getHttpServer())
+      .patch(`/order/${order.id}/detail/${detail.productId}`)
+      .send({ quantity: 20, discount: 0.1 })
+      .expect(HttpStatus.OK)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toHaveProperty('quantity', 20);
+    expect(response.body).toHaveProperty('discount', 0.1);
+  });
+
+  test('given a DELETE request to /order/:orderId/detail/:productId when the detail exists then it should delete it', async () => {
+    const order = await useSeederFactory(Order).save();
+    const productId = 2;
+
+    await useSeederFactory(OrderDetail).save({
+      orderId: order.id,
+      productId,
+    });
+
+    await request(app.getHttpServer())
+      .delete(`/order/${order.id}/detail/${productId}`)
+      .expect(HttpStatus.OK);
+  });
+
+  test('given a POST request to /order/:orderId/detail when quantity is less than 1 then it should return a bad request', async () => {
+    const order = await useSeederFactory(Order).save();
+
+    await request(app.getHttpServer())
+      .post(`/order/${order.id}/detail`)
+      .send({ product: 1, unitPrice: 10, quantity: 0, discount: 0 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a POST request to /order/:orderId/detail when discount is out of range then it should return a bad request', async () => {
+    const order = await useSeederFactory(Order).save();
+
+    await request(app.getHttpServer())
+      .post(`/order/${order.id}/detail`)
+      .send({ product: 1, unitPrice: 10, quantity: 1, discount: 1.5 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  test('given a POST request to /order/:orderId/detail when product does not exist then it should return a bad request', async () => {
+    const order = await useSeederFactory(Order).save();
+
+    await request(app.getHttpServer())
+      .post(`/order/${order.id}/detail`)
+      .send({ product: 99999, unitPrice: 10, quantity: 1, discount: 0 })
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+});
