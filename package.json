@@ -63,7 +63,7 @@
     "tsconfig-paths": "4.2.0",
     "typeorm-extension": "4.0.0-beta.3",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.66.0",
+    "typescript-eslint": "8.67.0",
     "unplugin-swc": "1.5.10",
     "vitest": "4.1.10"
   },
