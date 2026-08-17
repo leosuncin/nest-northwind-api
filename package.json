@@ -40,7 +40,7 @@
     "@eslint/js": "10.0.1",
     "@nestjs/cli": "11.0.24",
     "@nestjs/schematics": "11.1.0",
-    "@nestjs/testing": "11.1.29",
+    "@nestjs/testing": "11.2.0",
     "@suites/di.nestjs": "3.1.0",
     "@suites/doubles.vitest": "3.1.0",
     "@suites/unit": "3.1.1",
