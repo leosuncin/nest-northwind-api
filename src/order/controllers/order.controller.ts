@@ -21,7 +21,6 @@ import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
 import { CreateOrder } from '../dto/create-order.dto';
 import { UpdateOrder } from '../dto/update-order.dto';
 import { Order } from '../entities/order.entity';
-import { OrderCreatePipe } from '../pipes/order-create.pipe';
 import { OrderPipe } from '../pipes/order.pipe';
 import { OrderService } from '../services/order.service';
 
@@ -32,10 +31,7 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  @UsePipes(
-    new ValidationPipe({ transform: true, whitelist: true }),
-    OrderCreatePipe,
-  )
+  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }), OrderPipe)
   create(@Body() createOrder: CreateOrder) {
     return this.orderService.create(createOrder);
   }

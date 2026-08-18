@@ -197,7 +197,7 @@ describe('OrderController (e2e)', () => {
       .expect(HttpStatus.CREATED)
       .expect('Content-Type', /json/);
 
-    expect(response.body).toHaveProperty('orderId', order.id);
+    expect(response.body).toHaveProperty('orderId', +order.id);
     expect(response.body).toHaveProperty('productId', 1);
   });
 
