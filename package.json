@@ -67,5 +67,5 @@
     "unplugin-swc": "1.5.11",
     "vitest": "4.1.10"
   },
-  "packageManager": "pnpm@11.21.0"
+  "packageManager": "pnpm@11.22.0"
 }
