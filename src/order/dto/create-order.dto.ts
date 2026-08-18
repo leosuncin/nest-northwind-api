@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  ArrayNotEmpty,
   IsDateString,
   IsDefined,
   IsInt,
@@ -87,6 +88,7 @@ export class CreateOrder {
   readonly shipCountry?: string;
 
   @IsOptional()
+  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => CreateOrderDetail)
   readonly details: CreateOrderDetail[] = [];

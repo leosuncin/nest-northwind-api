@@ -28,7 +28,7 @@ describe('OrderPipe', () => {
 
     repository.findOneOrFail.mockResolvedValue(order);
 
-    const result = await pipe.transform(id);
+    const result = await pipe.transform(id, { type: 'param' });
 
     expect(result).toEqual(order);
     expect(repository.findOneOrFail).toHaveBeenCalledWith({
@@ -40,5 +40,22 @@ describe('OrderPipe', () => {
         details: { product: true },
       },
     });
+  });
+
+  test('given a create order when transform then it returns the transformed create order', () => {
+    const body = {
+      customer: 1,
+      employee: 1,
+      details: [{ product: 1 }, { product: 2 }],
+    };
+
+    const result = pipe.transform(body, { type: 'body' });
+
+    expect(result).toEqual({
+      customer: { id: 1 },
+      employee: { id: 1 },
+      details: [{ product: { id: 1 } }, { product: { id: 2 } }],
+    });
+    expect(repository.findOneOrFail).not.toHaveBeenCalled();
   });
 });
