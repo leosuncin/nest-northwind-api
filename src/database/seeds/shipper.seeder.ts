@@ -1,7 +1,7 @@
 import { Seeder } from 'typeorm-extension';
 
 import { Shipper } from '../../shipper/entities/shipper.entity';
-import type { DataSource, Repository } from 'typeorm';
+import type { DataSource } from 'typeorm';
 
 export const speedyExpress = Object.assign<Shipper, Partial<Shipper>>(
   new Shipper(),
@@ -30,23 +30,39 @@ export const federalShipping = Object.assign<Shipper, Partial<Shipper>>(
   },
 );
 
-async function upsert(repository: Repository<Shipper>, shipper: Shipper) {
-  const { id, ...partialEntity } = shipper;
-  const result = await repository.update({ id }, partialEntity);
-
-  if (result.affected === 0) {
-    await repository.insert(shipper);
-  }
-}
+const shipperJsonFixtures = JSON.stringify(
+  [speedyExpress, unitedPackage, federalShipping],
+  (_key, value) => {
+    if (typeof value === 'boolean') {
+      return value ? 1 : 0;
+    }
+    return value as unknown;
+  },
+);
 
 export default class ShipperSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<void> {
     await dataSource.transaction(async (manager) => {
-      const repository = manager.getRepository(Shipper);
+      await manager.sql`ALTER TABLE shipper NOCHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT shipper ON;
 
-      await upsert(repository, speedyExpress);
-      await upsert(repository, unitedPackage);
-      await upsert(repository, federalShipping);
+      MERGE INTO shipper AS target
+      USING OPENJSON(${shipperJsonFixtures}) WITH (
+        id bigint,
+        companyName varchar(40),
+        phone varchar(24)
+      ) AS source
+      ON target.id = source.id
+      WHEN MATCHED THEN
+        UPDATE SET
+          companyName = source.companyName,
+          phone = source.phone
+      WHEN NOT MATCHED THEN
+        INSERT (id, companyName, phone)
+        VALUES (source.id, source.companyName, source.phone);
+
+      ALTER TABLE shipper CHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT shipper OFF`;
     });
   }
 }

@@ -1,7 +1,7 @@
 import { Seeder } from 'typeorm-extension';
 
 import { Customer } from '../../customer/entities/customer.entity';
-import type { DataSource, Repository } from 'typeorm';
+import type { DataSource } from 'typeorm';
 
 export const alfki = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
@@ -1464,114 +1464,145 @@ export const wolza = Object.assign<Customer, Partial<Customer>>(
   },
 );
 
-async function upsert(
-  repository: Repository<Customer>,
-  customer: Customer,
-): Promise<void> {
-  const { code, id: _, ...partialEntity } = customer;
-  const result = await repository.update({ code }, partialEntity);
-
-  if (result.affected === 0) {
-    await repository.insert(customer);
-  }
-}
+const customerJsonFixtures = JSON.stringify(
+  [
+    alfki,
+    anatr,
+    anton,
+    arout,
+    bergs,
+    blaus,
+    blonp,
+    bolid,
+    bonap,
+    bottm,
+    bsbev,
+    cactu,
+    centc,
+    chops,
+    commi,
+    consh,
+    dracd,
+    dumon,
+    eastc,
+    ernsh,
+    famia,
+    fissa,
+    folig,
+    folko,
+    frank,
+    franr,
+    frans,
+    furib,
+    galed,
+    godos,
+    gourl,
+    greal,
+    grosr,
+    hanar,
+    hila,
+    hungc,
+    hungg,
+    islat,
+    koene,
+    lacor,
+    lamai,
+    laugb,
+    lazyk,
+    lehms,
+    letss,
+    lilas,
+    linod,
+    lonep,
+    magaa,
+    maisd,
+    merep,
+    morgk,
+    norts,
+    ocean,
+    oldwo,
+    ottik,
+    paris,
+    peric,
+    picco,
+    prini,
+    quede,
+    queen,
+    quick,
+    ranch,
+    rattc,
+    reggc,
+    ricar,
+    ricsu,
+    romey,
+    santg,
+    savea,
+    seves,
+    simob,
+    specd,
+    splir,
+    suprd,
+    thebi,
+    thecr,
+    tomsp,
+    tortu,
+    tradd,
+    traih,
+    vaffe,
+    victe,
+    vinet,
+    wandk,
+    warth,
+    welli,
+    whitc,
+    wilmk,
+    wolza,
+  ],
+  (_key, value) => {
+    if (typeof value === 'boolean') {
+      return value ? 1 : 0;
+    }
+    return value as unknown;
+  },
+);
 
 export default class CustomerSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<void> {
     await dataSource.transaction(async (manager) => {
-      const repository = manager.getRepository(Customer);
+      await manager.sql`ALTER TABLE customer NOCHECK CONSTRAINT ALL;
 
-      await upsert(repository, alfki);
-      await upsert(repository, anatr);
-      await upsert(repository, anton);
-      await upsert(repository, arout);
-      await upsert(repository, bergs);
-      await upsert(repository, blaus);
-      await upsert(repository, blonp);
-      await upsert(repository, bolid);
-      await upsert(repository, bonap);
-      await upsert(repository, bottm);
-      await upsert(repository, bsbev);
-      await upsert(repository, cactu);
-      await upsert(repository, centc);
-      await upsert(repository, chops);
-      await upsert(repository, commi);
-      await upsert(repository, consh);
-      await upsert(repository, dracd);
-      await upsert(repository, dumon);
-      await upsert(repository, eastc);
-      await upsert(repository, ernsh);
-      await upsert(repository, famia);
-      await upsert(repository, fissa);
-      await upsert(repository, folig);
-      await upsert(repository, folko);
-      await upsert(repository, frank);
-      await upsert(repository, franr);
-      await upsert(repository, frans);
-      await upsert(repository, furib);
-      await upsert(repository, galed);
-      await upsert(repository, godos);
-      await upsert(repository, gourl);
-      await upsert(repository, greal);
-      await upsert(repository, grosr);
-      await upsert(repository, hanar);
-      await upsert(repository, hila);
-      await upsert(repository, hungc);
-      await upsert(repository, hungg);
-      await upsert(repository, islat);
-      await upsert(repository, koene);
-      await upsert(repository, lacor);
-      await upsert(repository, lamai);
-      await upsert(repository, laugb);
-      await upsert(repository, lazyk);
-      await upsert(repository, lehms);
-      await upsert(repository, letss);
-      await upsert(repository, lilas);
-      await upsert(repository, linod);
-      await upsert(repository, lonep);
-      await upsert(repository, magaa);
-      await upsert(repository, maisd);
-      await upsert(repository, merep);
-      await upsert(repository, morgk);
-      await upsert(repository, norts);
-      await upsert(repository, ocean);
-      await upsert(repository, oldwo);
-      await upsert(repository, ottik);
-      await upsert(repository, paris);
-      await upsert(repository, peric);
-      await upsert(repository, picco);
-      await upsert(repository, prini);
-      await upsert(repository, quede);
-      await upsert(repository, queen);
-      await upsert(repository, quick);
-      await upsert(repository, ranch);
-      await upsert(repository, rattc);
-      await upsert(repository, reggc);
-      await upsert(repository, ricar);
-      await upsert(repository, ricsu);
-      await upsert(repository, romey);
-      await upsert(repository, santg);
-      await upsert(repository, savea);
-      await upsert(repository, seves);
-      await upsert(repository, simob);
-      await upsert(repository, specd);
-      await upsert(repository, splir);
-      await upsert(repository, suprd);
-      await upsert(repository, thebi);
-      await upsert(repository, thecr);
-      await upsert(repository, tomsp);
-      await upsert(repository, tortu);
-      await upsert(repository, tradd);
-      await upsert(repository, traih);
-      await upsert(repository, vaffe);
-      await upsert(repository, victe);
-      await upsert(repository, vinet);
-      await upsert(repository, wandk);
-      await upsert(repository, warth);
-      await upsert(repository, welli);
-      await upsert(repository, whitc);
-      await upsert(repository, wilmk);
-      await upsert(repository, wolza);
+      MERGE INTO customer AS target
+      USING OPENJSON(${customerJsonFixtures}) WITH (
+        code varchar(5),
+        companyName varchar(40),
+        contactName varchar(30),
+        contactTitle varchar(30),
+        address varchar(60),
+        city varchar(15),
+        region varchar(15),
+        postalCode varchar(10),
+        country varchar(15),
+        phone varchar(24),
+        fax varchar(24)
+      ) AS source
+      ON target.code = source.code
+      WHEN MATCHED THEN
+        UPDATE SET
+          companyName = source.companyName,
+          contactName = source.contactName,
+          contactTitle = source.contactTitle,
+          address = source.address,
+          city = source.city,
+          region = source.region,
+          postalCode = source.postalCode,
+          country = source.country,
+          phone = source.phone,
+          fax = source.fax
+      WHEN NOT MATCHED THEN
+        INSERT (code, companyName, contactName, contactTitle, address, city, region, postalCode, country, phone, fax)
+        VALUES (source.code, source.companyName, source.contactName, source.contactTitle, source.address, source.city, source.region, source.postalCode, source.country, source.phone, source.fax);
+
+      ALTER TABLE customer CHECK CONSTRAINT ALL`;
     });
   }
 }
