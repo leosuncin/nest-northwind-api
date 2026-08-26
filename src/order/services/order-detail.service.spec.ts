@@ -7,6 +7,7 @@ import { OrderDetailService } from './order-detail.service';
 import { OrderDetail } from '../entities/order-detail.entity';
 import { CreateOrderDetail } from '../dto/create-order-detail.dto';
 import { UpdateOrderDetail } from '../dto/update-order-detail.dto';
+
 describe('OrderDetailService', () => {
   let service: OrderDetailService;
   let orderDetailRepository: Mocked<Repository<OrderDetail>>;
@@ -25,7 +26,7 @@ describe('OrderDetailService', () => {
     const orderId = 1;
     const details = [{ orderId, productId: 1 } as OrderDetail];
 
-    orderDetailRepository.find.mockResolvedValue(details);
+    void orderDetailRepository.find.mockResolvedValue(details);
 
     const result = await service.findAll(orderId);
 
@@ -41,7 +42,7 @@ describe('OrderDetailService', () => {
     const productId = 2;
     const detail = { orderId, productId } as OrderDetail;
 
-    orderDetailRepository.findOneOrFail.mockResolvedValue(detail);
+    void orderDetailRepository.findOneOrFail.mockResolvedValue(detail);
 
     const result = await service.findOne(orderId, productId);
 
@@ -69,7 +70,7 @@ describe('OrderDetailService', () => {
     } as OrderDetail;
 
     orderDetailRepository.create.mockReturnValue(createdDetail);
-    orderDetailRepository.save.mockResolvedValue(createdDetail);
+    void orderDetailRepository.save.mockResolvedValue(createdDetail);
 
     const result = await service.create(orderId, createDto);
 
@@ -87,16 +88,12 @@ describe('OrderDetailService', () => {
     const existing = { orderId, productId, quantity: 1 } as OrderDetail;
     const changes: UpdateOrderDetail = { quantity: 5 };
 
-    orderDetailRepository.findOneOrFail.mockResolvedValue(existing);
     orderDetailRepository.merge.mockReturnValue(existing);
-    orderDetailRepository.save.mockResolvedValue(existing);
+    void orderDetailRepository.save.mockResolvedValue(existing);
 
-    const result = await service.update(orderId, productId, changes);
+    const result = await service.update(existing, changes);
 
     expect(result).toEqual(existing);
-    expect(orderDetailRepository.findOneOrFail).toHaveBeenCalledWith({
-      where: { orderId, productId },
-    });
     expect(orderDetailRepository.merge).toHaveBeenCalledWith(existing, changes);
     expect(orderDetailRepository.save).toHaveBeenCalledWith(existing);
   });
@@ -106,15 +103,11 @@ describe('OrderDetailService', () => {
     const productId = 2;
     const detail = { orderId, productId } as OrderDetail;
 
-    orderDetailRepository.findOneOrFail.mockResolvedValue(detail);
-    orderDetailRepository.remove.mockResolvedValue(detail);
+    void orderDetailRepository.remove.mockResolvedValue(detail);
 
-    const result = await service.remove(orderId, productId);
+    const result = await service.remove(detail);
 
     expect(result).toEqual(detail);
-    expect(orderDetailRepository.findOneOrFail).toHaveBeenCalledWith({
-      where: { orderId, productId },
-    });
     expect(orderDetailRepository.remove).toHaveBeenCalledWith(detail);
   });
 });

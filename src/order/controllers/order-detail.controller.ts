@@ -5,18 +5,19 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UseFilters,
   UseInterceptors,
-  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 
 import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
 import { CreateOrderDetail } from '../dto/create-order-detail.dto';
 import { UpdateOrderDetail } from '../dto/update-order-detail.dto';
+import { OrderDetail } from '../entities/order-detail.entity';
+import { OrderDetailPipe } from '../pipes/order-detail.pipe';
 import { OrderDetailService } from '../services/order-detail.service';
 
 @Controller('order/:orderId/detail')
@@ -26,46 +27,38 @@ export class OrderDetailController {
   constructor(private readonly orderDetailService: OrderDetailService) {}
 
   @Get()
-  findAll(@Param('orderId', ParseIntPipe) orderId: number) {
+  findAll(@Param('orderId', PositiveIntPipe) orderId: number) {
     return this.orderDetailService.findAll(orderId);
   }
 
   @Get(':productId')
-  findOne(
-    @Param('orderId', ParseIntPipe) orderId: number,
-    @Param('productId', ParseIntPipe) productId: number,
-  ) {
-    return this.orderDetailService.findOne(orderId, productId);
+  findOne(@Param(OrderDetailPipe) orderDetail: OrderDetail) {
+    return orderDetail;
   }
 
   @Post()
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   create(
-    @Param('orderId', ParseIntPipe) orderId: number,
-    @Body() createOrderDetail: CreateOrderDetail,
+    @Param('orderId', PositiveIntPipe) orderId: number,
+    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    createOrderDetail: CreateOrderDetail,
   ) {
     return this.orderDetailService.create(orderId, createOrderDetail);
   }
 
   @Patch(':productId')
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   update(
-    @Param('orderId', ParseIntPipe) orderId: number,
-    @Param('productId', ParseIntPipe) productId: number,
-    @Body() updateOrderDetail: UpdateOrderDetail,
+    @Param(OrderDetailPipe) detail: OrderDetail,
+    @Body(
+      new ValidationPipe({ transform: true, whitelist: true }),
+      new OrderDetailPipe(),
+    )
+    updateOrderDetail: UpdateOrderDetail,
   ) {
-    return this.orderDetailService.update(
-      orderId,
-      productId,
-      updateOrderDetail,
-    );
+    return this.orderDetailService.update(detail, updateOrderDetail);
   }
 
   @Delete(':productId')
-  remove(
-    @Param('orderId', ParseIntPipe) orderId: number,
-    @Param('productId', ParseIntPipe) productId: number,
-  ) {
-    return this.orderDetailService.remove(orderId, productId);
+  remove(@Param(OrderDetailPipe) detail: OrderDetail) {
+    return this.orderDetailService.remove(detail);
   }
 }

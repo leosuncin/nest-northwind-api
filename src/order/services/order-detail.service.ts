@@ -41,27 +41,13 @@ export class OrderDetailService {
     return this.orderDetailRepository.save(detail);
   }
 
-  update(
-    orderId: number,
-    productId: number,
-    updateOrderDetail: UpdateOrderDetail,
-  ) {
-    return this.orderDetailRepository
-      .findOneOrFail({
-        where: { orderId, productId },
-      })
-      .then((detail) => {
-        this.orderDetailRepository.merge(detail, updateOrderDetail);
+  update(detail: OrderDetail, updateOrderDetail: UpdateOrderDetail) {
+    this.orderDetailRepository.merge(detail, updateOrderDetail);
 
-        return this.orderDetailRepository.save(detail);
-      });
+    return this.orderDetailRepository.save(detail);
   }
 
-  remove(orderId: number, productId: number) {
-    return this.orderDetailRepository
-      .findOneOrFail({
-        where: { orderId, productId },
-      })
-      .then((detail) => this.orderDetailRepository.remove(detail));
+  remove(detail: OrderDetail) {
+    return this.orderDetailRepository.remove(detail);
   }
 }
