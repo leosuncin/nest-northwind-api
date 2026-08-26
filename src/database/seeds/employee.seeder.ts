@@ -1,7 +1,7 @@
 import { Seeder } from 'typeorm-extension';
 
 import { Employee } from '../../employee/entities/employee.entity';
-import type { DataSource, Repository } from 'typeorm';
+import type { DataSource } from 'typeorm';
 
 export const AndrewFuller = Object.assign<Employee, Partial<Employee>>(
   new Employee(),
@@ -217,35 +217,125 @@ export const AnneDodsworth = Object.assign<Employee, Partial<Employee>>(
   },
 );
 
-async function upsert(repository: Repository<Employee>, employee: Employee) {
-  const entity = await repository.findOne({
-    where: { id: employee.id },
-    select: { id: true },
-    order: { id: 'DESC' },
-  });
-
-  if (entity) {
-    const { id, ...partialEntity } = employee;
-    await repository.update({ id }, partialEntity);
-  } else {
-    await repository.insert(employee);
-  }
-}
+const employeeJsonFixtures = JSON.stringify(
+  [
+    {
+      ...AndrewFuller,
+      reportsToId: null,
+      birthDate: AndrewFuller.birthDate?.toISOString().split('T')[0],
+      hireDate: AndrewFuller.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...NancyDavolio,
+      reportsToId: (NancyDavolio.reportsTo as Employee).id,
+      birthDate: NancyDavolio.birthDate?.toISOString().split('T')[0],
+      hireDate: NancyDavolio.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...JanetLeverling,
+      reportsToId: (JanetLeverling.reportsTo as Employee).id,
+      birthDate: JanetLeverling.birthDate?.toISOString().split('T')[0],
+      hireDate: JanetLeverling.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...MargaretPeacock,
+      reportsToId: (MargaretPeacock.reportsTo as Employee).id,
+      birthDate: MargaretPeacock.birthDate?.toISOString().split('T')[0],
+      hireDate: MargaretPeacock.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...StevenBuchanan,
+      reportsToId: (StevenBuchanan.reportsTo as Employee).id,
+      birthDate: StevenBuchanan.birthDate?.toISOString().split('T')[0],
+      hireDate: StevenBuchanan.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...MichaelSuyama,
+      reportsToId: (MichaelSuyama.reportsTo as Employee).id,
+      birthDate: MichaelSuyama.birthDate?.toISOString().split('T')[0],
+      hireDate: MichaelSuyama.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...RobertKing,
+      reportsToId: (RobertKing.reportsTo as Employee).id,
+      birthDate: RobertKing.birthDate?.toISOString().split('T')[0],
+      hireDate: RobertKing.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...LauraCallahan,
+      reportsToId: (LauraCallahan.reportsTo as Employee).id,
+      birthDate: LauraCallahan.birthDate?.toISOString().split('T')[0],
+      hireDate: LauraCallahan.hireDate?.toISOString().split('T')[0],
+    },
+    {
+      ...AnneDodsworth,
+      reportsToId: (AnneDodsworth.reportsTo as Employee).id,
+      birthDate: AnneDodsworth.birthDate?.toISOString().split('T')[0],
+      hireDate: AnneDodsworth.hireDate?.toISOString().split('T')[0],
+    },
+  ],
+  (_key, value) => {
+    if (value instanceof Date) {
+      return value.toISOString().split('T')[0];
+    }
+    if (typeof value === 'boolean') {
+      return value ? 1 : 0;
+    }
+    return value as unknown;
+  },
+);
 
 export default class EmployeeSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<void> {
     await dataSource.transaction(async (manager) => {
-      const repository = manager.getRepository(Employee);
+      await manager.sql`ALTER TABLE employee NOCHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT employee ON;
 
-      await upsert(repository, AndrewFuller);
-      await upsert(repository, NancyDavolio);
-      await upsert(repository, JanetLeverling);
-      await upsert(repository, MargaretPeacock);
-      await upsert(repository, StevenBuchanan);
-      await upsert(repository, MichaelSuyama);
-      await upsert(repository, RobertKing);
-      await upsert(repository, LauraCallahan);
-      await upsert(repository, AnneDodsworth);
+      MERGE INTO employee AS target
+      USING OPENJSON(${employeeJsonFixtures}) WITH (
+        id bigint,
+        firstName varchar(10),
+        lastName varchar(20),
+        title varchar(30),
+        titleOfCourtesy varchar(25),
+        birthDate date,
+        hireDate date,
+        address varchar(60),
+        city varchar(15),
+        region varchar(15),
+        postalCode varchar(10),
+        country varchar(15),
+        homePhone varchar(24),
+        extension varchar(4),
+        photo varchar(255),
+        notes varchar(MAX),
+        reportsToId bigint
+      ) AS source
+      ON target.id = source.id
+      WHEN MATCHED THEN
+        UPDATE SET
+          firstName = source.firstName,
+          lastName = source.lastName,
+          title = source.title,
+          titleOfCourtesy = source.titleOfCourtesy,
+          birthDate = source.birthDate,
+          hireDate = source.hireDate,
+          address = source.address,
+          city = source.city,
+          region = source.region,
+          postalCode = source.postalCode,
+          country = source.country,
+          homePhone = source.homePhone,
+          extension = source.extension,
+          photo = source.photo,
+          notes = source.notes,
+          reportsTo = source.reportsToId
+      WHEN NOT MATCHED THEN
+        INSERT (id, firstName, lastName, title, titleOfCourtesy, birthDate, hireDate, address, city, region, postalCode, country, homePhone, extension, photo, notes, reportsTo)
+        VALUES (source.id, source.firstName, source.lastName, source.title, source.titleOfCourtesy, source.birthDate, source.hireDate, source.address, source.city, source.region, source.postalCode, source.country, source.homePhone, source.extension, source.photo, source.notes, source.reportsToId);
+
+      ALTER TABLE employee CHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT employee OFF`;
     });
   }
 }

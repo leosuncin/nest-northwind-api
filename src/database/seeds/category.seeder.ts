@@ -1,5 +1,5 @@
-import type { Seeder } from 'typeorm-extension';
-import type { DataSource, Repository } from 'typeorm';
+import type { DataSource } from 'typeorm';
+import { Seeder } from 'typeorm-extension';
 
 import { Category } from '../../category/entities/category.entity';
 
@@ -75,34 +75,48 @@ export const seafood = Object.assign<Category, Partial<Category>>(
   },
 );
 
-async function upsert(repository: Repository<Category>, category: Category) {
-  const entity = await repository.findOne({
-    where: { id: category.id },
-    select: { id: true },
-    order: { id: 'DESC' },
-  });
-
-  if (entity) {
-    const { id, ...partialEntity } = category;
-    await repository.update({ id }, partialEntity);
-  } else {
-    await repository.insert(category);
-  }
-}
+const categoryJsonFixtures = JSON.stringify(
+  [
+    beverages,
+    condiments,
+    confections,
+    dairyProducts,
+    grainsCereals,
+    meatPoultry,
+    produce,
+    seafood,
+  ],
+  (_key, value) => {
+    if (typeof value === 'boolean') {
+      return value ? 1 : 0;
+    }
+    return value as unknown;
+  },
+);
 
 export default class CategorySeeder implements Seeder {
-  async run(dataSource: DataSource) {
+  async run(dataSource: DataSource): Promise<void> {
     await dataSource.transaction(async (manager) => {
-      const repository = manager.getRepository(Category);
+      await manager.sql`ALTER TABLE category NOCHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT category ON;
 
-      await upsert(repository, beverages);
-      await upsert(repository, condiments);
-      await upsert(repository, confections);
-      await upsert(repository, dairyProducts);
-      await upsert(repository, grainsCereals);
-      await upsert(repository, meatPoultry);
-      await upsert(repository, produce);
-      await upsert(repository, seafood);
+      MERGE INTO category AS target
+      USING OPENJSON(${categoryJsonFixtures}) WITH (
+        id bigint,
+        name varchar(15),
+        description varchar(MAX)
+      ) AS source
+      ON target.id = source.id
+      WHEN MATCHED THEN
+        UPDATE SET
+          name = source.name,
+          description = source.description
+      WHEN NOT MATCHED THEN
+        INSERT (id, name, description)
+        VALUES (source.id, source.name, source.description);
+
+      ALTER TABLE category CHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT category OFF`;
     });
   }
 }
