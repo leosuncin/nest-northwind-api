@@ -6,6 +6,7 @@ import type { DataSource } from 'typeorm';
 export const alfki = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 1,
     code: 'ALFKI',
     companyName: 'Alfreds Futterkiste',
     contactName: 'Maria Anders',
@@ -22,6 +23,7 @@ export const alfki = Object.assign<Customer, Partial<Customer>>(
 export const anatr = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 2,
     code: 'ANATR',
     companyName: 'Ana Trujillo Emparedados y helados',
     contactName: 'Ana Trujillo',
@@ -38,6 +40,7 @@ export const anatr = Object.assign<Customer, Partial<Customer>>(
 export const anton = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 3,
     code: 'ANTON',
     companyName: 'Antonio Moreno Taquería',
     contactName: 'Antonio Moreno',
@@ -53,6 +56,7 @@ export const anton = Object.assign<Customer, Partial<Customer>>(
 export const arout = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 4,
     code: 'AROUT',
     companyName: 'Around the Horn',
     contactName: 'Thomas Hardy',
@@ -69,6 +73,7 @@ export const arout = Object.assign<Customer, Partial<Customer>>(
 export const bergs = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 5,
     code: 'BERGS',
     companyName: 'Berglunds snabbköp',
     contactName: 'Christina Berglund',
@@ -85,6 +90,7 @@ export const bergs = Object.assign<Customer, Partial<Customer>>(
 export const blaus = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 6,
     code: 'BLAUS',
     companyName: 'Blauer See Delikatessen',
     contactName: 'Hanna Moos',
@@ -101,6 +107,7 @@ export const blaus = Object.assign<Customer, Partial<Customer>>(
 export const blonp = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 7,
     code: 'BLONP',
     companyName: 'Blondesddsl père et fils',
     contactName: 'Frédérique Citeaux',
@@ -117,6 +124,7 @@ export const blonp = Object.assign<Customer, Partial<Customer>>(
 export const bolid = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 8,
     code: 'BOLID',
     companyName: 'Bólido Comidas preparadas',
     contactName: 'Martín Sommer',
@@ -133,6 +141,7 @@ export const bolid = Object.assign<Customer, Partial<Customer>>(
 export const bonap = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 9,
     code: 'BONAP',
     companyName: "Bon app'",
     contactName: 'Laurence Lebihan',
@@ -149,6 +158,7 @@ export const bonap = Object.assign<Customer, Partial<Customer>>(
 export const bottm = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 10,
     code: 'BOTTM',
     companyName: 'Bottom-Dollar Markets',
     contactName: 'Elizabeth Lincoln',
@@ -166,6 +176,7 @@ export const bottm = Object.assign<Customer, Partial<Customer>>(
 export const bsbev = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 11,
     code: 'BSBEV',
     companyName: "B's Beverages",
     contactName: 'Victoria Ashworth',
@@ -181,6 +192,7 @@ export const bsbev = Object.assign<Customer, Partial<Customer>>(
 export const cactu = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 12,
     code: 'CACTU',
     companyName: 'Cactus Comidas para llevar',
     contactName: 'Patricio Simpson',
@@ -197,6 +209,7 @@ export const cactu = Object.assign<Customer, Partial<Customer>>(
 export const centc = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 13,
     code: 'CENTC',
     companyName: 'Centro comercial Moctezuma',
     contactName: 'Francisco Chang',
@@ -213,6 +226,7 @@ export const centc = Object.assign<Customer, Partial<Customer>>(
 export const chops = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 14,
     code: 'CHOPS',
     companyName: 'Chop-suey Chinese',
     contactName: 'Yang Wang',
@@ -228,6 +242,7 @@ export const chops = Object.assign<Customer, Partial<Customer>>(
 export const commi = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 15,
     code: 'COMMI',
     companyName: 'Comércio Mineiro',
     contactName: 'Pedro Afonso',
@@ -244,6 +259,7 @@ export const commi = Object.assign<Customer, Partial<Customer>>(
 export const consh = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 16,
     code: 'CONSH',
     companyName: 'Consolidated Holdings',
     contactName: 'Elizabeth Brown',
@@ -260,6 +276,7 @@ export const consh = Object.assign<Customer, Partial<Customer>>(
 export const dracd = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 17,
     code: 'DRACD',
     companyName: 'Drachenblut Delikatessen',
     contactName: 'Sven Ottlieb',
@@ -276,6 +293,7 @@ export const dracd = Object.assign<Customer, Partial<Customer>>(
 export const dumon = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 18,
     code: 'DUMON',
     companyName: 'Du monde entier',
     contactName: 'Janine Labrune',
@@ -292,6 +310,7 @@ export const dumon = Object.assign<Customer, Partial<Customer>>(
 export const eastc = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 19,
     code: 'EASTC',
     companyName: 'Eastern Connection',
     contactName: 'Ann Devon',
@@ -308,6 +327,7 @@ export const eastc = Object.assign<Customer, Partial<Customer>>(
 export const ernsh = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 20,
     code: 'ERNSH',
     companyName: 'Ernst Handel',
     contactName: 'Roland Mendel',
@@ -324,6 +344,7 @@ export const ernsh = Object.assign<Customer, Partial<Customer>>(
 export const famia = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 21,
     code: 'FAMIA',
     companyName: 'Familia Arquibaldo',
     contactName: 'Aria Cruz',
@@ -340,6 +361,7 @@ export const famia = Object.assign<Customer, Partial<Customer>>(
 export const fissa = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 22,
     code: 'FISSA',
     companyName: 'FISSA Fabrica Inter. Salchichas S.A.',
     contactName: 'Diego Roel',
@@ -356,6 +378,7 @@ export const fissa = Object.assign<Customer, Partial<Customer>>(
 export const folig = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 23,
     code: 'FOLIG',
     companyName: 'Folies gourmandes',
     contactName: 'Martine Rancé',
@@ -372,6 +395,7 @@ export const folig = Object.assign<Customer, Partial<Customer>>(
 export const folko = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 24,
     code: 'FOLKO',
     companyName: 'Folk och fä HB',
     contactName: 'Maria Larsson',
@@ -387,6 +411,7 @@ export const folko = Object.assign<Customer, Partial<Customer>>(
 export const frank = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 25,
     code: 'FRANK',
     companyName: 'Frankenversand',
     contactName: 'Peter Franken',
@@ -403,6 +428,7 @@ export const frank = Object.assign<Customer, Partial<Customer>>(
 export const franr = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 26,
     code: 'FRANR',
     companyName: 'France restauration',
     contactName: 'Carine Schmitt',
@@ -419,6 +445,7 @@ export const franr = Object.assign<Customer, Partial<Customer>>(
 export const frans = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 27,
     code: 'FRANS',
     companyName: 'Franchi S.p.A.',
     contactName: 'Paolo Accorti',
@@ -435,6 +462,7 @@ export const frans = Object.assign<Customer, Partial<Customer>>(
 export const furib = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 28,
     code: 'FURIB',
     companyName: 'Furia Bacalhau e Frutos do Mar',
     contactName: 'Lino Rodriguez',
@@ -451,6 +479,7 @@ export const furib = Object.assign<Customer, Partial<Customer>>(
 export const galed = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 29,
     code: 'GALED',
     companyName: 'Galería del gastrónomo',
     contactName: 'Eduardo Saavedra',
@@ -467,6 +496,7 @@ export const galed = Object.assign<Customer, Partial<Customer>>(
 export const godos = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 30,
     code: 'GODOS',
     companyName: 'Godos Cocina Típica',
     contactName: 'José Pedro Freyre',
@@ -482,6 +512,7 @@ export const godos = Object.assign<Customer, Partial<Customer>>(
 export const gourl = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 31,
     code: 'GOURL',
     companyName: 'Gourmet Lanchonetes',
     contactName: 'André Fonseca',
@@ -498,6 +529,7 @@ export const gourl = Object.assign<Customer, Partial<Customer>>(
 export const greal = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 32,
     code: 'GREAL',
     companyName: 'Great Lakes Food Market',
     contactName: 'Howard Snyder',
@@ -514,6 +546,7 @@ export const greal = Object.assign<Customer, Partial<Customer>>(
 export const grosr = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 33,
     code: 'GROSR',
     companyName: 'GROSELLA-Restaurante',
     contactName: 'Manuel Pereira',
@@ -531,6 +564,7 @@ export const grosr = Object.assign<Customer, Partial<Customer>>(
 export const hanar = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 34,
     code: 'HANAR',
     companyName: 'Hanari Carnes',
     contactName: 'Mario Pontes',
@@ -546,6 +580,7 @@ export const hanar = Object.assign<Customer, Partial<Customer>>(
 );
 
 export const hila = Object.assign<Customer, Partial<Customer>>(new Customer(), {
+  id: 35,
   code: 'HILAA',
   companyName: 'HILARION-Abastos',
   contactName: 'Carlos Hernández',
@@ -562,6 +597,7 @@ export const hila = Object.assign<Customer, Partial<Customer>>(new Customer(), {
 export const hungc = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 36,
     code: 'HUNGC',
     companyName: 'Hungry Coyote Import Store',
     contactName: 'Yoshi Latimer',
@@ -579,6 +615,7 @@ export const hungc = Object.assign<Customer, Partial<Customer>>(
 export const hungg = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 37,
     code: 'HUNGO',
     companyName: 'Hungry Owl All-Night Grocers',
     contactName: 'Patricia McKenna',
@@ -595,6 +632,7 @@ export const hungg = Object.assign<Customer, Partial<Customer>>(
 export const islat = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 38,
     code: 'ISLAT',
     companyName: 'Island Trading',
     contactName: 'Helen Bennett',
@@ -611,6 +649,7 @@ export const islat = Object.assign<Customer, Partial<Customer>>(
 export const koene = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 39,
     code: 'KOENE',
     companyName: 'Königlich Essen',
     contactName: 'Philip Cramer',
@@ -626,6 +665,7 @@ export const koene = Object.assign<Customer, Partial<Customer>>(
 export const lacor = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 40,
     code: 'LACOR',
     companyName: "La corne d'abondance",
     contactName: 'Daniel Tonini',
@@ -642,6 +682,7 @@ export const lacor = Object.assign<Customer, Partial<Customer>>(
 export const lamai = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 41,
     code: 'LAMAI',
     companyName: "La maison d'Asie",
     contactName: 'Annette Roulet',
@@ -658,6 +699,7 @@ export const lamai = Object.assign<Customer, Partial<Customer>>(
 export const laugb = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 42,
     code: 'LAUGB',
     companyName: 'Laughing Bacchus Wine Cellars',
     contactName: 'Yoshi Tannamuri',
@@ -675,6 +717,7 @@ export const laugb = Object.assign<Customer, Partial<Customer>>(
 export const lazyk = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 43,
     code: 'LAZYK',
     companyName: 'Lazy K Kountry Store',
     contactName: 'John Steel',
@@ -692,6 +735,7 @@ export const lazyk = Object.assign<Customer, Partial<Customer>>(
 export const lehms = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 44,
     code: 'LEHMS',
     companyName: 'Lehmanns Marktstand',
     contactName: 'Renate Messner',
@@ -708,6 +752,7 @@ export const lehms = Object.assign<Customer, Partial<Customer>>(
 export const letss = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 45,
     code: 'LETSS',
     companyName: "Let's Stop N Shop",
     contactName: 'Jaime Yorres',
@@ -724,6 +769,7 @@ export const letss = Object.assign<Customer, Partial<Customer>>(
 export const lilas = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 46,
     code: 'LILAS',
     companyName: 'LILA-Supermercado',
     contactName: 'Carlos González',
@@ -741,6 +787,7 @@ export const lilas = Object.assign<Customer, Partial<Customer>>(
 export const linod = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 47,
     code: 'LINOD',
     companyName: 'LINO-Delicateses',
     contactName: 'Felipe Izquierdo',
@@ -758,6 +805,7 @@ export const linod = Object.assign<Customer, Partial<Customer>>(
 export const lonep = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 48,
     code: 'LONEP',
     companyName: 'Lonesome Pine Restaurant',
     contactName: 'Fran Wilson',
@@ -775,6 +823,7 @@ export const lonep = Object.assign<Customer, Partial<Customer>>(
 export const magaa = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 49,
     code: 'MAGAA',
     companyName: 'Magazzini Alimentari Riuniti',
     contactName: 'Giovanni Rovelli',
@@ -791,6 +840,7 @@ export const magaa = Object.assign<Customer, Partial<Customer>>(
 export const maisd = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 50,
     code: 'MAISD',
     companyName: 'Maison Dewey',
     contactName: 'Catherine Dewey',
@@ -807,6 +857,7 @@ export const maisd = Object.assign<Customer, Partial<Customer>>(
 export const merep = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 51,
     code: 'MEREP',
     companyName: 'Mère Paillarde',
     contactName: 'Jean Fresnière',
@@ -824,6 +875,7 @@ export const merep = Object.assign<Customer, Partial<Customer>>(
 export const morgk = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 52,
     code: 'MORGK',
     companyName: 'Morgenstern Gesundkost',
     contactName: 'Alexander Feuer',
@@ -839,6 +891,7 @@ export const morgk = Object.assign<Customer, Partial<Customer>>(
 export const norts = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 53,
     code: 'NORTS',
     companyName: 'North/South',
     contactName: 'Simon Crowther',
@@ -855,6 +908,7 @@ export const norts = Object.assign<Customer, Partial<Customer>>(
 export const ocean = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 54,
     code: 'OCEAN',
     companyName: 'Océano Atlántico Ltda.',
     contactName: 'Yvonne Moncada',
@@ -871,6 +925,7 @@ export const ocean = Object.assign<Customer, Partial<Customer>>(
 export const oldwo = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 55,
     code: 'OLDWO',
     companyName: 'Old World Delicatessen',
     contactName: 'Rene Phillips',
@@ -888,6 +943,7 @@ export const oldwo = Object.assign<Customer, Partial<Customer>>(
 export const ottik = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 56,
     code: 'OTTIK',
     companyName: 'Ottilies Käseladen',
     contactName: 'Henriette Pfalzheim',
@@ -904,6 +960,7 @@ export const ottik = Object.assign<Customer, Partial<Customer>>(
 export const paris = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 57,
     code: 'PARIS',
     companyName: 'Paris spécialités',
     contactName: 'Marie Bertrand',
@@ -920,6 +977,7 @@ export const paris = Object.assign<Customer, Partial<Customer>>(
 export const peric = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 58,
     code: 'PERIC',
     companyName: 'Pericles Comidas clásicas',
     contactName: 'Guillermo Fernández',
@@ -936,6 +994,7 @@ export const peric = Object.assign<Customer, Partial<Customer>>(
 export const picco = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 59,
     code: 'PICCO',
     companyName: 'Piccolo und mehr',
     contactName: 'Georg Pipps',
@@ -952,6 +1011,7 @@ export const picco = Object.assign<Customer, Partial<Customer>>(
 export const prini = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 60,
     code: 'PRINI',
     companyName: 'Princesa Isabel Vinhos',
     contactName: 'Isabel de Castro',
@@ -967,6 +1027,7 @@ export const prini = Object.assign<Customer, Partial<Customer>>(
 export const quede = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 61,
     code: 'QUEDE',
     companyName: 'Que Delícia',
     contactName: 'Bernardo Batista',
@@ -984,6 +1045,7 @@ export const quede = Object.assign<Customer, Partial<Customer>>(
 export const queen = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 62,
     code: 'QUEEN',
     companyName: 'Queen Cozinha',
     contactName: 'Lúcia Carvalho',
@@ -1000,6 +1062,7 @@ export const queen = Object.assign<Customer, Partial<Customer>>(
 export const quick = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 63,
     code: 'QUICK',
     companyName: 'QUICK-Stop',
     contactName: 'Horst Kloss',
@@ -1015,6 +1078,7 @@ export const quick = Object.assign<Customer, Partial<Customer>>(
 export const ranch = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 64,
     code: 'RANCH',
     companyName: 'Rancho grande',
     contactName: 'Sergio Gutiérrez',
@@ -1031,6 +1095,7 @@ export const ranch = Object.assign<Customer, Partial<Customer>>(
 export const rattc = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 65,
     code: 'RATTC',
     companyName: 'Rattlesnake Canyon Grocery',
     contactName: 'Paula Wilson',
@@ -1048,6 +1113,7 @@ export const rattc = Object.assign<Customer, Partial<Customer>>(
 export const reggc = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 66,
     code: 'REGGC',
     companyName: 'Reggiani Caseifici',
     contactName: 'Maurizio Moroni',
@@ -1064,6 +1130,7 @@ export const reggc = Object.assign<Customer, Partial<Customer>>(
 export const ricar = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 67,
     code: 'RICAR',
     companyName: 'Ricardo Adocicados',
     contactName: 'Janete Limeira',
@@ -1080,6 +1147,7 @@ export const ricar = Object.assign<Customer, Partial<Customer>>(
 export const ricsu = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 68,
     code: 'RICSU',
     companyName: 'Richter Supermarkt',
     contactName: 'Michael Holz',
@@ -1095,6 +1163,7 @@ export const ricsu = Object.assign<Customer, Partial<Customer>>(
 export const romey = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 69,
     code: 'ROMEY',
     companyName: 'Romero y tomillo',
     contactName: 'Alejandra Camino',
@@ -1111,6 +1180,7 @@ export const romey = Object.assign<Customer, Partial<Customer>>(
 export const santg = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 70,
     code: 'SANTG',
     companyName: 'Santé Gourmet',
     contactName: 'Jonas Bergulfsen',
@@ -1127,6 +1197,7 @@ export const santg = Object.assign<Customer, Partial<Customer>>(
 export const savea = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 71,
     code: 'SAVEA',
     companyName: 'Save-a-lot Markets',
     contactName: 'Jose Pavarotti',
@@ -1143,6 +1214,7 @@ export const savea = Object.assign<Customer, Partial<Customer>>(
 export const seves = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 72,
     code: 'SEVES',
     companyName: 'Seven Seas Imports',
     contactName: 'Hari Kumar',
@@ -1159,6 +1231,7 @@ export const seves = Object.assign<Customer, Partial<Customer>>(
 export const simob = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 73,
     code: 'SIMOB',
     companyName: 'Simons bistro',
     contactName: 'Jytte Petersen',
@@ -1175,6 +1248,7 @@ export const simob = Object.assign<Customer, Partial<Customer>>(
 export const specd = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 74,
     code: 'SPECD',
     companyName: 'Spécialités du monde',
     contactName: 'Dominique Perrier',
@@ -1191,6 +1265,7 @@ export const specd = Object.assign<Customer, Partial<Customer>>(
 export const splir = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 75,
     code: 'SPLIR',
     companyName: 'Split Rail Beer & Ale',
     contactName: 'Art Braunschweiger',
@@ -1208,6 +1283,7 @@ export const splir = Object.assign<Customer, Partial<Customer>>(
 export const suprd = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 76,
     code: 'SUPRD',
     companyName: 'Suprêmes délices',
     contactName: 'Pascale Cartrain',
@@ -1224,6 +1300,7 @@ export const suprd = Object.assign<Customer, Partial<Customer>>(
 export const thebi = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 77,
     code: 'THEBI',
     companyName: 'The Big Cheese',
     contactName: 'Liz Nixon',
@@ -1240,6 +1317,7 @@ export const thebi = Object.assign<Customer, Partial<Customer>>(
 export const thecr = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 78,
     code: 'THECR',
     companyName: 'The Cracker Box',
     contactName: 'Liu Wong',
@@ -1257,6 +1335,7 @@ export const thecr = Object.assign<Customer, Partial<Customer>>(
 export const tomsp = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 79,
     code: 'TOMSP',
     companyName: 'Toms Spezialitäten',
     contactName: 'Karin Josephs',
@@ -1273,6 +1352,7 @@ export const tomsp = Object.assign<Customer, Partial<Customer>>(
 export const tortu = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 80,
     code: 'TORTU',
     companyName: 'Tortuga Restaurante',
     contactName: 'Miguel Angel Paolino',
@@ -1288,6 +1368,7 @@ export const tortu = Object.assign<Customer, Partial<Customer>>(
 export const tradd = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 81,
     code: 'TRADH',
     companyName: 'Tradição Hipermercados',
     contactName: 'Anabela Domingues',
@@ -1305,6 +1386,7 @@ export const tradd = Object.assign<Customer, Partial<Customer>>(
 export const traih = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 82,
     code: 'TRAIH',
     companyName: "Trail's Head Gourmet Provisioners",
     contactName: 'Helvetius Nagy',
@@ -1322,6 +1404,7 @@ export const traih = Object.assign<Customer, Partial<Customer>>(
 export const vaffe = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 83,
     code: 'VAFFE',
     companyName: 'Vaffeljernet',
     contactName: 'Palle Ibsen',
@@ -1338,6 +1421,7 @@ export const vaffe = Object.assign<Customer, Partial<Customer>>(
 export const victe = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 84,
     code: 'VICTE',
     companyName: 'Victuailles en stock',
     contactName: 'Mary Saveley',
@@ -1354,6 +1438,7 @@ export const victe = Object.assign<Customer, Partial<Customer>>(
 export const vinet = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 85,
     code: 'VINET',
     companyName: 'Vins et alcools Chevalier',
     contactName: 'Paul Henriot',
@@ -1370,6 +1455,7 @@ export const vinet = Object.assign<Customer, Partial<Customer>>(
 export const wandk = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 86,
     code: 'WANDK',
     companyName: 'Die Wandernde Kuh',
     contactName: 'Rita Müller',
@@ -1386,6 +1472,7 @@ export const wandk = Object.assign<Customer, Partial<Customer>>(
 export const warth = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 87,
     code: 'WARTH',
     companyName: 'Wartian Herkku',
     contactName: 'Pirkko Koskitalo',
@@ -1402,6 +1489,7 @@ export const warth = Object.assign<Customer, Partial<Customer>>(
 export const welli = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 88,
     code: 'WELLI',
     companyName: 'Wellington Importadora',
     contactName: 'Paula Parente',
@@ -1418,6 +1506,7 @@ export const welli = Object.assign<Customer, Partial<Customer>>(
 export const whitc = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 89,
     code: 'WHITC',
     companyName: 'White Clover Markets',
     contactName: 'Karl Jablonski',
@@ -1435,6 +1524,7 @@ export const whitc = Object.assign<Customer, Partial<Customer>>(
 export const wilmk = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 90,
     code: 'WILMK',
     companyName: 'Wilman Kala',
     contactName: 'Matti Karttunen',
@@ -1451,6 +1541,7 @@ export const wilmk = Object.assign<Customer, Partial<Customer>>(
 export const wolza = Object.assign<Customer, Partial<Customer>>(
   new Customer(),
   {
+    id: 91,
     code: 'WOLZA',
     companyName: 'Wolski  Zajazd',
     contactName: 'Zbyszek Piestrzeniewicz',
@@ -1570,9 +1661,11 @@ export default class CustomerSeeder implements Seeder {
   async run(dataSource: DataSource): Promise<void> {
     await dataSource.transaction(async (manager) => {
       await manager.sql`ALTER TABLE customer NOCHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT customer ON;
 
       MERGE INTO customer AS target
       USING OPENJSON(${customerJsonFixtures}) WITH (
+        id bigint,
         code varchar(5),
         companyName varchar(40),
         contactName varchar(30),
@@ -1585,9 +1678,10 @@ export default class CustomerSeeder implements Seeder {
         phone varchar(24),
         fax varchar(24)
       ) AS source
-      ON target.code = source.code
+      ON target.id = source.id
       WHEN MATCHED THEN
         UPDATE SET
+          code = source.code,
           companyName = source.companyName,
           contactName = source.contactName,
           contactTitle = source.contactTitle,
@@ -1599,10 +1693,11 @@ export default class CustomerSeeder implements Seeder {
           phone = source.phone,
           fax = source.fax
       WHEN NOT MATCHED THEN
-        INSERT (code, companyName, contactName, contactTitle, address, city, region, postalCode, country, phone, fax)
-        VALUES (source.code, source.companyName, source.contactName, source.contactTitle, source.address, source.city, source.region, source.postalCode, source.country, source.phone, source.fax);
+        INSERT (id, code, companyName, contactName, contactTitle, address, city, region, postalCode, country, phone, fax)
+        VALUES (source.id, source.code, source.companyName, source.contactName, source.contactTitle, source.address, source.city, source.region, source.postalCode, source.country, source.phone, source.fax);
 
-      ALTER TABLE customer CHECK CONSTRAINT ALL`;
+      ALTER TABLE customer CHECK CONSTRAINT ALL;
+      SET IDENTITY_INSERT customer OFF`;
     });
   }
 }
