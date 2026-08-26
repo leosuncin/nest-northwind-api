@@ -3,12 +3,12 @@
   "dockerComposeFile": ["compose.yaml"],
   "service": "workspace",
   "workspaceFolder": "/workspaces/nest-northwind-api",
-  "runServices": ["sql-server"],
+  "runServices": ["sql-server", "contract-flows"],
   "postCreateCommand": "sudo chown -R node:node /home/node/.local ; git clone --depth 1 https://github.com/powerline/fonts.git ~/fonts && ~/fonts/install.sh && rm -rf ~/fonts; wget -qO ~/.gitconfig https://gist.githubusercontent.com/leosuncin/7fb12809933571729e9ff3f6f8837fd0/raw/930532e442c6963bed4fa2d4af94e99c8fcf93db/.gitconfig ; echo 'eval $(pnpm completion zsh)\neval $(mise completion zsh)' >> ~/.zshrc ; sed -i 's/^ZSH_THEME=\"devcontainers\"$/ZSH_THEME=\"amuse\"/' ~/.zshrc",
   "postStartCommand": "mise trust --all && mise install && pnpm install",
   "shutdownAction": "stopCompose",
   "remoteUser": "node",
-  "forwardPorts": [1433, 3000],
+  "forwardPorts": [1337, 1433, 8080],
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2.5.9": {
       "configureZshAsDefaultShell": true

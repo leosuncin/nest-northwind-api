@@ -26,6 +26,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  contract-flows:
+    image: pactumjs/flows:latest
+    environment:
+      AUTH_TOKEN: ${AUTH_TOKEN:-CH4ng3_m€}
+      DB_HOST: mongo
+    depends_on:
+      mongo:
+        condition: service_healthy
+    network_mode: service:workspace
+    healthcheck:
+      test: curl -qS --spider http://127.0.0.1:8080/api/flow/v1/health
+  mongo:
+    image: mongo:8.3
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: mongosh --eval "db.adminCommand('ping')"
 
 volumes:
   sql-server-data:
+  mongo-data:
