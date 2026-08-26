@@ -1,6 +1,7 @@
 import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const swcPlugin = swc.vite({
   module: { type: 'es6' },
   jsc: {
@@ -45,6 +46,14 @@ export default defineConfig({
           include: ['test/**/*.e2e-spec.ts'],
           testTimeout: 60_000,
           hookTimeout: 60_000,
+        },
+      },
+      {
+        plugins: [swcPlugin],
+        test: {
+          ...sharedTest,
+          name: 'Contract',
+          include: ['test/**/*.ct-spec.ts'],
         },
       },
     ],

@@ -4,6 +4,8 @@ import { pathToFileURL } from 'node:url';
 
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import type { StartedMSSQLServerContainer } from '@testcontainers/mssqlserver';
+import pactum from 'pactum';
+import pactumFlow from 'pactum-flow-plugin';
 import type {
   DataSourceOptions,
   MigrationInterface,
@@ -93,4 +95,15 @@ export async function buildTypeOrmOptions(
     seeds,
     factories,
   } satisfies DataSourceOptions & TypeOrmModuleOptions & SeederOptions;
+}
+
+export function addFlowReporter(moduleName: string, client: boolean) {
+  pactumFlow.config.url = 'http://localhost:8080';
+  pactumFlow.config.projectId = `${client ? 'client' : 'api'}_${moduleName.toLowerCase()}`;
+  pactumFlow.config.projectName = `[${client ? 'Consumer' : 'Provider'}] ${moduleName} API`;
+  pactumFlow.config.version = '1.0.0';
+  pactumFlow.config.username = 'scanner';
+  pactumFlow.config.password = 'scanner';
+
+  pactum.reporter.add(pactumFlow.reporter);
 }

@@ -11,6 +11,7 @@ MSSQL_SA_PASSWORD = { age = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3VlQ0VC9
 AUTH_TOKEN = "zVcZ5q2VVCLAhUNxMEUwTw=="
 _.file = ".env"
 _.path = ["{{config_root}}/node_modules/.bin"]
+PACTUM_REQUEST_BASE_URL = "http://localhost:1337"
 HK_MISE = 1
 
 [settings]
