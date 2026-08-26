@@ -156,10 +156,12 @@ describe('ProductController (e2e)', () => {
         ...product,
         category: {
           ...product.category,
+          id: product.category.id.toString(),
           picture: product.category.picture ?? null,
         },
         supplier: {
           ...product.supplier,
+          id: product.supplier.id.toString(),
           fax: product.supplier.fax ?? null,
           region: product.supplier.region ?? null,
           homePage: product.supplier.homePage ?? null,
