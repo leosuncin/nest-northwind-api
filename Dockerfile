@@ -50,10 +50,6 @@ FROM gcr.io/distroless/nodejs26-debian13:nonroot
 
 ARG PORT=3000
 
-LABEL org.opencontainers.image.title="Nest.js Northwind API"
-LABEL org.opencontainers.image.source="https://github.com/leosuncin/nest-northwind-api"
-LABEL org.opencontainers.image.licenses="AGPL-3.0-only"
-
 WORKDIR /app
 
 COPY package.json .
