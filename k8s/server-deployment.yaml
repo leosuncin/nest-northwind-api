@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: server
+  template:
+    metadata:
+      labels:
+        io.kompose.service: server
+    spec:
+      containers:
+        - name: server
+          image: api:latest
+          imagePullPolicy: Never
+          envFrom:
+            - secretRef:
+                name: northwind-db
+          env:
+            - name: MSSQL_HOST
+              value: sql-server
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+      restartPolicy: Always

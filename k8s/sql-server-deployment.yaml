@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: sql-server
+  name: sql-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sql-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: sql-server
+    spec:
+      containers:
+        - name: sql-server
+          image: mcr.microsoft.com/mssql/server:2025-latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: northwind-db
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  /opt/mssql-tools18/bin/sqlcmd \
+                    -h -1 -t 1 -C -b \
+                    -U "${MSSQL_USER:?}" \
+                    -P "${MSSQL_PASSWORD:?}" \
+                    -Q "SELECT name FROM sys.databases WHERE name = N'${MSSQL_DB:?}'"
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          volumeMounts:
+            - mountPath: /var/opt/mssql
+              name: sql-server-data
+      restartPolicy: Always
+      volumes:
+        - name: sql-server-data
+          persistentVolumeClaim:
+            claimName: sql-server-data

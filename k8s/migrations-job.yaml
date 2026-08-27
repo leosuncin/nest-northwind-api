@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+  labels:
+    io.kompose.service: migrations
+spec:
+  backoffLimit: 30
+  ttlSecondsAfterFinished: 600
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        io.kompose.service: migrations
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrations
+          image: migrations:latest
+          imagePullPolicy: Never
+          envFrom:
+            - secretRef:
+                name: northwind-db
+          env:
+            - name: MSSQL_HOST
+              value: sql-server
+          volumeMounts:
+            - mountPath: /typeorm/data-source.js
+              name: data-source
+              subPath: data-source.js
+      volumes:
+        - name: data-source
+          configMap:
+            name: data-source
+            items:
+              - key: data-source.js
+                path: data-source.js
