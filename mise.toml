@@ -1,6 +1,8 @@
 [tools]
-hk = { version = "latest", postinstall = "hk install --mise", depends = "pkl" }
-node = { version = "latest", postinstall = "corepack enable", depends = "npm:corepack" }
+"github:tj/node-prune" = "latest"
+hk = { version = "latest", postinstall = "hk install --mise" }
+node = { version = "latest" }
+"npm:corepack" = { version = "latest", postinstall = "corepack enable" }
 opencode = "latest"
 
 [env]
@@ -25,3 +27,16 @@ description = "Installs dependencies with pnpm"
 run = "pnpm install"
 sources = ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "mise.toml"]
 outputs = ["node_modules/.pnpm/lock.yaml"]
+
+[tasks.build-and-clean]
+description = "Build the app and clean node_modules"
+run = ["pnpm run build", "pnpm prune --prod", "node-prune"]
+env = { NODE_ENV = "production", CI = "1" }
+sources = [
+  "package.json",
+  "pnpm-lock.yaml",
+  "pnpm-workspace.yaml",
+  "tsconfig.json",
+  "tsconfig.build.json",
+]
+outputs = ["dist/tsconfig.build.tsbuildinfo"]
