@@ -1,0 +1,39 @@
+info:
+  name: Remove one category
+  type: http
+  seq: 5
+  tags:
+    - category
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/category/:categoryId'
+  params:
+    - name: categoryId
+      value: '{{CATEGORY_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("category removed properties", () => {
+          const payload = req.getBody();
+          const category = res.getBody();
+
+          expect(category).not.to.have.property('id');
+          expect(category).to.have.property('name').and.to.be.an('string');
+          expect(category).to.have.property('description').and.to.be.an('string');
+          expect(category).to.have.property('picture').and.to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,48 @@
+info:
+  name: Create a new category
+  type: http
+  seq: 1
+  tags:
+    - category
+
+http:
+  method: POST
+  url: '{{BASE_URL}}/category'
+  body:
+    type: json
+    data: |-
+      {
+        "name": "{{$randomDepartment}}",
+        "description": "{{$randomProductAdjective}}",
+        "picture": "{{$randomBusinessImage}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const category = res.getBody();
+
+        bru.setVar('CATEGORY_ID', category.id);
+    - type: tests
+      code: |-
+        test("category properties", () => {
+          const payload = req.getBody();
+          const category = res.getBody();
+
+          expect(category).to.have.property('id');
+          expect(category).to.have.property('name', payload.name);
+          expect(category).to.have.property('description', payload.description);
+          expect(category).to.have.property('picture', payload.picture);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '201'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

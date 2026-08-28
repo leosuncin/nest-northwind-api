@@ -1,0 +1,48 @@
+info:
+  name: Update one category
+  type: http
+  seq: 4
+  tags:
+    - category
+
+http:
+  method: PATCH
+  url: '{{BASE_URL}}/category/:categoryId'
+  params:
+    - name: categoryId
+      value: '{{CATEGORY_ID}}'
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "{{$randomDepartment}}",
+        "description": "{{$randomProductAdjective}}",
+        "picture": "{{$randomBusinessImage}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("category updated properties", () => {
+          const payload = req.getBody();
+          const category = res.getBody();
+          const categoryId = req.getPathParams()[0].value;
+
+          expect(category).to.have.property('id', categoryId);
+          expect(category).to.have.property('name', payload.name);
+          expect(category).to.have.property('description', payload.description);
+          expect(category).to.have.property('picture', payload.picture);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
