@@ -70,5 +70,12 @@
     "unplugin-swc": "1.5.11",
     "vitest": "4.1.11"
   },
-  "packageManager": "pnpm@11.24.0"
+  "packageManager": "pnpm@11.24.0",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "~26.8.0",
+      "onFail": "download"
+    }
+  }
 }
