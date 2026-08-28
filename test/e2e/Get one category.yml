@@ -1,0 +1,39 @@
+info:
+  name: Get one category
+  type: http
+  seq: 3
+  tags:
+    - category
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/category/:categoryId'
+  params:
+    - name: categoryId
+      value: '{{CATEGORY_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing category properties", () => {
+          const category = res.getBody();
+          const categoryId = req.getPathParams()[0].value;
+
+          expect(category).to.have.property('id', categoryId);
+          expect(category).to.have.property('name').to.be.an('string');
+          expect(category).to.have.property('description').to.be.an('string');
+          expect(category).to.have.property('picture').to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
