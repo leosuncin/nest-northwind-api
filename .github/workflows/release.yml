@@ -16,14 +16,11 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Install PNPM 🧰
-        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-      - name: Install Node.js LTS 📜
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+
+      - name: Setup PNPM 🧰
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2
         with:
-          node-version: 26
-          cache: pnpm
-      - name: Install dependencies 📦
-        run: pnpm install --frozen-lockfile --strict-peer-dependencies
+          cache: true
+
       - name: Release 🚀
         run: pnpm exec semantic-release
