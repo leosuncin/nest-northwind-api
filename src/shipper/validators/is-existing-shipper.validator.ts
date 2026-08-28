@@ -6,9 +6,9 @@ import {
   registerDecorator,
 } from 'class-validator';
 
-import { isId } from '../../shared/utils/id.utils';
-import { Shipper } from '../entities/shipper.entity';
-import { ShipperService } from '../services/shipper.service';
+import { isId } from '../../shared/utils/id.utils.js';
+import { Shipper } from '../entities/shipper.entity.js';
+import { ShipperService } from '../services/shipper.service.js';
 
 @Injectable()
 @ValidatorConstraint({ name: 'IsExistingShipper', async: true })

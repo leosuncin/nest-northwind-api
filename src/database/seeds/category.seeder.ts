@@ -1,7 +1,7 @@
 import type { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
-import { Category } from '../../category/entities/category.entity';
+import { Category } from '../../category/entities/category.entity.js';
 
 export const beverages = Object.assign<Category, Partial<Category>>(
   new Category(),

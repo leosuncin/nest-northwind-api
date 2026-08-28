@@ -9,11 +9,11 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module';
-import typeormConfig from '../src/config/typeorm';
-import { CreateSupplier } from '../src/supplier/dto/create-supplier.dto';
-import { Supplier } from '../src/supplier/entities/supplier.entity';
-import { buildTypeOrmOptions } from './helpers';
+import { AppModule } from '../src/app.module.js';
+import typeormConfig from '../src/config/typeorm.js';
+import { CreateSupplier } from '../src/supplier/dto/create-supplier.dto.js';
+import { Supplier } from '../src/supplier/entities/supplier.entity.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 describe('SupplierController (e2e)', () => {
   let app: INestApplication<App>;

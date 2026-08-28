@@ -1,9 +1,10 @@
+import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
-import { Employee } from '../../employee/entities/employee.entity';
-import { roundDateToDay } from '../../shared/utils/date.utils';
+import { Employee } from '../../employee/entities/employee.entity.js';
+import { roundDateToDay } from '../../shared/utils/date.utils.js';
 
-export const employeeFactory = setSeederFactory(Employee, (faker) => {
+export const employeeFactory = setSeederFactory(Employee, () => {
   const employee = new Employee();
 
   employee.lastName = faker.person.lastName().substring(0, 20);

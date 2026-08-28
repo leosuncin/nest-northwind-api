@@ -6,8 +6,8 @@ import { useContainer, validate } from 'class-validator';
 import {
   IsExistingShipper,
   IsExistingShipperConstraint,
-} from './is-existing-shipper.validator';
-import { ShipperService } from '../services/shipper.service';
+} from './is-existing-shipper.validator.js';
+import { ShipperService } from '../services/shipper.service.js';
 
 describe('IsExistingShipper validator', () => {
   class TestDto {

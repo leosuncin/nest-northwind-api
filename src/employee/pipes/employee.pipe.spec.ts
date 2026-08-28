@@ -3,9 +3,9 @@ import type { Mocked } from '@suites/doubles.vitest';
 import { TestBed } from '@suites/unit';
 import type { Repository } from 'typeorm';
 
-import { Employee } from '../entities/employee.entity';
-import { EmployeeService } from '../services/employee.service';
-import { EmployeePipe } from './employee.pipe';
+import { Employee } from '../entities/employee.entity.js';
+import { EmployeeService } from '../services/employee.service.js';
+import { EmployeePipe } from './employee.pipe.js';
 
 describe('EmployeePipe', () => {
   let pipe: EmployeePipe;

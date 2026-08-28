@@ -13,13 +13,13 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { Customer } from '../../customer/entities/customer.entity';
-import { Employee } from '../../employee/entities/employee.entity';
-import { IsExistingCustomer } from '../../customer/validators/is-existing-customer.validator';
-import { IsExistingEmployee } from '../../employee/validators/is-existing-employee.validator';
-import { IsExistingShipper } from '../../shipper/validators/is-existing-shipper.validator';
-import { Shipper } from '../../shipper/entities/shipper.entity';
-import { CreateOrderDetail } from './create-order-detail.dto';
+import { Customer } from '../../customer/entities/customer.entity.js';
+import { Employee } from '../../employee/entities/employee.entity.js';
+import { IsExistingCustomer } from '../../customer/validators/is-existing-customer.validator.js';
+import { IsExistingEmployee } from '../../employee/validators/is-existing-employee.validator.js';
+import { IsExistingShipper } from '../../shipper/validators/is-existing-shipper.validator.js';
+import { Shipper } from '../../shipper/entities/shipper.entity.js';
+import { CreateOrderDetail } from './create-order-detail.dto.js';
 
 export class CreateOrder {
   @IsDefined()

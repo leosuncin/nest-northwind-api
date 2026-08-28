@@ -15,14 +15,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
-import { CreateOrder } from '../dto/create-order.dto';
-import { UpdateOrder } from '../dto/update-order.dto';
-import { Order } from '../entities/order.entity';
-import { OrderPipe } from '../pipes/order.pipe';
-import { OrderService } from '../services/order.service';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
+import { CreateOrder } from '../dto/create-order.dto.js';
+import { UpdateOrder } from '../dto/update-order.dto.js';
+import { Order } from '../entities/order.entity.js';
+import { OrderPipe } from '../pipes/order.pipe.js';
+import { OrderService } from '../services/order.service.js';
 
 @Controller('order')
 @UseFilters(EntityNotFoundFilter)

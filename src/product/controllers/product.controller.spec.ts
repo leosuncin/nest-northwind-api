@@ -1,11 +1,11 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { ProductController } from './product.controller';
-import { ProductService } from '../services/product.service';
-import { CreateProduct } from '../dto/create-product.dto';
-import { UpdateProduct } from '../dto/update-product.dto';
-import { Product } from '../entities/product.entity';
+import { ProductController } from './product.controller.js';
+import { ProductService } from '../services/product.service.js';
+import { CreateProduct } from '../dto/create-product.dto.js';
+import { UpdateProduct } from '../dto/update-product.dto.js';
+import { Product } from '../entities/product.entity.js';
 
 describe('ProductController', () => {
   let controller: ProductController;

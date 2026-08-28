@@ -8,10 +8,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Customer } from '../../customer/entities/customer.entity';
-import { Employee } from '../../employee/entities/employee.entity';
-import { Shipper } from '../../shipper/entities/shipper.entity';
-import { OrderDetail } from './order-detail.entity';
+import { Customer } from '../../customer/entities/customer.entity.js';
+import { Employee } from '../../employee/entities/employee.entity.js';
+import { Shipper } from '../../shipper/entities/shipper.entity.js';
+import { OrderDetail } from './order-detail.entity.js';
 
 @Entity()
 export class Order {

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { CreateEmployee } from '../dto/create-employee.dto';
-import { UpdateEmployee } from '../dto/update-employee.dto';
-import { Employee } from '../entities/employee.entity';
+import { CreateEmployee } from '../dto/create-employee.dto.js';
+import { UpdateEmployee } from '../dto/update-employee.dto.js';
+import { Employee } from '../entities/employee.entity.js';
 
 @Injectable()
 export class EmployeeService {

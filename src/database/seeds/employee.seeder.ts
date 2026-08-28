@@ -1,6 +1,6 @@
 import { Seeder } from 'typeorm-extension';
 
-import { Employee } from '../../employee/entities/employee.entity';
+import { Employee } from '../../employee/entities/employee.entity.js';
 import type { DataSource } from 'typeorm';
 
 export const AndrewFuller = Object.assign<Employee, Partial<Employee>>(

@@ -3,10 +3,10 @@ import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { EmployeeService } from './employee.service';
-import { Employee } from '../entities/employee.entity';
-import { CreateEmployee } from '../dto/create-employee.dto';
-import { UpdateEmployee } from '../dto/update-employee.dto';
+import { EmployeeService } from './employee.service.js';
+import { Employee } from '../entities/employee.entity.js';
+import { CreateEmployee } from '../dto/create-employee.dto.js';
+import { UpdateEmployee } from '../dto/update-employee.dto.js';
 
 describe('EmployeeService', () => {
   let service: EmployeeService;

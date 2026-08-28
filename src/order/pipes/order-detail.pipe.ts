@@ -7,7 +7,7 @@ import {
   PipeTransform,
 } from '@nestjs/common';
 
-import { OrderDetailService } from '../services/order-detail.service';
+import { OrderDetailService } from '../services/order-detail.service.js';
 
 function assertKeys(
   value: unknown,

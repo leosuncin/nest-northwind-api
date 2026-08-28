@@ -1,7 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 
-import { Category } from '../entities/category.entity';
-import { CategoryService } from '../services/category.service';
+import { Category } from '../entities/category.entity.js';
+import { CategoryService } from '../services/category.service.js';
 
 @Injectable()
 export class CategoryPipe implements PipeTransform {

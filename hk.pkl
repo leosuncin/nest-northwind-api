@@ -4,7 +4,7 @@ import "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Builtin
 local linters = new Mapping<String, Step> {
     // Add linters here. Examples:
     ["prettier"] = Builtins.prettier
-    ["eslint"] = Builtins.eslint
+    ["oxlint"] = Builtins.ox_lint
     // ["ruff"] = Builtins.ruff
     // ["biome"] = Builtins.biome
 

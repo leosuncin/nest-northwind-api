@@ -1,6 +1,6 @@
 import { Seeder } from 'typeorm-extension';
 
-import { Shipper } from '../../shipper/entities/shipper.entity';
+import { Shipper } from '../../shipper/entities/shipper.entity.js';
 import type { DataSource } from 'typeorm';
 
 export const speedyExpress = Object.assign<Shipper, Partial<Shipper>>(

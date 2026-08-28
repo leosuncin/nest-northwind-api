@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Category } from '../../category/entities/category.entity';
-import { Supplier } from '../../supplier/entities/supplier.entity';
+import { Category } from '../../category/entities/category.entity.js';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
 
 @Entity()
 export class Product {

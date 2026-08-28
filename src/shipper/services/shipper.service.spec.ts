@@ -3,10 +3,10 @@ import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { ShipperService } from './shipper.service';
-import { Shipper } from '../entities/shipper.entity';
-import { CreateShipper } from '../dto/create-shipper.dto';
-import { UpdateShipper } from '../dto/update-shipper.dto';
+import { ShipperService } from './shipper.service.js';
+import { Shipper } from '../entities/shipper.entity.js';
+import { CreateShipper } from '../dto/create-shipper.dto.js';
+import { UpdateShipper } from '../dto/update-shipper.dto.js';
 
 describe('ShipperService', () => {
   let service: ShipperService;

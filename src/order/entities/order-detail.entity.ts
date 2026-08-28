@@ -5,10 +5,11 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
+  type Relation,
 } from 'typeorm';
 
-import { Order } from './order.entity';
-import { Product } from '../../product/entities/product.entity';
+import { Order } from './order.entity.js';
+import { Product } from '../../product/entities/product.entity.js';
 
 @Entity()
 export class OrderDetail {
@@ -20,7 +21,7 @@ export class OrderDetail {
 
   @ManyToOne(() => Order, { nullable: false })
   @JoinColumn({ name: 'orderId' })
-  order!: Order;
+  order!: Relation<Order>;
 
   @ManyToOne(() => Product, { nullable: false })
   @JoinColumn({ name: 'productId' })

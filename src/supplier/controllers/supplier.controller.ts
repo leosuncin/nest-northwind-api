@@ -15,14 +15,14 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
-import { CreateSupplier } from '../dto/create-supplier.dto';
-import { UpdateSupplier } from '../dto/update-supplier.dto';
-import { Supplier } from '../entities/supplier.entity';
-import { SupplierPipe } from '../pipes/supplier.pipe';
-import { SupplierService } from '../services/supplier.service';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
+import { CreateSupplier } from '../dto/create-supplier.dto.js';
+import { UpdateSupplier } from '../dto/update-supplier.dto.js';
+import { Supplier } from '../entities/supplier.entity.js';
+import { SupplierPipe } from '../pipes/supplier.pipe.js';
+import { SupplierService } from '../services/supplier.service.js';
 
 @Controller('supplier')
 @UseFilters(EntityNotFoundFilter)

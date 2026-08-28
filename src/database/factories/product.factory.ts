@@ -1,6 +1,7 @@
+import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
-import { Product } from '../../product/entities/product.entity';
+import { Product } from '../../product/entities/product.entity.js';
 import {
   beverages,
   condiments,
@@ -10,7 +11,7 @@ import {
   meatPoultry,
   produce,
   seafood,
-} from '../seeds/category.seeder';
+} from '../seeds/category.seeder.js';
 import {
   auxJoyeuxEcclesiastiques,
   bigfootBreweries,
@@ -41,7 +42,7 @@ import {
   svenskSjofoodaAB,
   tokyoTraders,
   zaanseSnoepfabriek,
-} from '../seeds/supplier.seeder';
+} from '../seeds/supplier.seeder.js';
 
 const categories = [
   beverages,
@@ -85,7 +86,7 @@ const suppliers = [
   zaanseSnoepfabriek,
 ];
 
-export const productFactory = setSeederFactory(Product, (faker) => {
+export const productFactory = setSeederFactory(Product, () => {
   const product = new Product();
 
   product.name = faker.commerce.productName().substring(0, 40);

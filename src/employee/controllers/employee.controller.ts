@@ -15,14 +15,14 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
-import { EmployeeService } from '../services/employee.service';
-import { CreateEmployee } from '../dto/create-employee.dto';
-import { UpdateEmployee } from '../dto/update-employee.dto';
-import { EmployeePipe } from '../pipes/employee.pipe';
-import { Employee } from '../entities/employee.entity';
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
+import { EmployeeService } from '../services/employee.service.js';
+import { CreateEmployee } from '../dto/create-employee.dto.js';
+import { UpdateEmployee } from '../dto/update-employee.dto.js';
+import { EmployeePipe } from '../pipes/employee.pipe.js';
+import { Employee } from '../entities/employee.entity.js';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
 
 @Controller('employee')
 @UseFilters(EntityNotFoundFilter)

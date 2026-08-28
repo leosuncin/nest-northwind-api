@@ -15,14 +15,14 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
-import { ShipperService } from '../services/shipper.service';
-import { CreateShipper } from '../dto/create-shipper.dto';
-import { UpdateShipper } from '../dto/update-shipper.dto';
-import { Shipper } from '../entities/shipper.entity';
-import { ShipperPipe } from '../pipes/shipper.pipe';
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
+import { ShipperService } from '../services/shipper.service.js';
+import { CreateShipper } from '../dto/create-shipper.dto.js';
+import { UpdateShipper } from '../dto/update-shipper.dto.js';
+import { Shipper } from '../entities/shipper.entity.js';
+import { ShipperPipe } from '../pipes/shipper.pipe.js';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
 
 @Controller('shipper')
 @UseFilters(EntityNotFoundFilter)

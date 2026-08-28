@@ -3,10 +3,10 @@ import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { ProductService } from './product.service';
-import { Product } from '../entities/product.entity';
-import { CreateProduct } from '../dto/create-product.dto';
-import { UpdateProduct } from '../dto/update-product.dto';
+import { ProductService } from './product.service.js';
+import { Product } from '../entities/product.entity.js';
+import { CreateProduct } from '../dto/create-product.dto.js';
+import { UpdateProduct } from '../dto/update-product.dto.js';
 
 describe('ProductService', () => {
   let service: ProductService;

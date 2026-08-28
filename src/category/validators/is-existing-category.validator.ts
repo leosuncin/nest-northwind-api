@@ -7,9 +7,9 @@ import {
   registerDecorator,
 } from 'class-validator';
 
-import { isId } from '../../shared/utils/id.utils';
-import { Category } from '../entities/category.entity';
-import { CategoryService } from '../services/category.service';
+import { isId } from '../../shared/utils/id.utils.js';
+import { Category } from '../entities/category.entity.js';
+import { CategoryService } from '../services/category.service.js';
 
 @Injectable()
 @ValidatorConstraint({ name: 'IsExistingCategory', async: true })

@@ -6,8 +6,8 @@ import { useContainer, validate } from 'class-validator';
 import {
   IsExistingEmployee,
   IsExistingEmployeeConstraint,
-} from './is-existing-employee.validator';
-import { EmployeeService } from '../services/employee.service';
+} from './is-existing-employee.validator.js';
+import { EmployeeService } from '../services/employee.service.js';
 
 describe('IsExistingEmployee validator', () => {
   class TestDto {

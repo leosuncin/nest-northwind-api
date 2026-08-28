@@ -9,12 +9,12 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module';
-import typeormConfig from '../src/config/typeorm';
-import type { CreateEmployee } from '../src/employee/dto/create-employee.dto';
-import type { UpdateEmployee } from '../src/employee/dto/update-employee.dto';
-import { Employee } from '../src/employee/entities/employee.entity';
-import { buildTypeOrmOptions } from './helpers';
+import { AppModule } from '../src/app.module.js';
+import typeormConfig from '../src/config/typeorm.js';
+import type { CreateEmployee } from '../src/employee/dto/create-employee.dto.js';
+import type { UpdateEmployee } from '../src/employee/dto/update-employee.dto.js';
+import { Employee } from '../src/employee/entities/employee.entity.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 describe('EmployeeController (e2e)', () => {
   let app: INestApplication<App>;

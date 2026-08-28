@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { CreateShipper } from '../dto/create-shipper.dto';
-import { UpdateShipper } from '../dto/update-shipper.dto';
-import { Shipper } from '../entities/shipper.entity';
+import { CreateShipper } from '../dto/create-shipper.dto.js';
+import { UpdateShipper } from '../dto/update-shipper.dto.js';
+import { Shipper } from '../entities/shipper.entity.js';
 
 @Injectable()
 export class ShipperService {

@@ -9,11 +9,11 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module';
-import typeormConfig from '../src/config/typeorm';
-import { CreateCustomer } from '../src/customer/dto/create-customer.dto';
-import { Customer } from '../src/customer/entities/customer.entity';
-import { buildTypeOrmOptions } from './helpers';
+import { AppModule } from '../src/app.module.js';
+import typeormConfig from '../src/config/typeorm.js';
+import { CreateCustomer } from '../src/customer/dto/create-customer.dto.js';
+import { Customer } from '../src/customer/entities/customer.entity.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 describe('CustomerController (e2e)', () => {
   let app: INestApplication<App>;

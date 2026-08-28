@@ -1,8 +1,9 @@
+import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
-import { OrderDetail } from '../../order/entities/order-detail.entity';
+import { OrderDetail } from '../../order/entities/order-detail.entity.js';
 
-export const orderDetailFactory = setSeederFactory(OrderDetail, (faker) => {
+export const orderDetailFactory = setSeederFactory(OrderDetail, () => {
   const detail = new OrderDetail();
 
   detail.unitPrice = faker.number.float({

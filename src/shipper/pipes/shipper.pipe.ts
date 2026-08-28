@@ -1,7 +1,7 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
 
-import { Shipper } from '../entities/shipper.entity';
-import { ShipperService } from '../services/shipper.service';
+import { Shipper } from '../entities/shipper.entity.js';
+import { ShipperService } from '../services/shipper.service.js';
 
 @Injectable()
 export class ShipperPipe implements PipeTransform {

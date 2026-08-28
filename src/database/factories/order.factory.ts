@@ -1,6 +1,7 @@
+import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
-import { Order } from '../../order/entities/order.entity';
+import { Order } from '../../order/entities/order.entity.js';
 import {
   alfki,
   anatr,
@@ -68,7 +69,7 @@ import {
   welli,
   whitc,
   wolza,
-} from '../seeds/customer.seeder';
+} from '../seeds/customer.seeder.js';
 import {
   AndrewFuller,
   AnneDodsworth,
@@ -79,12 +80,12 @@ import {
   NancyDavolio,
   RobertKing,
   StevenBuchanan,
-} from '../seeds/employee.seeder';
+} from '../seeds/employee.seeder.js';
 import {
   federalShipping,
   speedyExpress,
   unitedPackage,
-} from '../seeds/shipper.seeder';
+} from '../seeds/shipper.seeder.js';
 
 const customers = [
   alfki,
@@ -169,7 +170,7 @@ const employees = [
 
 const shippers = [speedyExpress, unitedPackage, federalShipping];
 
-export const orderFactory = setSeederFactory(Order, (faker) => {
+export const orderFactory = setSeederFactory(Order, () => {
   const order = new Order();
 
   order.customer = faker.helpers.arrayElement(customers);

@@ -1,12 +1,12 @@
 import type { Mocked } from '@suites/doubles.vitest';
 import { TestBed } from '@suites/unit';
 
-import { Product } from '../../product/entities/product.entity';
-import { CreateOrderDetail } from '../dto/create-order-detail.dto';
-import { UpdateOrderDetail } from '../dto/update-order-detail.dto';
-import { OrderDetail } from '../entities/order-detail.entity';
-import { OrderDetailService } from '../services/order-detail.service';
-import { OrderDetailController } from './order-detail.controller';
+import { Product } from '../../product/entities/product.entity.js';
+import { CreateOrderDetail } from '../dto/create-order-detail.dto.js';
+import { UpdateOrderDetail } from '../dto/update-order-detail.dto.js';
+import { OrderDetail } from '../entities/order-detail.entity.js';
+import { OrderDetailService } from '../services/order-detail.service.js';
+import { OrderDetailController } from './order-detail.controller.js';
 
 describe('OrderDetailController', () => {
   let controller: OrderDetailController;

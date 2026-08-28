@@ -1,7 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 
-import { Order } from '../entities/order.entity';
-import { OrderService } from '../services/order.service';
+import { Order } from '../entities/order.entity.js';
+import { OrderService } from '../services/order.service.js';
 
 @Injectable()
 export class OrderPipe implements PipeTransform {

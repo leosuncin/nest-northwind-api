@@ -1,9 +1,9 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { CategoryPipe } from './category.pipe';
-import { CategoryService } from '../services/category.service';
-import { Category } from '../entities/category.entity';
+import { CategoryPipe } from './category.pipe.js';
+import { CategoryService } from '../services/category.service.js';
+import { Category } from '../entities/category.entity.js';
 
 describe('CategoryPipe', () => {
   let pipe: CategoryPipe;
