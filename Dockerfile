@@ -1,39 +1,30 @@
 # syntax=docker/dockerfile:1
 
-ARG MISE_VERSION=latest
+ARG PNPM_VERSION=11
 
-FROM jdxcode/mise:${MISE_VERSION} AS deps
+FROM ghcr.io/pnpm/pnpm:${PNPM_VERSION} AS deps
 
 WORKDIR /usr/src/app
 
-ENV MISE_EXPERIMENTAL=1
-ENV MISE_AGE_STRICT=0
-ENV PNPM_HOME=/pnpm
-ENV PATH="$PNPM_HOME:$PATH"
-ENV CI=1
-
-RUN --mount=type=cache,target=/mise \
-    --mount=type=cache,target=/pnpm/store \
-    --mount=type=bind,source=mise.toml,target=/usr/src/app/mise.toml \
+RUN --mount=type=cache,target=/pnpm/store \
     --mount=type=bind,source=package.json,target=/usr/src/app/package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=/usr/src/app/pnpm-lock.yaml \
     --mount=type=bind,source=pnpm-workspace.yaml,target=/usr/src/app/pnpm-workspace.yaml \
-    mise trust && \
-    mise install
+    pnpm install --frozen-lockfile
 
 FROM deps AS build
 
 COPY ./src ./src
 
-RUN --mount=type=cache,target=/mise \
-    --mount=type=cache,target=/pnpm/store \
-    --mount=type=bind,source=mise.toml,target=/usr/src/app/mise.toml \
+RUN --mount=type=cache,target=/pnpm/store \
     --mount=type=bind,source=package.json,target=/usr/src/app/package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=/usr/src/app/pnpm-lock.yaml \
     --mount=type=bind,source=pnpm-workspace.yaml,target=/usr/src/app/pnpm-workspace.yaml \
     --mount=type=bind,source=tsconfig.json,target=/usr/src/app/tsconfig.json \
     --mount=type=bind,source=tsconfig.build.json,target=/usr/src/app/tsconfig.build.json \
-    mise build-and-clean
+    pnpm run build && \
+    pnpm prune --prod && \
+    pnpm dlx node-prune
 
 FROM gcr.io/distroless/nodejs26-debian13:nonroot AS migrations
 
