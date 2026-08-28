@@ -2,8 +2,6 @@ name: Publish the Docker images 🐋
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   docker-bake:
@@ -22,58 +20,66 @@ jobs:
           set: |
             api.tags=ttl.sh/api-${{ github.sha }}:1h
             migrations.tags=ttl.sh/migrations-${{ github.sha }}:1h
+            *.cache-to=type=registry,ref=ttl.sh/${{ github.sha }}:1h,mode=max
 
-  docker-push:
+  test-k8s:
     runs-on: ubuntu-latest
     needs:
       - docker-bake
-    strategy:
-      matrix:
-        project: ['api', 'migrations']
-    permissions:
-      packages: write
     steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@v7
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
-      - name: Set up QEMU 🖥️
-        uses: docker/setup-qemu-action@v4
+      - name: Create a ephemeral Kubernetes cluster with Kind ⚓
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc
 
-      - name: Set up Docker Buildx 🐳
-        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e
+      - name: Verify Cluster Connection
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
 
-      - name: Gather metadata 📋
-        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302
-        id: meta
+      - name: Replace values
+        run: |
+          yq -i '.spec.template.spec.containers.[0].image = ttl.sh/api-${{ github.sha }}:1h' k8s/server-deployment.yaml
+          yq -i '.spec.template.spec.containers.[0].image = ttl.sh/migrations-${{ github.sha }}:1h' k8s/migrations-job.yaml
+          yq '.stringData.MSSQL_PASSWORD = "${{ github.sha }}" | .stringData.MSSQL_SA_PASSWORD = "${{ github.sha }}"' k8s/database-secret.example.yaml | yq -Poy k8s/database-secret.yaml
+
+      - name: Deploy SQL Server
+        run: |
+          kubectl apply -f k8s/database-secret.yaml
+          kubectl apply -f k8s/sql-server-data-persistentvolumeclaim.yaml
+          kubectl apply -f k8s/sql-server-deployment.yaml
+          kubectl apply -f k8s/sql-server-service.yaml
+          kubectl rollout status sql-server --timeout=90s
+
+      - name: Run migrations job
+        run: |
+          kubectl apply -f k8s/data-source-configmap.yaml
+          kubectl apply -f k8s/migrations-job.yaml
+
+      - name: Deploy the API server
+        run: |
+          kubectl apply -f k8s/server-deployment.yaml
+          kubectl apply -f k8s/server-service.yaml
+          kubectl rollout status server --timeout=30s
+
+      - name: Forward the port
+        background: true
+        run: kubectl port-forward server 3000:3000
+
+      - name: Wait for the server
+        uses: harryvasanth/wait-for-http-endpoint@e56e03998cd4799fa97f17ce54a3d0ed62f8e02c
         with:
-          images: |
-            ghcr.io/${{ matrix.project }}-${{ github.sha }}:1h
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=sha
+          url: http://localhost:3000
 
-      - name: Login to GitHub Container Registry 🔑
-        uses: docker/login-action@v4
+      - name: Run bruno tests
+        uses: usebruno/bruno-cli-action@104e180c2e7219a915dc48b6979ddbafe0940fcd
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: test/e2e
+          command: run --env development
 
-      - name: Build 🏗️
-        uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b
-        with:
-          push: true
-          files: |
-            ./docker-bake.hcl
-            cwd://${{ steps.meta.outputs.bake-file }}
-
-      - name: Build and push ⚒️
-        uses: docker/build-push-action@v7
-        with:
-          push: true
-          tags: ghcr.io/${{ github.repository }}:latest,ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max
+      - name: Print cluster status on failure
+        if: failure()
+        run: |
+          kubectl get pods --all-namespaces
+          kubectl get events --sort-by='.metadata.creationTimestamp'
