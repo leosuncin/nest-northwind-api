@@ -7,8 +7,8 @@ import {
   Min,
 } from 'class-validator';
 
-import { IsExistingProduct } from '../../product/validators/is-existing-product.validator';
-import { Product } from '../../product/entities/product.entity';
+import { IsExistingProduct } from '../../product/validators/is-existing-product.validator.js';
+import { Product } from '../../product/entities/product.entity.js';
 
 export class CreateOrderDetail {
   @IsDefined()

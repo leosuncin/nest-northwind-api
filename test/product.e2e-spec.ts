@@ -11,11 +11,11 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module';
-import typeormConfig from '../src/config/typeorm';
-import { CreateProduct } from '../src/product/dto/create-product.dto';
-import { Product } from '../src/product/entities/product.entity';
-import { buildTypeOrmOptions } from './helpers';
+import { AppModule } from '../src/app.module.js';
+import typeormConfig from '../src/config/typeorm.js';
+import { CreateProduct } from '../src/product/dto/create-product.dto.js';
+import { Product } from '../src/product/entities/product.entity.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 describe('ProductController (e2e)', () => {
   let app: INestApplication<App>;

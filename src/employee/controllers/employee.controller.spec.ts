@@ -1,11 +1,11 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { EmployeeController } from './employee.controller';
-import { EmployeeService } from '../services/employee.service';
-import { CreateEmployee } from '../dto/create-employee.dto';
-import { UpdateEmployee } from '../dto/update-employee.dto';
-import { Employee } from '../entities/employee.entity';
+import { EmployeeController } from './employee.controller.js';
+import { EmployeeService } from '../services/employee.service.js';
+import { CreateEmployee } from '../dto/create-employee.dto.js';
+import { UpdateEmployee } from '../dto/update-employee.dto.js';
+import { Employee } from '../entities/employee.entity.js';
 
 describe('EmployeeController', () => {
   let controller: EmployeeController;

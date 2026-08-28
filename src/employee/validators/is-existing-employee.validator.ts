@@ -6,9 +6,9 @@ import {
   registerDecorator,
 } from 'class-validator';
 
-import { isId } from '../../shared/utils/id.utils';
-import { Employee } from '../entities/employee.entity';
-import { EmployeeService } from '../services/employee.service';
+import { isId } from '../../shared/utils/id.utils.js';
+import { Employee } from '../entities/employee.entity.js';
+import { EmployeeService } from '../services/employee.service.js';
 
 @Injectable()
 @ValidatorConstraint({ name: 'IsExistingEmployee', async: true })

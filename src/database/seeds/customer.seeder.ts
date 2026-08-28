@@ -1,6 +1,6 @@
 import { Seeder } from 'typeorm-extension';
 
-import { Customer } from '../../customer/entities/customer.entity';
+import { Customer } from '../../customer/entities/customer.entity.js';
 import type { DataSource } from 'typeorm';
 
 export const alfki = Object.assign<Customer, Partial<Customer>>(

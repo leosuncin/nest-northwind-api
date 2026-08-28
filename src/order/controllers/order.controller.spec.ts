@@ -1,11 +1,11 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { OrderController } from './order.controller';
-import { OrderService } from '../services/order.service';
-import { CreateOrder } from '../dto/create-order.dto';
-import { UpdateOrder } from '../dto/update-order.dto';
-import { Order } from '../entities/order.entity';
+import { OrderController } from './order.controller.js';
+import { OrderService } from '../services/order.service.js';
+import { CreateOrder } from '../dto/create-order.dto.js';
+import { UpdateOrder } from '../dto/update-order.dto.js';
+import { Order } from '../entities/order.entity.js';
 
 describe('OrderController', () => {
   let controller: OrderController;
@@ -22,6 +22,7 @@ describe('OrderController', () => {
     const createOrder: CreateOrder = {
       customer: 1 as unknown as Order['customer'],
       employee: 1 as unknown as Order['employee'],
+      details: [],
     };
     const createdOrder = { id: 1, ...createOrder } as Order;
 

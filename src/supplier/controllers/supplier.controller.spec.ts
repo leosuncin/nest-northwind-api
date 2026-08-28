@@ -1,11 +1,11 @@
 import type { Mocked } from '@suites/doubles.vitest';
 import { TestBed } from '@suites/unit';
 
-import { SupplierController } from './supplier.controller';
-import { CreateSupplier } from '../dto/create-supplier.dto';
-import { UpdateSupplier } from '../dto/update-supplier.dto';
-import { Supplier } from '../entities/supplier.entity';
-import { SupplierService } from '../services/supplier.service';
+import { SupplierController } from './supplier.controller.js';
+import { CreateSupplier } from '../dto/create-supplier.dto.js';
+import { UpdateSupplier } from '../dto/update-supplier.dto.js';
+import { Supplier } from '../entities/supplier.entity.js';
+import { SupplierService } from '../services/supplier.service.js';
 
 describe('SupplierController', () => {
   let controller: SupplierController;

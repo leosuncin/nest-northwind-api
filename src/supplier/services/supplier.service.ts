@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { CreateSupplier } from '../dto/create-supplier.dto';
-import { UpdateSupplier } from '../dto/update-supplier.dto';
-import { Supplier } from '../entities/supplier.entity';
+import { CreateSupplier } from '../dto/create-supplier.dto.js';
+import { UpdateSupplier } from '../dto/update-supplier.dto.js';
+import { Supplier } from '../entities/supplier.entity.js';
 
 @Injectable()
 export class SupplierService {

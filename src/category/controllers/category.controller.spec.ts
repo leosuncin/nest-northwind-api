@@ -1,11 +1,11 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { CategoryController } from './category.controller';
-import { CategoryService } from '../services/category.service';
-import { CreateCategory } from '../dto/create-category.dto';
-import { UpdateCategory } from '../dto/update-category.dto';
-import { Category } from '../entities/category.entity';
+import { CategoryController } from './category.controller.js';
+import { CategoryService } from '../services/category.service.js';
+import { CreateCategory } from '../dto/create-category.dto.js';
+import { UpdateCategory } from '../dto/update-category.dto.js';
+import { Category } from '../entities/category.entity.js';
 
 describe('CategoryController', () => {
   let controller: CategoryController;

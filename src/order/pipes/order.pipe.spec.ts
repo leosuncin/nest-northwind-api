@@ -3,9 +3,9 @@ import type { Mocked } from '@suites/doubles.vitest';
 import { TestBed } from '@suites/unit';
 import type { Repository } from 'typeorm';
 
-import { Order } from '../entities/order.entity';
-import { OrderService } from '../services/order.service';
-import { OrderPipe } from './order.pipe';
+import { Order } from '../entities/order.entity.js';
+import { OrderService } from '../services/order.service.js';
+import { OrderPipe } from './order.pipe.js';
 
 describe('OrderPipe', () => {
   let pipe: OrderPipe;

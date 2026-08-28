@@ -1,7 +1,7 @@
 import type { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
-import { Product } from '../../product/entities/product.entity';
+import { Product } from '../../product/entities/product.entity.js';
 import {
   beverages,
   condiments,
@@ -11,7 +11,7 @@ import {
   meatPoultry,
   produce,
   seafood,
-} from './category.seeder';
+} from './category.seeder.js';
 import {
   auxJoyeuxEcclesiastiques,
   bigfootBreweries,
@@ -42,7 +42,7 @@ import {
   svenskSjofoodaAB,
   tokyoTraders,
   zaanseSnoepfabriek,
-} from './supplier.seeder';
+} from './supplier.seeder.js';
 
 export const chai = Object.assign(new Product(), {
   id: 1,

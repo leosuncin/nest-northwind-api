@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { PositiveIntPipe } from './positive-int.pipe';
+import { PositiveIntPipe } from './positive-int.pipe.js';
 
 describe('PositiveIntPipe', () => {
   const pipe = new PositiveIntPipe();

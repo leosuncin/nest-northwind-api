@@ -15,14 +15,14 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
-import { CategoryService } from '../services/category.service';
-import { CreateCategory } from '../dto/create-category.dto';
-import { UpdateCategory } from '../dto/update-category.dto';
-import { Category } from '../entities/category.entity';
-import { CategoryPipe } from '../pipes/category.pipe';
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
+import { CategoryService } from '../services/category.service.js';
+import { CreateCategory } from '../dto/create-category.dto.js';
+import { UpdateCategory } from '../dto/update-category.dto.js';
+import { Category } from '../entities/category.entity.js';
+import { CategoryPipe } from '../pipes/category.pipe.js';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
 
 @Controller('category')
 @UseFilters(EntityNotFoundFilter)

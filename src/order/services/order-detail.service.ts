@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { CreateOrderDetail } from '../dto/create-order-detail.dto';
-import { UpdateOrderDetail } from '../dto/update-order-detail.dto';
-import { OrderDetail } from '../entities/order-detail.entity';
+import { CreateOrderDetail } from '../dto/create-order-detail.dto.js';
+import { UpdateOrderDetail } from '../dto/update-order-detail.dto.js';
+import { OrderDetail } from '../entities/order-detail.entity.js';
 
 @Injectable()
 export class OrderDetailService {

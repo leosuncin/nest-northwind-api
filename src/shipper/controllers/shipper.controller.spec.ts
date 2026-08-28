@@ -1,11 +1,11 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { ShipperController } from './shipper.controller';
-import { ShipperService } from '../services/shipper.service';
-import { CreateShipper } from '../dto/create-shipper.dto';
-import { UpdateShipper } from '../dto/update-shipper.dto';
-import { Shipper } from '../entities/shipper.entity';
+import { ShipperController } from './shipper.controller.js';
+import { ShipperService } from '../services/shipper.service.js';
+import { CreateShipper } from '../dto/create-shipper.dto.js';
+import { UpdateShipper } from '../dto/update-shipper.dto.js';
+import { Shipper } from '../entities/shipper.entity.js';
 
 describe('ShipperController', () => {
   let controller: ShipperController;

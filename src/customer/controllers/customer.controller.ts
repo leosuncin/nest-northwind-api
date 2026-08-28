@@ -15,14 +15,14 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 
-import { CustomerService } from '../services/customer.service';
-import { CreateCustomer } from '../dto/create-customer.dto';
-import { UpdateCustomer } from '../dto/update-customer.dto';
-import { Customer } from '../entities/customer.entity';
-import { CustomerPipe } from '../pipes/customer.pipe';
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
+import { CustomerService } from '../services/customer.service.js';
+import { CreateCustomer } from '../dto/create-customer.dto.js';
+import { UpdateCustomer } from '../dto/update-customer.dto.js';
+import { Customer } from '../entities/customer.entity.js';
+import { CustomerPipe } from '../pipes/customer.pipe.js';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
 
 @Controller('customer')
 @UseFilters(EntityNotFoundFilter)

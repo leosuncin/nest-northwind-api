@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SharedModule } from '../shared/shared.module';
-import { CustomerModule } from '../customer/customer.module';
-import { EmployeeModule } from '../employee/employee.module';
-import { ShipperModule } from '../shipper/shipper.module';
-import { ProductModule } from '../product/product.module';
-import { Order } from './entities/order.entity';
-import { OrderDetail } from './entities/order-detail.entity';
-import { OrderService } from './services/order.service';
-import { OrderDetailService } from './services/order-detail.service';
-import { OrderPipe } from './pipes/order.pipe';
-import { OrderController } from './controllers/order.controller';
-import { OrderDetailController } from './controllers/order-detail.controller';
+import { SharedModule } from '../shared/shared.module.js';
+import { CustomerModule } from '../customer/customer.module.js';
+import { EmployeeModule } from '../employee/employee.module.js';
+import { ShipperModule } from '../shipper/shipper.module.js';
+import { ProductModule } from '../product/product.module.js';
+import { Order } from './entities/order.entity.js';
+import { OrderDetail } from './entities/order-detail.entity.js';
+import { OrderService } from './services/order.service.js';
+import { OrderDetailService } from './services/order-detail.service.js';
+import { OrderPipe } from './pipes/order.pipe.js';
+import { OrderController } from './controllers/order.controller.js';
+import { OrderDetailController } from './controllers/order-detail.controller.js';
 
 @Module({
   imports: [

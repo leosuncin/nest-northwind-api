@@ -1,7 +1,7 @@
 import type { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
-import { Supplier } from '../../supplier/entities/supplier.entity';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
 
 export const exoticLiquids = Object.assign<Supplier, Partial<Supplier>>(
   new Supplier(),

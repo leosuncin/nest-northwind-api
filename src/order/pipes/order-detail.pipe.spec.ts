@@ -1,9 +1,9 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { OrderDetailPipe } from './order-detail.pipe';
-import { OrderDetailService } from '../services/order-detail.service';
-import { OrderDetail } from '../entities/order-detail.entity';
+import { OrderDetailPipe } from './order-detail.pipe.js';
+import { OrderDetailService } from '../services/order-detail.service.js';
+import { OrderDetail } from '../entities/order-detail.entity.js';
 
 describe('OrderDetailPipe', () => {
   let pipe: OrderDetailPipe;

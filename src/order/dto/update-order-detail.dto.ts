@@ -8,8 +8,8 @@ import {
   Min,
 } from 'class-validator';
 
-import { Product } from '../../product/entities/product.entity';
-import { IsExistingProduct } from '../../product/validators/is-existing-product.validator';
+import { Product } from '../../product/entities/product.entity.js';
+import { IsExistingProduct } from '../../product/validators/is-existing-product.validator.js';
 
 export class UpdateOrderDetail {
   @IsOptional()

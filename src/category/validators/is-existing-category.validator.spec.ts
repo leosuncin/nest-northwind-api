@@ -7,8 +7,8 @@ import {
   IsExistingCategory,
   IsExistingCategoryConstraint,
   IsNotExistingCategory,
-} from './is-existing-category.validator';
-import { CategoryService } from '../services/category.service';
+} from './is-existing-category.validator.js';
+import { CategoryService } from '../services/category.service.js';
 
 describe('IsExistingCategory validator', () => {
   class TestDto {

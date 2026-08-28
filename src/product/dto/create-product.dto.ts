@@ -11,10 +11,10 @@ import {
   Min,
 } from 'class-validator';
 
-import { IsExistingCategory } from '../../category/validators/is-existing-category.validator';
-import { IsExistingSupplier } from '../../supplier/validators/is-existing-supplier.validator';
-import { Supplier } from '../../supplier/entities/supplier.entity';
-import { Category } from '../../category/entities/category.entity';
+import { IsExistingCategory } from '../../category/validators/is-existing-category.validator.js';
+import { IsExistingSupplier } from '../../supplier/validators/is-existing-supplier.validator.js';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
+import { Category } from '../../category/entities/category.entity.js';
 
 export class CreateProduct {
   @IsDefined()

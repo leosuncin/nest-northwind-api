@@ -15,16 +15,16 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
-import { CreateProduct } from '../dto/create-product.dto';
-import { UpdateProduct } from '../dto/update-product.dto';
-import { Product } from '../entities/product.entity';
-import { ProductPipe } from '../pipes/product.pipe';
-import { ProductService } from '../services/product.service';
-import { SupplierPipe } from '../../supplier/pipes/supplier.pipe';
-import { CategoryPipe } from '../../category/pipes/category.pipe';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
+import { CreateProduct } from '../dto/create-product.dto.js';
+import { UpdateProduct } from '../dto/update-product.dto.js';
+import { Product } from '../entities/product.entity.js';
+import { ProductPipe } from '../pipes/product.pipe.js';
+import { ProductService } from '../services/product.service.js';
+import { SupplierPipe } from '../../supplier/pipes/supplier.pipe.js';
+import { CategoryPipe } from '../../category/pipes/category.pipe.js';
 
 @Controller('product')
 @UseFilters(EntityNotFoundFilter)

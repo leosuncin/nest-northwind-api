@@ -6,8 +6,8 @@ import { useContainer, validate } from 'class-validator';
 import {
   IsExistingCustomer,
   IsExistingCustomerConstraint,
-} from './is-existing-customer.validator';
-import { CustomerService } from '../services/customer.service';
+} from './is-existing-customer.validator.js';
+import { CustomerService } from '../services/customer.service.js';
 
 describe('IsExistingCustomer validator', () => {
   class TestDto {

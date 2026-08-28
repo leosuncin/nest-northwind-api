@@ -4,8 +4,8 @@ import {
   type PipeTransform,
 } from '@nestjs/common';
 
-import type { Supplier } from '../entities/supplier.entity';
-import { SupplierService } from '../services/supplier.service';
+import type { Supplier } from '../entities/supplier.entity.js';
+import { SupplierService } from '../services/supplier.service.js';
 
 @Injectable()
 export class SupplierPipe implements PipeTransform {

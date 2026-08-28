@@ -3,10 +3,10 @@ import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-hos
 import { createMocks } from 'node-mocks-http';
 import { type BaseEntity, EntityNotFoundError } from 'typeorm';
 
-import { Customer } from '../../customer/entities/customer.entity';
-import { Employee } from '../../employee/entities/employee.entity';
-import { OrderDetail } from '../../order/entities/order-detail.entity';
-import { EntityNotFoundFilter } from './entity-not-found.filter';
+import { Customer } from '../../customer/entities/customer.entity.js';
+import { Employee } from '../../employee/entities/employee.entity.js';
+import { OrderDetail } from '../../order/entities/order-detail.entity.js';
+import { EntityNotFoundFilter } from './entity-not-found.filter.js';
 
 describe('EntityNotFoundFilter', () => {
   test('given a non existing entity when catch then it responds with 404 and a descriptive message', () => {

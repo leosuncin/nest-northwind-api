@@ -3,10 +3,10 @@ import { TestBed } from '@suites/unit';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { CreateSupplier } from '../dto/create-supplier.dto';
-import { UpdateSupplier } from '../dto/update-supplier.dto';
-import { Supplier } from '../entities/supplier.entity';
-import { SupplierService } from './supplier.service';
+import { CreateSupplier } from '../dto/create-supplier.dto.js';
+import { UpdateSupplier } from '../dto/update-supplier.dto.js';
+import { Supplier } from '../entities/supplier.entity.js';
+import { SupplierService } from './supplier.service.js';
 
 describe('SupplierService', () => {
   let service: SupplierService;

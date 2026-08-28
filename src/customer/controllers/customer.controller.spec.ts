@@ -1,11 +1,11 @@
 import { TestBed } from '@suites/unit';
 import type { Mocked } from '@suites/doubles.vitest';
 
-import { CustomerController } from './customer.controller';
-import { CustomerService } from '../services/customer.service';
-import { CreateCustomer } from '../dto/create-customer.dto';
-import { UpdateCustomer } from '../dto/update-customer.dto';
-import { Customer } from '../entities/customer.entity';
+import { CustomerController } from './customer.controller.js';
+import { CustomerService } from '../services/customer.service.js';
+import { CreateCustomer } from '../dto/create-customer.dto.js';
+import { UpdateCustomer } from '../dto/update-customer.dto.js';
+import { Customer } from '../entities/customer.entity.js';
 
 describe('CustomerController', () => {
   let controller: CustomerController;

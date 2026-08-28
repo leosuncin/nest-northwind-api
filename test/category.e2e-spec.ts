@@ -9,12 +9,12 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module';
-import type { CreateCategory } from '../src/category/dto/create-category.dto';
-import type { UpdateCategory } from '../src/category/dto/update-category.dto';
-import { Category } from '../src/category/entities/category.entity';
-import typeormConfig from '../src/config/typeorm';
-import { buildTypeOrmOptions } from './helpers';
+import { AppModule } from '../src/app.module.js';
+import type { CreateCategory } from '../src/category/dto/create-category.dto.js';
+import type { UpdateCategory } from '../src/category/dto/update-category.dto.js';
+import { Category } from '../src/category/entities/category.entity.js';
+import typeormConfig from '../src/config/typeorm.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 describe('CategoryController (e2e)', () => {
   let app: INestApplication<App>;

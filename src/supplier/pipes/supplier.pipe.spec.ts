@@ -3,9 +3,9 @@ import { TestBed } from '@suites/unit';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { Supplier } from '../entities/supplier.entity';
-import { SupplierService } from '../services/supplier.service';
-import { SupplierPipe } from './supplier.pipe';
+import { Supplier } from '../entities/supplier.entity.js';
+import { SupplierService } from '../services/supplier.service.js';
+import { SupplierPipe } from './supplier.pipe.js';
 
 describe('SupplierPipe', () => {
   let pipe: SupplierPipe;

@@ -11,12 +11,12 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module';
-import typeormConfig from '../src/config/typeorm';
-import { CreateOrder } from '../src/order/dto/create-order.dto';
-import { Order } from '../src/order/entities/order.entity';
-import { OrderDetail } from '../src/order/entities/order-detail.entity';
-import { buildTypeOrmOptions } from './helpers';
+import { AppModule } from '../src/app.module.js';
+import typeormConfig from '../src/config/typeorm.js';
+import { CreateOrder } from '../src/order/dto/create-order.dto.js';
+import { Order } from '../src/order/entities/order.entity.js';
+import { OrderDetail } from '../src/order/entities/order-detail.entity.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 describe('OrderController (e2e)', () => {
   let app: INestApplication<App>;

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { CreateCategory } from '../dto/create-category.dto';
-import { UpdateCategory } from '../dto/update-category.dto';
-import { Category } from '../entities/category.entity';
+import { CreateCategory } from '../dto/create-category.dto.js';
+import { UpdateCategory } from '../dto/update-category.dto.js';
+import { Category } from '../entities/category.entity.js';
 
 @Injectable()
 export class CategoryService {

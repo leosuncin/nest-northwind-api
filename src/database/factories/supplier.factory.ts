@@ -1,8 +1,9 @@
+import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
-import { Supplier } from '../../supplier/entities/supplier.entity';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
 
-export const supplierFactory = setSeederFactory(Supplier, (faker) => {
+export const supplierFactory = setSeederFactory(Supplier, () => {
   const supplier = new Supplier();
 
   supplier.companyName = faker.company.name().substring(0, 40);

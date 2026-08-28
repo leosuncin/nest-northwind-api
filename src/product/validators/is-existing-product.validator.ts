@@ -6,9 +6,9 @@ import {
   registerDecorator,
 } from 'class-validator';
 
-import { isId } from '../../shared/utils/id.utils';
-import type { Product } from '../entities/product.entity';
-import { ProductService } from '../services/product.service';
+import { isId } from '../../shared/utils/id.utils.js';
+import type { Product } from '../entities/product.entity.js';
+import { ProductService } from '../services/product.service.js';
 
 @Injectable()
 @ValidatorConstraint({ name: 'IsExistingProduct', async: true })

@@ -2,7 +2,7 @@ import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-hos
 import { createMocks } from 'node-mocks-http';
 import { firstValueFrom, of } from 'rxjs';
 
-import { PaginationInterceptor } from './pagination.interceptor';
+import { PaginationInterceptor } from './pagination.interceptor.js';
 
 function buildContext(query: Record<string, string>) {
   const { req, res } = createMocks({

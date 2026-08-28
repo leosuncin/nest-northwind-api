@@ -12,13 +12,13 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe';
-import { CreateOrderDetail } from '../dto/create-order-detail.dto';
-import { UpdateOrderDetail } from '../dto/update-order-detail.dto';
-import { OrderDetail } from '../entities/order-detail.entity';
-import { OrderDetailPipe } from '../pipes/order-detail.pipe';
-import { OrderDetailService } from '../services/order-detail.service';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
+import { CreateOrderDetail } from '../dto/create-order-detail.dto.js';
+import { UpdateOrderDetail } from '../dto/update-order-detail.dto.js';
+import { OrderDetail } from '../entities/order-detail.entity.js';
+import { OrderDetailPipe } from '../pipes/order-detail.pipe.js';
+import { OrderDetailService } from '../services/order-detail.service.js';
 
 @Controller('order/:orderId/detail')
 @UseFilters(EntityNotFoundFilter)

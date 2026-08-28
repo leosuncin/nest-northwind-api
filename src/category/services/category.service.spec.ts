@@ -3,10 +3,10 @@ import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { CategoryService } from './category.service';
-import { Category } from '../entities/category.entity';
-import { CreateCategory } from '../dto/create-category.dto';
-import { UpdateCategory } from '../dto/update-category.dto';
+import { CategoryService } from './category.service.js';
+import { Category } from '../entities/category.entity.js';
+import { CreateCategory } from '../dto/create-category.dto.js';
+import { UpdateCategory } from '../dto/update-category.dto.js';
 
 describe('CategoryService', () => {
   let service: CategoryService;
