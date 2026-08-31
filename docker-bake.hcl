@@ -1,16 +1,3 @@
-variable "VERSION" {
-  default = "latest"
-  validation {
-    condition = VERSION == regex("(?:^\\d+\\.\\d+\\.\\d+$)|latest", VERSION)
-    error_message = "VERSION must follow SemVer format"
-  }
-}
-
-function "tag" {
-  params = [project]
-  result = ["${project}:${VERSION}"]
-}
-
 target "docker-metadata-action" {}
 
 target "api" {
