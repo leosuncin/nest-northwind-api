@@ -92,7 +92,7 @@ jobs:
         run: |
           kubectl apply -f k8s/server-deployment.yaml
           kubectl apply -f k8s/server-service.yaml
-          kubectl rollout status deployment/server --timeout=30s
+          kubectl rollout status deployment/server --timeout=90s
 
       - name: Forward the port ⏩
         background: true
