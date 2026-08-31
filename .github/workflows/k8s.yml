@@ -72,6 +72,13 @@ jobs:
         run: |
           kubectl apply -f k8s/data-source-configmap.yaml
           kubectl apply -f k8s/migrations-job.yaml
+          until
+            kubectl wait job/migrations --for=condition=complete --timeout=5s >/dev/null 2>&1 ||
+            kubectl wait job/migrations --for=condition=failed --timeout=5s >/dev/null 2>&1
+          do
+            echo "Waiting for migrations to finish..."
+            sleep 5
+          done
 
       - name: Deploy the API server 🏁
         run: |
