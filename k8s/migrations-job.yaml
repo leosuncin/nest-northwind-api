@@ -17,7 +17,7 @@ spec:
       containers:
         - name: migrations
           image: migrations:latest
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
                 name: northwind-db

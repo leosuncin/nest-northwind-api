@@ -9,3 +9,8 @@ allowBuilds:
   esbuild: true
   protobufjs: true
   ssh2: true
+
+packageExtensions:
+  ttsc:
+    dependencies:
+      typescript: '7'

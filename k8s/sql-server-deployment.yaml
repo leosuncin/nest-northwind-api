@@ -16,10 +16,25 @@ spec:
       labels:
         io.kompose.service: sql-server
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
         - name: sql-server
           image: mcr.microsoft.com/mssql/server:2025-latest
           imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 1433
+              name: tcpsql
+          env:
+            - name: ACCEPT_EULA
+              value: 'Y'
+            - name: MSSQL_PID
+              value: Developer
+            - name: MSSQL_LCID
+              value: '3082'
+            - name: MSSQL_ENABLE_HADR
+              value: '1'
+            - name: MSSQL_AGENT_ENABLED
+              value: 'true'
           envFrom:
             - secretRef:
                 name: northwind-db
@@ -39,9 +54,9 @@ spec:
             failureThreshold: 5
           volumeMounts:
             - mountPath: /var/opt/mssql
-              name: sql-server-data
+              name: sql-server-db
       restartPolicy: Always
       volumes:
-        - name: sql-server-data
+        - name: sql-server-db
           persistentVolumeClaim:
             claimName: sql-server-data

@@ -25,6 +25,7 @@ describe('OrderService', () => {
     const createOrder: CreateOrder = {
       customer: 1 as unknown as Order['customer'],
       employee: 1 as unknown as Order['employee'],
+      details: [],
     };
     const createdOrder = { id: 1, ...createOrder } as Order;
 

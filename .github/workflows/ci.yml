@@ -33,7 +33,9 @@ jobs:
         run: pnpm lint
 
       - name: Build
-        run: pnpm build
+        run: |
+          pnpm ttsc --noEmit
+          pnpm build
 
   unit:
     name: Unit tests

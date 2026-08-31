@@ -30,4 +30,4 @@ jobs:
           --package=@semantic-release/git \
           semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_REPOSITORY || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN || secrets.GITHUB_TOKEN }}
