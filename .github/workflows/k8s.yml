@@ -1,0 +1,99 @@
+name: Kubernetes
+
+on:
+  pull_request:
+    branches:
+      - master
+
+  build:
+    name: Build the image 🐋
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker build cache 🧺
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        id: build-cache
+        with:
+          path: pnpm-store-cache
+          key: build-cache-ci
+
+      - name: Set up Docker Buildx 🐳
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e
+
+      - name: Restore the build cache 🪏
+        uses: reproducible-containers/buildkit-cache-dance@5422eac04292c961a382e0f584ea0f03ad9da723
+        with:
+          cache-dir: pnpm-store-cache
+          skip-extraction: ${{ steps.build-cache.outputs.cache-hit }}
+          cache-map: |
+            { "pnpm-store-cache": "/pnpm/store" }
+
+      - name: Build the image 🏗️
+        uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b
+        with:
+          push: true
+          set: |
+            api.tags=ttl.sh/api-${{ github.sha }}:1h
+            migrations.tags=ttl.sh/migrations-${{ github.sha }}:1h
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
+
+  test-k8s:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout 📥
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Create a ephemeral Kubernetes cluster with Kind ⚓
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc
+
+      - name: Verify Cluster Connection 🎛️
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Replace values ✍️
+        run: |
+          yq -i '.spec.template.spec.containers.[0].image = ttl.sh/api-${{ github.sha }}:1h' k8s/server-deployment.yaml
+          yq -i '.spec.template.spec.containers.[0].image = ttl.sh/migrations-${{ github.sha }}:1h' k8s/migrations-job.yaml
+          yq '.stringData.MSSQL_PASSWORD = "${{ github.sha }}" | .stringData.MSSQL_SA_PASSWORD = "${{ github.sha }}"' k8s/database-secret.example.yaml | yq -Poy k8s/database-secret.yaml
+
+      - name: Deploy SQL Server 🏁
+        run: |
+          kubectl apply -f k8s/database-secret.yaml
+          kubectl apply -f k8s/sql-server-data-persistentvolumeclaim.yaml
+          kubectl apply -f k8s/sql-server-deployment.yaml
+          kubectl apply -f k8s/sql-server-service.yaml
+          kubectl rollout status sql-server --timeout=90s
+
+      - name: Run migrations job 🏁
+        run: |
+          kubectl apply -f k8s/data-source-configmap.yaml
+          kubectl apply -f k8s/migrations-job.yaml
+
+      - name: Deploy the API server 🏁
+        run: |
+          kubectl apply -f k8s/server-deployment.yaml
+          kubectl apply -f k8s/server-service.yaml
+          kubectl rollout status server --timeout=30s
+
+      - name: Forward the port ⏩
+        background: true
+        run: kubectl port-forward server 3000:3000
+
+      - name: Wait for the server 🙋‍♂️
+        uses: harryvasanth/wait-for-http-endpoint@e56e03998cd4799fa97f17ce54a3d0ed62f8e02c
+        with:
+          url: http://localhost:3000
+
+      - name: Run bruno tests 🐶
+        uses: usebruno/bruno-cli-action@104e180c2e7219a915dc48b6979ddbafe0940fcd
+        with:
+          working-directory: test/e2e
+          command: run --env development
+
+      - name: Print cluster status on failure 🖨️
+        if: failure()
+        run: |
+          kubectl get pods --all-namespaces
+          kubectl get events --sort-by='.metadata.creationTimestamp'
