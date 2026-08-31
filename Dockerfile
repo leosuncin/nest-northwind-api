@@ -1,6 +1,6 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
 
-ARG NODE_VERSION=26-slim
+ARG NODE_VERSION=26-slim@sha256:c0753125a3789977aefe869cbebccf70e3cfd7ea84ca48547458f02e4f1d7146
 
 FROM node:${NODE_VERSION} AS deps
 
@@ -29,7 +29,7 @@ RUN --mount=type=cache,target=/pnpm/store,sharing=locked \
     pnpm prune --prod && \
     pnpm dlx node-prune
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot AS migrations
+FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:10ec8cb93ef461563da50d4eb8dfac7d048783826825bf5b07510c2f34c14315 AS migrations
 
 WORKDIR /typeorm
 
@@ -40,7 +40,7 @@ ENTRYPOINT ["/nodejs/bin/node", "./node_modules/typeorm/cli.js"]
 
 CMD ["migration:run", "-d", "/typeorm/data-source.js"]
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot
+FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:10ec8cb93ef461563da50d4eb8dfac7d048783826825bf5b07510c2f34c14315
 
 ARG PORT=3000
 
