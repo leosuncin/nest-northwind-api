@@ -89,7 +89,7 @@ jobs:
 
       - name: Forward the port ⏩
         background: true
-        run: kubectl port-forward server 3000:3000
+        run: kubectl port-forward service/server 3000:3000
 
       - name: Wait for the server 🙋‍♂️
         uses: harryvasanth/wait-for-http-endpoint@e56e03998cd4799fa97f17ce54a3d0ed62f8e02c
