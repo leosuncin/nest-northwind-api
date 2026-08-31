@@ -15,29 +15,29 @@ jobs:
     steps:
       - name: Get relevant tags
         id: semver
-        uses: jupyterhub/action-major-minor-tag-calculator@v3
+        uses: jupyterhub/action-major-minor-tag-calculator@1af536f74e102b9190e1db49a8f84bdfd7b282d9 # v3
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker build cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         id: cache
         with:
           path: pnpm-store-cache
           key: build-cache-${{ fromJson(steps.semver.outputs.tags)[2] }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+        uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v4
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Restore the build cache
-        uses: reproducible-containers/buildkit-cache-dance@v3
+        uses: reproducible-containers/buildkit-cache-dance@5422eac04292c961a382e0f584ea0f03ad9da723 # v3
         with:
           cache-dir: pnpm-store-cache
           skip-extraction: ${{ steps.cache.outputs.cache-hit }}
@@ -46,7 +46,7 @@ jobs:
 
       - name: Docker image metadata
         id: meta
-        uses: docker/metadata-action@v6
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
@@ -58,7 +58,7 @@ jobs:
             type=sha
 
       - name: Bake the image
-        uses: docker/bake-action@v7
+        uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
         with:
           push: true
           files: |
