@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Get relevant tags
         id: semver
-        uses: jupyterhub/action-major-minor-tag-calculator@1af536f74e102b9190e1db49a8f84bdfd7b282d9 # v3
+        uses: jupyterhub/action-major-minor-tag-calculator@40566ffdf246e5a9e640cf768df890ead4424b22 # v4
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
