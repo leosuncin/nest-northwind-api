@@ -5,6 +5,7 @@ on:
     branches:
       - master
 
+jobs:
   build:
     name: Build the image 🐋
     runs-on: ubuntu-latest
