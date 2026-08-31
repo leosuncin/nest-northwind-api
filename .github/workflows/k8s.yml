@@ -95,6 +95,7 @@ jobs:
           kubectl rollout status deployment/server --timeout=90s
 
       - name: Forward the port ⏩
+        id: port-forward
         background: true
         run: kubectl port-forward --address 0.0.0.0 service/server 3000:3000
 
@@ -104,6 +105,9 @@ jobs:
           working-directory: test/e2e
           command: run --env development
 
+      - name: Stop forwarding the port ⛔
+        cancel: port-forward
+    
       - name: Print cluster status on failure 🖨️
         if: failure()
         run: |
