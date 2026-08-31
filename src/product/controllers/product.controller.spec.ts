@@ -6,6 +6,8 @@ import { ProductService } from '../services/product.service.js';
 import { CreateProduct } from '../dto/create-product.dto.js';
 import { UpdateProduct } from '../dto/update-product.dto.js';
 import { Product } from '../entities/product.entity.js';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
+import { Category } from '../../category/entities/category.entity.js';
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -35,7 +37,19 @@ describe('ProductController', () => {
     const page = 2;
     const limit = 5;
     const products: [Product[], number] = [
-      [{ id: 1, name: 'Chai', discontinued: false }],
+      [
+        {
+          id: 1,
+          name: 'Chai',
+          discontinued: false,
+          supplier: new Supplier(),
+          category: new Category(),
+          unitPrice: 0,
+          unitsInStock: 0,
+          unitsOnOrder: 0,
+          reorderLevel: 0,
+        },
+      ],
       1,
     ];
 
