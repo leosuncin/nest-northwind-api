@@ -28,18 +28,27 @@ describe('PaginationInterceptor', () => {
       }),
     );
 
-    expect(result).toEqual({
-      items,
-      meta: {
-        itemCount: items.length,
-        totalItems,
-        itemsPerPage: 5,
-        totalPages: Math.ceil(totalItems / 5),
-        currentPage: 2,
-        hasNextPage: 2 * 5 < totalItems,
-        hasPreviousPage: 2 > 1,
-      },
-    });
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "items": [
+          {
+            "id": 1,
+          },
+          {
+            "id": 2,
+          },
+        ],
+        "meta": {
+          "currentPage": 2,
+          "hasNextPage": true,
+          "hasPreviousPage": true,
+          "itemCount": 2,
+          "itemsPerPage": 5,
+          "totalItems": 20,
+          "totalPages": 4,
+        },
+      }
+    `);
   });
 
   test('given a response without query when intercept then it applies default pagination', async () => {
