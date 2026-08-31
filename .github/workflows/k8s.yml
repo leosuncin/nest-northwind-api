@@ -69,15 +69,16 @@ jobs:
           kubectl rollout status deployment/sql-server --timeout=90s
 
       - name: Run migrations job 🏁
+        timeout-minutes: 10
         run: |
           kubectl apply -f k8s/data-source-configmap.yaml
           kubectl apply -f k8s/migrations-job.yaml
           until
-            kubectl wait job/migrations --for=condition=complete --timeout=5s >/dev/null 2>&1 ||
-            kubectl wait job/migrations --for=condition=failed --timeout=5s >/dev/null 2>&1
+            kubectl wait job/migrations --for=condition=complete --timeout=15s >/dev/null 2>&1 ||
+            kubectl wait job/migrations --for=condition=failed --timeout=15s >/dev/null 2>&1
           do
             echo "Waiting for migrations to finish..."
-            sleep 5
+            sleep 15
           done
 
       - name: Deploy the API server 🏁
@@ -104,5 +105,7 @@ jobs:
       - name: Print cluster status on failure 🖨️
         if: failure()
         run: |
+          kubectl logs job/migrations
+          kubectl logs deployment/server
           kubectl get pods --all-namespaces
           kubectl get events --sort-by='.metadata.creationTimestamp'
