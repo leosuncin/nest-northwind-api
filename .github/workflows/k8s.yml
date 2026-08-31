@@ -96,12 +96,13 @@ jobs:
 
       - name: Forward the port ⏩
         background: true
-        run: kubectl port-forward service/server 3000:3000
+        run: kubectl port-forward --address 0.0.0.0 service/server 3000:3000
 
       - name: Wait for the server 🙋‍♂️
         uses: harryvasanth/wait-for-http-endpoint@e56e03998cd4799fa97f17ce54a3d0ed62f8e02c
         with:
           url: http://localhost:3000
+          timeout: 60000
 
       - name: Run bruno tests 🐶
         uses: usebruno/bruno-cli-action@104e180c2e7219a915dc48b6979ddbafe0940fcd
