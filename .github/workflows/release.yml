@@ -1,4 +1,4 @@
-name: Release a new version
+name: Release
 
 on:
   push:
@@ -6,21 +6,28 @@ on:
 
 jobs:
   release:
-    name: Release a new version 🚀
+    name: Release the new version
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
+      pull-requests: write
     steps:
-      - name: Checkout 🛎
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Checkout
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Setup PNPM 🧰
-        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2
+      - name: Setup node
+        uses: actions/setup-node@v7
         with:
-          cache: true
+          node-version: 26
 
-      - name: Release 🚀
-        run: pnpm exec semantic-release
+      - name: Semantic release
+        run: |-
+          npx --package=@semantic-release/changelog \
+          --package=@semantic-release/git \
+          semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_REPOSITORY || secrets.GITHUB_TOKEN }}
