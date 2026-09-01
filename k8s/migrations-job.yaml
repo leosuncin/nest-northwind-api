@@ -16,8 +16,8 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrations
-          image: migrations:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/leosuncin/nest-northwind-migrations:latest
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: northwind-db

@@ -16,14 +16,21 @@ spec:
     spec:
       containers:
         - name: server
-          image: api:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/leosuncin/nest-northwind-api:latest
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: northwind-db
           env:
             - name: MSSQL_HOST
               value: sql-server
+          resources:
+            requests:
+              cpu: 200m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           ports:
             - containerPort: 3000
               protocol: TCP
