@@ -1,4 +1,7 @@
-target "docker-metadata-action" {}
+target "docker-metadata-action" {
+  tags = ["latest"]
+  args = {}
+}
 
 variable "BASE_TAG" {
   default = "nest-northwind"
@@ -6,18 +9,20 @@ variable "BASE_TAG" {
 
 target "api" {
   inherits = ["docker-metadata-action"]
-  context = "."
   args = {
     "PORT" = 3000
   }
-  tags = [for tag in target.docker-metadata-action.tags : "${BASE_TAG}-api:${tag}"]
+  tags = [
+    for tag in target.docker-metadata-action.tags: "${BASE_TAG}-api:${tag}"
+  ]
 }
 
 target "migrations" {
   inherits = ["docker-metadata-action"]
-  context = "."
   target = "migrations"
-  tags = [for tag in target.docker-metadata-action.tags : "${BASE_TAG}-migrations:${tag}"]
+  tags = [
+    for tag in target.docker-metadata-action.tags: "${BASE_TAG}-migrations:${tag}"
+  ]
 }
 
 group "default" {
