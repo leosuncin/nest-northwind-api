@@ -1,12 +1,15 @@
-name: CI
+name: Continuous Integration
 
 permissions:
   contents: read
 
 on:
   push:
-    branches: [master]
+    branches-ignore:
+      - master
   pull_request:
+    branches:
+      - master
 
 concurrency:
   group: ci-${{ github.ref }}
