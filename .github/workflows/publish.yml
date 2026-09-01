@@ -49,9 +49,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6
         with:
-          images: |
-            ghcr.io/${{ github.repository_owner }}/nest-northwind-api
-            ghcr.io/${{ github.repository_owner }}/nest-northwind-migrations
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -62,6 +59,8 @@ jobs:
 
       - name: Bake the image
         uses: docker/bake-action@d3418bd7d0e9324001bca92fa8ba175ea7e6dc9b # v7
+        env:
+          BASE_TAG: ghcr.io/${{ github.repository_owner }}/nest-northwind
         with:
           push: true
           targets: default
