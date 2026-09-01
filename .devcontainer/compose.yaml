@@ -26,6 +26,17 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  oauth:
+    image: pocketid/pocket-id:v2
+    environment:
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-}
+      APP_URL: ${APP_URL:-http://localhost:1411}
+      VERSION_CHECK_DISABLED: 'true'
+      ANALYTICS_DISABLED: 'true'
+    network_mode: service:workspace
+    volumes:
+      - pocket-id-data:/app/data
 
 volumes:
   sql-server-data:
+  pocket-id-data:
