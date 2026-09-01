@@ -1,7 +1,12 @@
 [tools]
 "github:tj/node-prune" = "latest"
+helm = "latest"
 hk = { version = "latest", postinstall = "hk install --mise" }
-node = { version = "latest" }
+k9s = "latest"
+kind = { version = "latest", postinstall = "[[ $(kind get clusters | wc -l) = 0 ]] && kind create cluster", shell = "bash -c" }
+krew = { version = "latest", postinstall = "krew install krew" }
+kubectl = "latest"
+node = { version = "latest", postinstall = "npm install -g pnpm" }
 "npm:corepack" = { version = "latest", postinstall = "corepack enable" }
 opencode = "latest"
 
