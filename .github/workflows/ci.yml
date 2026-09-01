@@ -16,10 +16,15 @@ jobs:
   format-lint:
     name: Format, lint & build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Cache build
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: dist
+          key: ${{ github.sha }}
 
       - name: Setup PNPM
         uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2
@@ -119,3 +124,76 @@ jobs:
         run: |
           pnpm typeorm migration:run
           pnpm typeorm-extension seed:run
+
+  api:
+    name: API tests
+    needs:
+      - format-lint
+      - migrations
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2025-latest@sha256:4bab24f36c1ecd48e85f7d37df26e6bf301641d84c3fe652f9a0dcc947d512e1
+        env:
+          MSSQL_SA_PASSWORD: 'A1!${{ github.run_id }}a'
+          ACCEPT_EULA: 'Y'
+        ports:
+          - '1433:1433'
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -h -1 -t 1 -C -b -U sa -P $MSSQL_SA_PASSWORD -Q 'SELECT 1'"
+          --health-interval 20s
+          --health-timeout 10s
+          --health-start-period 15s
+          --health-retries 10
+    env:
+      MSSQL_DB: master
+      MSSQL_USER: sa
+      MSSQL_SA_PASSWORD: 'A1!${{ github.run_id }}a'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Cache build
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        id: build-cache
+        with:
+          path: dist
+          key: ${{ github.sha }}
+
+      - name: Setup PNPM
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2
+        with:
+          cache: true
+
+      - name: Build
+        if: ${{ steps.build-cache.outputs.cache-hit == 'false' }}
+        run: pnpm build
+
+      - name: Run migrations and seeders
+        run: |
+          pnpm typeorm migration:run
+          pnpm typeorm-extension seed:run
+
+      - name: Start the API server
+        id: api
+        run: pnpm start:prod
+        background: true
+
+      - name: Run API tests
+        uses: usebruno/bruno-cli-action@104e180c2e7219a915dc48b6979ddbafe0940fcd
+        with:
+          working-directory: test/e2e
+          command: run --env development --reporter-junit results.xml
+
+      - name: Publish JUnit Test Report
+        uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d
+        if: always()
+        with:
+          report_paths: 'test/e2e/results.xml'
+
+      - name: Stop the API server
+        cancel: api
