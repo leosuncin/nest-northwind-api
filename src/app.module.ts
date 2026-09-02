@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DocfyModule } from 'nestjs-docfy';
 
 import typeormOptions from './config/typeorm.js';
 import { AppController } from './app.controller.js';
@@ -18,6 +19,7 @@ import { OrderModule } from './order/order.module.js';
   imports: [
     ConfigModule.forRoot({ isGlobal: true, expandVariables: true }),
     TypeOrmModule.forRootAsync(typeormOptions.asProvider()),
+    DocfyModule.forRoot({ strict: true }),
     EmployeeModule,
     SharedModule,
     CategoryModule,

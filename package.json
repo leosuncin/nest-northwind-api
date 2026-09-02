@@ -20,7 +20,11 @@
     "test:e2e": "vitest run --project E2E",
     "test:watch": "vitest",
     "typeorm": "node --require ttsc/register node_modules/typeorm/cli.js -d data-source.ts",
-    "typeorm-extension": "node --require ttsc/register node_modules/typeorm-extension/bin/cli.mjs"
+    "typeorm-extension": "node --require ttsc/register node_modules/typeorm-extension/bin/cli.mjs",
+    "docs:generate": "nestjs-docfy generate",
+    "docs:preview": "nestjs-docfy generate --dry-run",
+    "docs:check": "nestjs-docfy check",
+    "docs:coverage": "nestjs-docfy coverage --min 95"
   },
   "dependencies": {
     "@nestjs/common": "^12.0.0",
@@ -28,10 +32,12 @@
     "@nestjs/core": "^12.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^12.0.0",
+    "@nestjs/swagger": "^12.0.1",
     "@nestjs/typeorm": "^12.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "mssql": "^12.7.0",
+    "nestjs-docfy": "^0.18.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "^1.0.0"
