@@ -1,29 +1,67 @@
+import { Reflector } from '@nestjs/core';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
+import { defineSchema, SchemaRegistry } from '@rapiq/core';
+import { TestBed } from '@suites/unit';
 import { createMocks } from 'node-mocks-http';
 import { firstValueFrom, of } from 'rxjs';
 
 import { PaginationInterceptor } from './pagination.interceptor.js';
 
-function buildContext(query: Record<string, string>) {
+function buildContext(limit = 10, offset = 0): ExecutionContextHost {
   const { req, res } = createMocks({
-    path: '/api',
+    path: '/fixture',
     headers: {
       Host: 'localhost',
     },
-    query,
+    query: {
+      codec: 'url-expression',
+      page: {
+        limit,
+        offset,
+      },
+    },
+    url: `/fixture?codec=url-expression&page%5Blimit%5D=${limit}&page%5Boffset%5D=${offset}`,
   });
 
   return new ExecutionContextHost([req, res]);
 }
 
 describe('PaginationInterceptor', () => {
+  const registry = new SchemaRegistry();
+  let interceptor: PaginationInterceptor;
+
+  beforeEach(async () => {
+    registry.add(
+      defineSchema({
+        name: 'fixture',
+        fields: {
+          allowed: ['id'],
+        },
+        pagination: {
+          maxLimit: 10,
+        },
+      }),
+    );
+    const { unit } = await TestBed.solitary(PaginationInterceptor)
+      .mock(Reflector)
+      .impl(() => ({
+        getAllAndOverride() {
+          return 'fixture';
+        },
+      }))
+      .mock(SchemaRegistry)
+      .final(registry)
+      .compile();
+
+    interceptor = unit;
+  });
+
   test('given a paginated response when intercept then it wraps items with metadata', async () => {
-    const interceptor = new PaginationInterceptor();
     const items = [{ id: 1 }, { id: 2 }];
     const totalItems = 20;
 
     const result = await firstValueFrom(
-      interceptor.intercept(buildContext({ page: '2', limit: '5' }), {
+      interceptor.intercept(buildContext(5, (2 - 1) * 5), {
         handle: () => of([items, totalItems]),
       }),
     );
@@ -54,10 +92,9 @@ describe('PaginationInterceptor', () => {
   test('given a response without query when intercept then it applies default pagination', async () => {
     const items = [{ id: 1 }];
     const totalItems = 1;
-    const interceptor = new PaginationInterceptor();
 
     const result = await firstValueFrom(
-      interceptor.intercept(buildContext({}), {
+      interceptor.intercept(buildContext(), {
         handle: () => of([items, totalItems]),
       }),
     );
