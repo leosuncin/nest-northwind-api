@@ -1,11 +1,20 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
+import type { Schema } from '@rapiq/core';
 
-import { PaginationInterceptor } from './interceptors/pagination.interceptor.js';
-import { EntityNotFoundFilter } from './filters/entity-not-found.filter.js';
-import { PositiveIntPipe } from './pipes/positive-int.pipe.js';
+import {
+  createSchemaRegistryProviders,
+  schemaRegistryProvider,
+} from './providers/schema-registry.provider.js';
 
-@Module({
-  providers: [PaginationInterceptor, EntityNotFoundFilter, PositiveIntPipe],
-  exports: [PaginationInterceptor, EntityNotFoundFilter, PositiveIntPipe],
-})
-export class SharedModule {}
+@Module({})
+export class SharedModule {
+  static forFeature(...schemas: Schema<any>[]): DynamicModule {
+    const providers = createSchemaRegistryProviders(...schemas);
+
+    return {
+      module: SharedModule,
+      providers: providers.concat(schemaRegistryProvider),
+      exports: [schemaRegistryProvider],
+    };
+  }
+}
