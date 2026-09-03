@@ -1,11 +1,12 @@
-import { TestBed } from '@suites/unit';
+import type { IQuery } from '@rapiq/core';
 import type { Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
 
-import { CategoryController } from './category.controller.js';
-import { CategoryService } from '../services/category.service.js';
 import { CreateCategory } from '../dto/create-category.dto.js';
 import { UpdateCategory } from '../dto/update-category.dto.js';
 import { Category } from '../entities/category.entity.js';
+import { CategoryService } from '../services/category.service.js';
+import { CategoryController } from './category.controller.js';
 
 describe('CategoryController', () => {
   let controller: CategoryController;
@@ -37,8 +38,12 @@ describe('CategoryController', () => {
   });
 
   test('given a page and limit when findAll then it delegates to the service', async () => {
-    const page = 2;
-    const limit = 5;
+    const filters = {
+      pagination: {
+        limit: 5,
+        offset: 5,
+      },
+    } as IQuery;
     const categories: [Category[], number] = [
       [{ id: 1, name: 'Beverages', picture: 'beverages.png' }],
       1,
@@ -46,10 +51,10 @@ describe('CategoryController', () => {
 
     service.findAll.mockResolvedValue(categories);
 
-    const result = await controller.findAll(page, limit);
+    const result = await controller.findAll(filters);
 
     expect(result).toEqual(categories);
-    expect(service.findAll).toHaveBeenCalledWith(page, limit);
+    expect(service.findAll).toHaveBeenCalledWith(filters);
   });
 
   test('given an id when findOne then it delegates to the service', async () => {

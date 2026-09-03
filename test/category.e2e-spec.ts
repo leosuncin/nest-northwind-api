@@ -1,6 +1,8 @@
 import { HttpStatus, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
+import { createURLCodec } from '@rapiq/codec-url';
+import { defineQuery, notContains, type QueryBuildInput } from '@rapiq/core';
 import {
   MSSQLServerContainer,
   type StartedMSSQLServerContainer,
@@ -14,7 +16,10 @@ import type { CreateCategory } from '../src/category/dto/create-category.dto.js'
 import type { UpdateCategory } from '../src/category/dto/update-category.dto.js';
 import { Category } from '../src/category/entities/category.entity.js';
 import typeormConfig from '../src/config/typeorm.js';
+import type { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
 import { buildTypeOrmOptions } from './helpers.js';
+
+const codec = createURLCodec();
 
 describe('CategoryController (e2e)', () => {
   let app: INestApplication<App>;
@@ -83,9 +88,70 @@ describe('CategoryController (e2e)', () => {
 
     expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
     expect(response.body).toHaveProperty('meta');
-    expect(response.body).toHaveProperty('meta.itemsPerPage', 10);
+    expect(response.body).toHaveProperty('meta.itemsPerPage', 100);
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
+
+  test.each([
+    [
+      {
+        fields: ['name', 'description'],
+        sorts: '-id',
+        filters: { description: { $contains: 'and' } },
+        pagination: { limit: 3 },
+      } satisfies QueryBuildInput<Category>,
+      {
+        itemCount: 3,
+        totalItems: 6,
+        itemsPerPage: 3,
+        totalPages: 2,
+        currentPage: 1,
+        hasNextPage: true,
+        hasPreviousPage: false,
+      } satisfies Pagination<Category>['meta'],
+    ],
+    [
+      {
+        fields: ['name', 'description'],
+        sorts: '-id',
+        filters: notContains('description', 'or'),
+        pagination: { limit: 3, offset: 3 },
+      } satisfies QueryBuildInput<Category>,
+      {
+        itemCount: 3,
+        totalItems: 7,
+        itemsPerPage: 3,
+        totalPages: 3,
+        currentPage: 2,
+        hasNextPage: true,
+        hasPreviousPage: true,
+      } satisfies Pagination<Category>['meta'],
+    ],
+  ])(
+    'given a GET request to /category when filters %j then it should return a pagination %o',
+    async (
+      filters: QueryBuildInput<Category>,
+      meta: Pagination<Category>['meta'],
+    ) => {
+      const query = defineQuery<Category>(filters);
+      const response = await request(app.getHttpServer())
+        .get('/category')
+        .query(codec.encode(query)!)
+        .expect(HttpStatus.OK)
+        .expect('Content-Type', /json/);
+
+      expect(response.body).toHaveProperty(
+        'items',
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: expect.any(String),
+            description: expect.any(String),
+          }),
+        ]),
+      );
+      expect(response.body).toHaveProperty('meta', meta);
+    },
+  );
 
   test('given a GET request to /category/:id when the category exists then it should return the category', async () => {
     const category = await useSeederFactory(Category).save({

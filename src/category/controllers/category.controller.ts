@@ -1,28 +1,29 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
-  Delete,
-  UseInterceptors,
   ClassSerializerInterceptor,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  SetMetadata,
   UseFilters,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
-  Query,
-  ParseIntPipe,
 } from '@nestjs/common';
+import type { IQuery } from '@rapiq/core';
 
-import { CategoryService } from '../services/category.service.js';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
 import { CreateCategory } from '../dto/create-category.dto.js';
 import { UpdateCategory } from '../dto/update-category.dto.js';
 import { Category } from '../entities/category.entity.js';
 import { CategoryPipe } from '../pipes/category.pipe.js';
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
+import { CategoryService } from '../services/category.service.js';
 
 @Controller('category')
 @UseFilters(EntityNotFoundFilter)
@@ -38,13 +39,9 @@ export class CategoryController {
 
   @Get()
   @UseInterceptors(PaginationInterceptor)
-  findAll(
-    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    limit = 10,
-  ) {
-    return this.categoryService.findAll(page, limit);
+  @SetMetadata('schema', 'category')
+  findAll(@Query() filters: IQuery) {
+    return this.categoryService.findAll(filters);
   }
 
   @Get(':id')

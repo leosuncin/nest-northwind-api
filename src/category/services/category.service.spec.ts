@@ -1,12 +1,13 @@
-import { TestBed } from '@suites/unit';
-import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import { defineQuery } from '@rapiq/core';
+import { mock, type Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
-import { CategoryService } from './category.service.js';
-import { Category } from '../entities/category.entity.js';
 import { CreateCategory } from '../dto/create-category.dto.js';
 import { UpdateCategory } from '../dto/update-category.dto.js';
+import { Category } from '../entities/category.entity.js';
+import { CategoryService } from './category.service.js';
 
 describe('CategoryService', () => {
   let service: CategoryService;
@@ -39,22 +40,20 @@ describe('CategoryService', () => {
   });
 
   test('given pagination params when findAll then it returns a paginated result', async () => {
-    const page = 2;
-    const limit = 5;
+    const filters = defineQuery({ pagination: { limit: 5, offset: 5 } });
     const result: [Category[], number] = [
       [{ id: 1, name: 'Beverages', picture: 'beverages.png' }],
       1,
     ];
 
-    repository.findAndCount.mockResolvedValue(result);
+    const queryBuilder = mock<SelectQueryBuilder<Category>>();
+    repository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.getManyAndCount.mockResolvedValue(result);
 
-    const categories = await service.findAll(page, limit);
+    const categories = await service.findAll(filters);
 
     expect(categories).toEqual(result);
-    expect(repository.findAndCount).toHaveBeenCalledWith({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    expect(queryBuilder.getManyAndCount).toHaveBeenCalled();
   });
 
   test('given an id when findOne then it returns the matching category', async () => {
