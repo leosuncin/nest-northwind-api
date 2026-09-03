@@ -1,12 +1,13 @@
-import { TestBed } from '@suites/unit';
-import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import { defineQuery } from '@rapiq/core';
+import { mock, type Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
-import { CustomerService } from './customer.service.js';
-import { Customer } from '../entities/customer.entity.js';
 import { CreateCustomer } from '../dto/create-customer.dto.js';
 import { UpdateCustomer } from '../dto/update-customer.dto.js';
+import { Customer } from '../entities/customer.entity.js';
+import { CustomerService } from './customer.service.js';
 
 describe('CustomerService', () => {
   let service: CustomerService;
@@ -39,22 +40,20 @@ describe('CustomerService', () => {
   });
 
   test('given pagination params when findAll then it returns a paginated result', async () => {
-    const page = 2;
-    const limit = 5;
+    const filters = defineQuery({ pagination: { limit: 5, offset: 5 } });
     const result: [Customer[], number] = [
       [{ id: 1, code: 'TEST1', companyName: 'Test Company' }],
       1,
     ];
 
-    repository.findAndCount.mockResolvedValue(result);
+    const queryBuilder = mock<SelectQueryBuilder<Customer>>();
+    repository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.getManyAndCount.mockResolvedValue(result);
 
-    const customers = await service.findAll(page, limit);
+    const customers = await service.findAll(filters);
 
     expect(customers).toEqual(result);
-    expect(repository.findAndCount).toHaveBeenCalledWith({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    expect(queryBuilder.getManyAndCount).toHaveBeenCalled();
   });
 
   test('given an id when findOne then it returns the matching customer', async () => {

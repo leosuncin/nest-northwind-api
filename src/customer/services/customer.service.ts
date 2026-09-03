@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
+import type { IQuery } from '@rapiq/core';
+import { TypeormAdapter } from '@rapiq/adapter-typeorm';
 
 import { CreateCustomer } from '../dto/create-customer.dto.js';
 import { UpdateCustomer } from '../dto/update-customer.dto.js';
@@ -19,11 +21,12 @@ export class CustomerService {
     return this.customerRepository.save(customer);
   }
 
-  findAll(page = 1, limit = 10) {
-    return this.customerRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+  findAll(filters: IQuery) {
+    const queryBuilder = this.customerRepository.createQueryBuilder('customer');
+    const adapter = new TypeormAdapter({ queryBuilder });
+    adapter.execute(filters);
+
+    return queryBuilder.getManyAndCount();
   }
 
   findOne(id: number) {
