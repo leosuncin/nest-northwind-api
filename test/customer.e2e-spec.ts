@@ -1,6 +1,8 @@
 import { HttpStatus, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
+import { createURLCodec } from '@rapiq/codec-url';
+import { defineQuery, QueryBuildInput } from '@rapiq/core';
 import {
   MSSQLServerContainer,
   type StartedMSSQLServerContainer,
@@ -14,6 +16,9 @@ import typeormConfig from '../src/config/typeorm.js';
 import { CreateCustomer } from '../src/customer/dto/create-customer.dto.js';
 import { Customer } from '../src/customer/entities/customer.entity.js';
 import { buildTypeOrmOptions } from './helpers.js';
+import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
+
+const codec = createURLCodec();
 
 describe('CustomerController (e2e)', () => {
   let app: INestApplication<App>;
@@ -60,9 +65,94 @@ describe('CustomerController (e2e)', () => {
 
     expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
     expect(response.body).toHaveProperty('meta');
-    expect(response.body).toHaveProperty('meta.itemsPerPage', 10);
+    expect(response.body).toHaveProperty('meta.itemsPerPage', 100);
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
+
+  test.each([
+    [
+      {
+        fields: ['code', 'companyName', 'contactName', 'contactTitle'],
+        sorts: ['code'],
+        filters: {
+          country: { $eq: 'USA' },
+        },
+        pagination: { limit: 10 },
+      } satisfies QueryBuildInput<Customer>,
+      {
+        itemCount: 10,
+        totalItems: 13,
+        itemsPerPage: 10,
+        totalPages: 2,
+        currentPage: 1,
+        hasNextPage: true,
+        hasPreviousPage: false,
+      } satisfies Pagination<Customer>['meta'],
+    ],
+    [
+      {
+        fields: ['code', 'companyName', 'contactName', 'contactTitle'],
+        sorts: ['-code'],
+        filters: {
+          region: { $eq: null },
+        },
+        pagination: { limit: 20, offset: 20 },
+      } satisfies QueryBuildInput<Customer>,
+      {
+        itemCount: 20,
+        totalItems: 60,
+        itemsPerPage: 20,
+        totalPages: 3,
+        currentPage: 2,
+        hasNextPage: true,
+        hasPreviousPage: true,
+      } satisfies Pagination<Customer>['meta'],
+    ],
+    [
+      {
+        fields: ['code', 'companyName', 'contactName', 'contactTitle'],
+        sorts: ['contactName'],
+        filters: {
+          contactTitle: { $contains: 'owner' },
+        },
+      } satisfies QueryBuildInput<Customer>,
+      {
+        itemCount: 18,
+        totalItems: 18,
+        itemsPerPage: 100,
+        totalPages: 1,
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      } satisfies Pagination<Customer>['meta'],
+    ],
+  ])(
+    'given a GET request to /customer when filters %o then it should return a pagination %o',
+    async (
+      filters: QueryBuildInput<Customer>,
+      meta: Pagination<Customer>['meta'],
+    ) => {
+      const query = defineQuery<Customer>(filters);
+      const response = await request(app.getHttpServer())
+        .get('/customer')
+        .query(codec.encode(query)!)
+        .expect(HttpStatus.OK)
+        .expect('Content-Type', /json/);
+
+      expect(response.body).toHaveProperty(
+        'items',
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: expect.any(String),
+            companyName: expect.any(String),
+            contactName: expect.any(String),
+            contactTitle: expect.any(String),
+          }),
+        ]),
+      );
+      expect(response.body).toHaveProperty('meta', meta);
+    },
+  );
 
   test('given a POST request to /customer when a valid customer is provided then it should create and return the created customer', async () => {
     const newCustomer: CreateCustomer = {

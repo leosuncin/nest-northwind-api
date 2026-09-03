@@ -1,28 +1,29 @@
 import {
+  Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
-  Body,
-  UseInterceptors,
-  ClassSerializerInterceptor,
+  Query,
+  SetMetadata,
   UseFilters,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
-  Query,
-  ParseIntPipe,
 } from '@nestjs/common';
+import type { IQuery } from '@rapiq/core';
 
-import { CustomerService } from '../services/customer.service.js';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
 import { CreateCustomer } from '../dto/create-customer.dto.js';
 import { UpdateCustomer } from '../dto/update-customer.dto.js';
 import { Customer } from '../entities/customer.entity.js';
 import { CustomerPipe } from '../pipes/customer.pipe.js';
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
+import { CustomerService } from '../services/customer.service.js';
 
 @Controller('customer')
 @UseFilters(EntityNotFoundFilter)
@@ -38,13 +39,9 @@ export class CustomerController {
 
   @Get()
   @UseInterceptors(PaginationInterceptor)
-  findAll(
-    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    limit = 10,
-  ) {
-    return this.customerService.findAll(page, limit);
+  @SetMetadata('schema', 'customer')
+  findAll(@Query() filters: IQuery) {
+    return this.customerService.findAll(filters);
   }
 
   @Get(':id')

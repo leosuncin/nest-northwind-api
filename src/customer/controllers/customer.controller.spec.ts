@@ -6,6 +6,7 @@ import { CustomerService } from '../services/customer.service.js';
 import { CreateCustomer } from '../dto/create-customer.dto.js';
 import { UpdateCustomer } from '../dto/update-customer.dto.js';
 import { Customer } from '../entities/customer.entity.js';
+import { IQuery } from '@rapiq/core';
 
 describe('CustomerController', () => {
   let controller: CustomerController;
@@ -37,8 +38,12 @@ describe('CustomerController', () => {
   });
 
   test('given a page and limit when findAll then it delegates to the service', async () => {
-    const page = 2;
-    const limit = 5;
+    const filters = {
+      pagination: {
+        limit: 5,
+        offset: 5,
+      },
+    } as IQuery;
     const customers: [Customer[], number] = [
       [{ id: 1, code: 'TEST1', companyName: 'Test Company' }],
       1,
@@ -46,10 +51,10 @@ describe('CustomerController', () => {
 
     service.findAll.mockResolvedValue(customers);
 
-    const result = await controller.findAll(page, limit);
+    const result = await controller.findAll(filters);
 
     expect(result).toEqual(customers);
-    expect(service.findAll).toHaveBeenCalledWith(page, limit);
+    expect(service.findAll).toHaveBeenCalledWith(filters);
   });
 
   test('given an id when findOne then it delegates to the service', async () => {
