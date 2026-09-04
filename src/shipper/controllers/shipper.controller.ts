@@ -1,28 +1,29 @@
 import {
+  Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
-  Body,
-  UseInterceptors,
-  ClassSerializerInterceptor,
+  Query,
+  SetMetadata,
   UseFilters,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
-  Query,
-  ParseIntPipe,
 } from '@nestjs/common';
+import type { IQuery } from '@rapiq/core';
 
-import { ShipperService } from '../services/shipper.service.js';
+import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
 import { CreateShipper } from '../dto/create-shipper.dto.js';
 import { UpdateShipper } from '../dto/update-shipper.dto.js';
 import { Shipper } from '../entities/shipper.entity.js';
 import { ShipperPipe } from '../pipes/shipper.pipe.js';
-import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
-import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
+import { ShipperService } from '../services/shipper.service.js';
 
 @Controller('shipper')
 @UseFilters(EntityNotFoundFilter)
@@ -38,13 +39,9 @@ export class ShipperController {
 
   @Get()
   @UseInterceptors(PaginationInterceptor)
-  findAll(
-    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    limit = 10,
-  ) {
-    return this.shipperService.findAll(page, limit);
+  @SetMetadata('schema', 'shipper')
+  findAll(@Query() filters: IQuery) {
+    return this.shipperService.findAll(filters);
   }
 
   @Get(':id')
