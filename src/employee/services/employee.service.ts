@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeormAdapter } from '@rapiq/adapter-typeorm';
+import type { IQuery } from '@rapiq/core';
 import type { Repository } from 'typeorm';
 
 import { CreateEmployee } from '../dto/create-employee.dto.js';
@@ -19,11 +21,15 @@ export class EmployeeService {
     return this.employeeRepository.save(employee);
   }
 
-  findAll(page = 1, limit = 10) {
-    return this.employeeRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
+  findAll(filters: IQuery) {
+    const queryBuilder = this.employeeRepository.createQueryBuilder('employee');
+    const adapter = new TypeormAdapter({
+      queryBuilder,
+      relations: { joinAndSelect: true },
     });
+    adapter.execute(filters);
+
+    return queryBuilder.getManyAndCount();
   }
 
   findOne(id: number) {

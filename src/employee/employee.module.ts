@@ -3,12 +3,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SharedModule } from '../shared/shared.module.js';
 import { EmployeeController } from './controllers/employee.controller.js';
+import { queryEmployeeSchema } from './dto/query-employee.dto.js';
 import { Employee } from './entities/employee.entity.js';
 import { EmployeeService } from './services/employee.service.js';
 import { IsExistingEmployeeConstraint } from './validators/is-existing-employee.validator.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Employee]), SharedModule.forFeature()],
+  imports: [
+    TypeOrmModule.forFeature([Employee]),
+    SharedModule.forFeature(queryEmployeeSchema),
+  ],
   controllers: [EmployeeController],
   providers: [EmployeeService, IsExistingEmployeeConstraint],
   exports: [IsExistingEmployeeConstraint],
