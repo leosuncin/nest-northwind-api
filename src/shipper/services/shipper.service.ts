@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeormAdapter } from '@rapiq/adapter-typeorm';
+import type { IQuery } from '@rapiq/core';
 import type { Repository } from 'typeorm';
 
 import { CreateShipper } from '../dto/create-shipper.dto.js';
@@ -19,11 +21,12 @@ export class ShipperService {
     return this.shipperRepository.save(shipper);
   }
 
-  findAll(page = 1, limit = 10) {
-    return this.shipperRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+  findAll(filters: IQuery) {
+    const queryBuilder = this.shipperRepository.createQueryBuilder('shipper');
+    const adapter = new TypeormAdapter({ queryBuilder });
+    adapter.execute(filters);
+
+    return queryBuilder.getManyAndCount();
   }
 
   findOne(id: number) {

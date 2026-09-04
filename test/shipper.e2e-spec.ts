@@ -11,7 +11,7 @@ import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
 import { AppModule } from '../src/app.module.js';
 import typeormConfig from '../src/config/typeorm.js';
-import { CreateShipper } from '../src/shipper/dto/create-shipper.dto.js';
+import type { CreateShipper } from '../src/shipper/dto/create-shipper.dto.js';
 import { Shipper } from '../src/shipper/entities/shipper.entity.js';
 import { buildTypeOrmOptions } from './helpers.js';
 
@@ -52,7 +52,7 @@ describe('ShipperController (e2e)', () => {
     await container.stop();
   });
 
-  test('given a GET request to /shipper when no params are provided then it should return a paginated list', async () => {
+  test('given a GET request to /shipper when no query params are provided then it should return a paginated list', async () => {
     const response = await request(app.getHttpServer())
       .get('/shipper')
       .expect(HttpStatus.OK)
@@ -60,8 +60,13 @@ describe('ShipperController (e2e)', () => {
 
     expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
     expect(response.body).toHaveProperty('meta');
+    expect(response.body).toHaveProperty('meta.itemCount', 3);
+    expect(response.body).toHaveProperty('meta.totalItems', 3);
     expect(response.body).toHaveProperty('meta.itemsPerPage', 100);
+    expect(response.body).toHaveProperty('meta.totalPages', 1);
     expect(response.body).toHaveProperty('meta.currentPage', 1);
+    expect(response.body).toHaveProperty('meta.hasNextPage', false);
+    expect(response.body).toHaveProperty('meta.hasPreviousPage', false);
   });
 
   test('given a POST request to /shipper when a valid shipper is provided then it should create and return the created shipper', async () => {

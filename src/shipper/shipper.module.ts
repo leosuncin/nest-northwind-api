@@ -3,12 +3,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SharedModule } from '../shared/shared.module.js';
 import { ShipperController } from './controllers/shipper.controller.js';
+import { queryShipperSchema } from './dto/query-shipper.dto.js';
 import { Shipper } from './entities/shipper.entity.js';
 import { ShipperService } from './services/shipper.service.js';
 import { IsExistingShipperConstraint } from './validators/is-existing-shipper.validator.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Shipper]), SharedModule.forFeature()],
+  imports: [
+    TypeOrmModule.forFeature([Shipper]),
+    SharedModule.forFeature(queryShipperSchema),
+  ],
   controllers: [ShipperController],
   providers: [ShipperService, IsExistingShipperConstraint],
   exports: [IsExistingShipperConstraint],
