@@ -1,13 +1,14 @@
-import { TestBed } from '@suites/unit';
+import type { IQuery } from '@rapiq/core';
 import type { Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
 
-import { ProductController } from './product.controller.js';
-import { ProductService } from '../services/product.service.js';
+import { Category } from '../../category/entities/category.entity.js';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
 import { CreateProduct } from '../dto/create-product.dto.js';
 import { UpdateProduct } from '../dto/update-product.dto.js';
 import { Product } from '../entities/product.entity.js';
-import { Supplier } from '../../supplier/entities/supplier.entity.js';
-import { Category } from '../../category/entities/category.entity.js';
+import { ProductService } from '../services/product.service.js';
+import { ProductController } from './product.controller.js';
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -33,9 +34,13 @@ describe('ProductController', () => {
     expect(service.create).toHaveBeenCalledWith(createProduct);
   });
 
-  test('given a page and limit when findAll then it delegates to the service', async () => {
-    const page = 2;
-    const limit = 5;
+  test('given filters when findAll then it delegates to the service', async () => {
+    const filters = {
+      pagination: {
+        limit: 5,
+        offset: 5,
+      },
+    } as IQuery;
     const products: [Product[], number] = [
       [
         {
@@ -55,10 +60,10 @@ describe('ProductController', () => {
 
     service.findAll.mockResolvedValue(products);
 
-    const result = await controller.findAll(page, limit);
+    const result = await controller.findAll(filters);
 
     expect(result).toEqual(products);
-    expect(service.findAll).toHaveBeenCalledWith(page, limit);
+    expect(service.findAll).toHaveBeenCalledWith(filters);
   });
 
   test('given an id when findOne then it delegates to the service', async () => {
