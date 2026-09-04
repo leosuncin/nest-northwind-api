@@ -5,6 +5,7 @@ import { CategoryModule } from '../category/category.module.js';
 import { SharedModule } from '../shared/shared.module.js';
 import { SupplierModule } from '../supplier/supplier.module.js';
 import { ProductController } from './controllers/product.controller.js';
+import { queryProductSchema } from './dto/query-product.dto.js';
 import { Product } from './entities/product.entity.js';
 import { ProductService } from './services/product.service.js';
 import { IsExistingProductConstraint } from './validators/is-existing-product.validator.js';
@@ -12,7 +13,7 @@ import { IsExistingProductConstraint } from './validators/is-existing-product.va
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
-    SharedModule.forFeature(),
+    SharedModule.forFeature(queryProductSchema),
     CategoryModule,
     SupplierModule,
   ],

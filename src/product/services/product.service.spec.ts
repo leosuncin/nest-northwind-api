@@ -1,14 +1,15 @@
-import { TestBed } from '@suites/unit';
-import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import { defineQuery } from '@rapiq/core';
+import { mock, type Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
-import { ProductService } from './product.service.js';
-import { Product } from '../entities/product.entity.js';
+import { Category } from '../../category/entities/category.entity.js';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
 import { CreateProduct } from '../dto/create-product.dto.js';
 import { UpdateProduct } from '../dto/update-product.dto.js';
-import { Supplier } from '../../supplier/entities/supplier.entity.js';
-import { Category } from '../../category/entities/category.entity.js';
+import { Product } from '../entities/product.entity.js';
+import { ProductService } from './product.service.js';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -41,8 +42,7 @@ describe('ProductService', () => {
   });
 
   test('given pagination params when findAll then it returns a paginated result', async () => {
-    const page = 2;
-    const limit = 5;
+    const filters = defineQuery({ pagination: { limit: 5, offset: 5 } });
     const result: [Product[], number] = [
       [
         {
@@ -60,15 +60,14 @@ describe('ProductService', () => {
       1,
     ];
 
-    repository.findAndCount.mockResolvedValue(result);
+    const queryBuilder = mock<SelectQueryBuilder<Product>>();
+    repository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.getManyAndCount.mockResolvedValue(result);
 
-    const products = await service.findAll(page, limit);
+    const products = await service.findAll(filters);
 
     expect(products).toEqual(result);
-    expect(repository.findAndCount).toHaveBeenCalledWith({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    expect(queryBuilder.getManyAndCount).toHaveBeenCalled();
   });
 
   test('given an id when findOne then it returns the matching product', async () => {

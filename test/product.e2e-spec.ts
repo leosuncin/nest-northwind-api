@@ -1,12 +1,22 @@
 import { HttpStatus, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
+import { createURLCodec, URLCodec } from '@rapiq/codec-url';
+import {
+  and,
+  defineQuery,
+  eq,
+  gt,
+  gte,
+  lte,
+  QueryBuildInput,
+  SchemaRegistry,
+} from '@rapiq/core';
 import {
   MSSQLServerContainer,
   type StartedMSSQLServerContainer,
 } from '@testcontainers/mssqlserver';
 import { useContainer } from 'class-validator';
-
 import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
@@ -15,11 +25,13 @@ import { AppModule } from '../src/app.module.js';
 import typeormConfig from '../src/config/typeorm.js';
 import { CreateProduct } from '../src/product/dto/create-product.dto.js';
 import { Product } from '../src/product/entities/product.entity.js';
+import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
 import { buildTypeOrmOptions } from './helpers.js';
 
 describe('ProductController (e2e)', () => {
   let app: INestApplication<App>;
   let container: StartedMSSQLServerContainer;
+  let codec: URLCodec;
 
   beforeAll(async () => {
     container = await new MSSQLServerContainer(
@@ -41,6 +53,8 @@ describe('ProductController (e2e)', () => {
     app = module.createNestApplication();
 
     await app.init();
+
+    codec = createURLCodec(app.get(SchemaRegistry));
   }, 60_000);
 
   beforeEach(async () => {
@@ -67,19 +81,54 @@ describe('ProductController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test('given a GET request to /product when page is zero then it should return a bad request', async () => {
-    await request(app.getHttpServer())
-      .get('/product')
-      .query({ page: 0 })
-      .expect(HttpStatus.BAD_REQUEST);
-  });
+  test.each([
+    [
+      {
+        filters: and(
+          gt<Product>('unitsInStock', 10),
+          and(gte<Product>('unitPrice', 10), lte<Product>('unitPrice', 100)),
+          eq<Product>('discontinued', false),
+        ),
+        pagination: { limit: 10 },
+      } satisfies QueryBuildInput<Product>,
+      {
+        itemCount: 10,
+        totalItems: 49,
+        itemsPerPage: 10,
+        totalPages: 5,
+        currentPage: 1,
+        hasNextPage: true,
+        hasPreviousPage: false,
+      } satisfies Pagination<Product>['meta'],
+    ],
+    [
+      {
+        filters: eq<Product>('discontinued', true),
+      } satisfies QueryBuildInput<Product>,
+      {
+        itemCount: 8,
+        totalItems: 8,
+        itemsPerPage: 100,
+        totalPages: 1,
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      } satisfies Pagination<Product>['meta'],
+    ],
+  ])(
+    'given a GET request to /product when filters %j then it should return a pagination %o',
+    async (filters, meta) => {
+      const query = defineQuery(filters);
+      const response = await request(app.getHttpServer())
+        .get('/product')
+        .query(codec.encode(query)!)
+        .expect(HttpStatus.OK)
+        .expect('Content-Type', /json/);
 
-  test('given a GET request to /product when limit is negative then it should return a bad request', async () => {
-    await request(app.getHttpServer())
-      .get('/product')
-      .query({ limit: -1 })
-      .expect(HttpStatus.BAD_REQUEST);
-  });
+      expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
+      expect(response.body).toHaveProperty('meta', meta);
+    },
+  );
 
   test('given a POST request to /product when a valid product is provided then it should create and return the created product', async () => {
     const newProduct = {
