@@ -8,7 +8,7 @@ import { ShipperService } from './services/shipper.service.js';
 import { IsExistingShipperConstraint } from './validators/is-existing-shipper.validator.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Shipper]), SharedModule],
+  imports: [TypeOrmModule.forFeature([Shipper]), SharedModule.forFeature()],
   controllers: [ShipperController],
   providers: [ShipperService, IsExistingShipperConstraint],
   exports: [IsExistingShipperConstraint],

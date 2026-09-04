@@ -12,7 +12,7 @@ import { IsExistingProductConstraint } from './validators/is-existing-product.va
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
-    SharedModule,
+    SharedModule.forFeature(),
     CategoryModule,
     SupplierModule,
   ],

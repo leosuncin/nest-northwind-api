@@ -8,7 +8,7 @@ import { SupplierService } from './services/supplier.service.js';
 import { IsExistingSupplierConstraint } from './validators/is-existing-supplier.validator.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Supplier]), SharedModule],
+  imports: [TypeOrmModule.forFeature([Supplier]), SharedModule.forFeature()],
   controllers: [SupplierController],
   providers: [SupplierService, IsExistingSupplierConstraint],
   exports: [SupplierService, IsExistingSupplierConstraint],

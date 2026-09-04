@@ -59,7 +59,7 @@ describe('SupplierController (e2e)', () => {
 
     expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
     expect(response.body).toHaveProperty('meta');
-    expect(response.body).toHaveProperty('meta.itemsPerPage', 10);
+    expect(response.body).toHaveProperty('meta.itemsPerPage', 100);
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
