@@ -1,11 +1,12 @@
-import { TestBed } from '@suites/unit';
+import type { IQuery } from '@rapiq/core';
 import type { Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
 
-import { EmployeeController } from './employee.controller.js';
-import { EmployeeService } from '../services/employee.service.js';
 import { CreateEmployee } from '../dto/create-employee.dto.js';
 import { UpdateEmployee } from '../dto/update-employee.dto.js';
 import { Employee } from '../entities/employee.entity.js';
+import { EmployeeService } from '../services/employee.service.js';
+import { EmployeeController } from './employee.controller.js';
 
 describe('EmployeeController', () => {
   let controller: EmployeeController;
@@ -36,9 +37,13 @@ describe('EmployeeController', () => {
     expect(service.create).toHaveBeenCalledWith(createEmployee);
   });
 
-  test('given a page and limit when findAll then it delegates to the service', async () => {
-    const page = 2;
-    const limit = 5;
+  test('given filters when findAll then it delegates to the service', async () => {
+    const filters = {
+      pagination: {
+        limit: 5,
+        offset: 5,
+      },
+    } as IQuery;
     const employees: [Employee[], number] = [
       [{ id: 1, firstName: 'John', lastName: 'Doe' }],
       1,
@@ -46,10 +51,10 @@ describe('EmployeeController', () => {
 
     service.findAll.mockResolvedValue(employees);
 
-    const result = await controller.findAll(page, limit);
+    const result = await controller.findAll(filters);
 
     expect(result).toEqual(employees);
-    expect(service.findAll).toHaveBeenCalledWith(page, limit);
+    expect(service.findAll).toHaveBeenCalledWith(filters);
   });
 
   test('given an id when findOne then it delegates to the service', async () => {

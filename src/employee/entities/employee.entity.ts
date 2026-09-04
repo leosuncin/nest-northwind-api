@@ -4,6 +4,7 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from 'typeorm';
 
 @Entity()
@@ -58,5 +59,5 @@ export class Employee {
 
   @OneToOne(() => Employee)
   @JoinColumn({ name: 'reportsTo' })
-  reportsTo?: number | Employee;
+  reportsTo?: Relation<Employee>;
 }

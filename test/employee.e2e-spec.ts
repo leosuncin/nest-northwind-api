@@ -1,6 +1,7 @@
 import { HttpStatus, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
+
 import {
   MSSQLServerContainer,
   type StartedMSSQLServerContainer,
@@ -8,6 +9,14 @@ import {
 import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import { createURLCodec, type URLCodec } from '@rapiq/codec-url';
+import {
+  defineQuery,
+  notContains,
+  type QueryBuildInput,
+  SchemaRegistry,
+  startsWith,
+} from '@rapiq/core';
 
 import { AppModule } from '../src/app.module.js';
 import typeormConfig from '../src/config/typeorm.js';
@@ -15,10 +24,12 @@ import type { CreateEmployee } from '../src/employee/dto/create-employee.dto.js'
 import type { UpdateEmployee } from '../src/employee/dto/update-employee.dto.js';
 import { Employee } from '../src/employee/entities/employee.entity.js';
 import { buildTypeOrmOptions } from './helpers.js';
+import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
 
 describe('EmployeeController (e2e)', () => {
   let app: INestApplication<App>;
   let container: StartedMSSQLServerContainer;
+  let codec: URLCodec;
 
   beforeAll(async () => {
     container = await new MSSQLServerContainer(
@@ -39,6 +50,8 @@ describe('EmployeeController (e2e)', () => {
     app = module.createNestApplication();
 
     await app.init();
+
+    codec = createURLCodec(app.get(SchemaRegistry));
   }, 60_000);
 
   beforeEach(async () => {
@@ -110,6 +123,54 @@ describe('EmployeeController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.itemsPerPage', 100);
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
+
+  test.each([
+    [
+      {
+        fields: ['firstName', 'lastName', 'title'],
+        sorts: ['title'],
+        filters: notContains<Employee>('title', 'president'),
+      } satisfies QueryBuildInput<Employee>,
+      {
+        itemCount: 9,
+        totalItems: 9,
+        itemsPerPage: 100,
+        totalPages: 1,
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      } satisfies Pagination<Employee>['meta'],
+    ],
+    [
+      {
+        fields: ['firstName', 'lastName', 'title'],
+        sorts: ['title'],
+        filters: startsWith<Employee>('titleOfCourtesy', 'Ms'),
+      } satisfies QueryBuildInput<Employee>,
+      {
+        itemCount: 4,
+        totalItems: 4,
+        itemsPerPage: 100,
+        totalPages: 1,
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      } satisfies Pagination<Employee>['meta'],
+    ],
+  ])(
+    'given a GET request to /employee when no limit or page parameters are provided then it should use the default pagination values',
+    async (filters, meta) => {
+      const query = defineQuery<Employee>(filters);
+      const response = await request(app.getHttpServer())
+        .get('/employee')
+        .query(codec.encode(query)!)
+        .expect(HttpStatus.OK)
+        .expect('Content-Type', /json/);
+
+      expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
+      expect(response.body).toHaveProperty('meta', meta);
+    },
+  );
 
   test('given a GET request to /employee/:id when the employee exists then it should return the employee', async () => {
     const employee = await useSeederFactory(Employee).save({
