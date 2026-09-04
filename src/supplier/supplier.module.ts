@@ -3,12 +3,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SharedModule } from '../shared/shared.module.js';
 import { SupplierController } from './controllers/supplier.controller.js';
+import { querySupplierSchema } from './dto/query-supplier.dto.js';
 import { Supplier } from './entities/supplier.entity.js';
 import { SupplierService } from './services/supplier.service.js';
 import { IsExistingSupplierConstraint } from './validators/is-existing-supplier.validator.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Supplier]), SharedModule.forFeature()],
+  imports: [
+    TypeOrmModule.forFeature([Supplier]),
+    SharedModule.forFeature(querySupplierSchema),
+  ],
   controllers: [SupplierController],
   providers: [SupplierService, IsExistingSupplierConstraint],
   exports: [SupplierService, IsExistingSupplierConstraint],

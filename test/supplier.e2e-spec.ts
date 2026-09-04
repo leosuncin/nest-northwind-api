@@ -8,16 +8,25 @@ import {
 import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import {
+  contains,
+  defineQuery,
+  type QueryBuildInput,
+  SchemaRegistry,
+} from '@rapiq/core';
+import { createURLCodec, type URLCodec } from '@rapiq/codec-url';
 
 import { AppModule } from '../src/app.module.js';
 import typeormConfig from '../src/config/typeorm.js';
 import { CreateSupplier } from '../src/supplier/dto/create-supplier.dto.js';
 import { Supplier } from '../src/supplier/entities/supplier.entity.js';
 import { buildTypeOrmOptions } from './helpers.js';
+import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
 
 describe('SupplierController (e2e)', () => {
   let app: INestApplication<App>;
   let container: StartedMSSQLServerContainer;
+  let codec: URLCodec;
 
   beforeAll(async () => {
     container = await new MSSQLServerContainer(
@@ -36,7 +45,10 @@ describe('SupplierController (e2e)', () => {
       .compile();
 
     app = module.createNestApplication();
+
     await app.init();
+
+    codec = createURLCodec(app.get(SchemaRegistry));
   }, 60_000);
 
   beforeEach(async () => {
@@ -63,17 +75,69 @@ describe('SupplierController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test('given a GET request to /supplier when page is zero then it returns a validation error', async () => {
-    await request(app.getHttpServer())
-      .get('/supplier?page=0')
-      .expect(HttpStatus.BAD_REQUEST);
-  });
+  test.each([
+    [
+      {
+        fields: ['companyName', 'contactName', 'contactTitle'],
+        sorts: ['companyName'],
+        filters: {
+          region: { $eq: null },
+        },
+        pagination: { limit: 10, offset: 10 },
+      } satisfies QueryBuildInput<Supplier>,
+      {
+        itemCount: 10,
+        totalItems: 20,
+        itemsPerPage: 10,
+        totalPages: 2,
+        currentPage: 2,
+        hasNextPage: false,
+        hasPreviousPage: true,
+      } satisfies Pagination<Supplier>['meta'],
+    ],
+    [
+      {
+        fields: ['companyName', 'contactName', 'contactTitle'],
+        sorts: ['companyName', 'contactName'],
+        filters: contains<Supplier>('contactTitle', 'sales'),
+        pagination: { limit: 5, offset: 10 },
+      } satisfies QueryBuildInput<Supplier>,
+      {
+        itemCount: 1,
+        totalItems: 11,
+        itemsPerPage: 5,
+        totalPages: 3,
+        currentPage: 3,
+        hasNextPage: false,
+        hasPreviousPage: true,
+      } satisfies Pagination<Supplier>['meta'],
+    ],
+  ])(
+    'given a GET request to /supplier when filters %j then it returns a pagination %o',
+    async (
+      filters: QueryBuildInput<Supplier>,
+      meta: Pagination<Supplier>['meta'],
+    ) => {
+      const query = defineQuery<Supplier>(filters);
+      const response = await request(app.getHttpServer())
+        .get('/supplier')
+        .query(codec.encode(query)!)
+        .expect(HttpStatus.OK)
+        .expect('Content-Type', /json/);
 
-  test('given a GET request to /supplier when limit is negative then it returns a validation error', async () => {
-    await request(app.getHttpServer())
-      .get('/supplier?limit=-1')
-      .expect(HttpStatus.BAD_REQUEST);
-  });
+      expect(response.body).toHaveProperty(
+        'items',
+        expect.arrayContaining([
+          expect.objectContaining({
+            companyName: expect.any(String),
+            contactName: expect.any(String),
+            contactTitle: expect.any(String),
+          }),
+        ]),
+      );
+      expect(response.body).toHaveProperty('meta', meta);
+    },
+  );
 
   test('given a POST request to /supplier when a valid supplier is provided then it creates and returns it', async () => {
     const newSupplier: CreateSupplier = {
