@@ -9,15 +9,16 @@ import {
   Patch,
   Post,
   Query,
+  SetMetadata,
   UseFilters,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import type { IQuery } from '@rapiq/core';
 
 import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
 import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
 import { CreateSupplier } from '../dto/create-supplier.dto.js';
 import { UpdateSupplier } from '../dto/update-supplier.dto.js';
 import { Supplier } from '../entities/supplier.entity.js';
@@ -38,13 +39,9 @@ export class SupplierController {
 
   @Get()
   @UseInterceptors(PaginationInterceptor)
-  findAll(
-    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    limit = 10,
-  ) {
-    return this.supplierService.findAll(page, limit);
+  @SetMetadata('schema', 'supplier')
+  findAll(@Query() filters: IQuery) {
+    return this.supplierService.findAll(filters);
   }
 
   @Get(':id')
