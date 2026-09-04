@@ -8,7 +8,7 @@ import { EmployeeService } from './services/employee.service.js';
 import { IsExistingEmployeeConstraint } from './validators/is-existing-employee.validator.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Employee]), SharedModule],
+  imports: [TypeOrmModule.forFeature([Employee]), SharedModule.forFeature()],
   controllers: [EmployeeController],
   providers: [EmployeeService, IsExistingEmployeeConstraint],
   exports: [IsExistingEmployeeConstraint],

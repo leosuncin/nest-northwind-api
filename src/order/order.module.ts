@@ -17,7 +17,7 @@ import { OrderDetailController } from './controllers/order-detail.controller.js'
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, OrderDetail]),
-    SharedModule,
+    SharedModule.forFeature(),
     CustomerModule,
     EmployeeModule,
     ShipperModule,

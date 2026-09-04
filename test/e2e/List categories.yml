@@ -20,9 +20,9 @@ runtime:
 
           expect(list).to.have.property('items').to.be.an('array');
           expect(list).to.have.property('meta').to.be.an('object');
-          expect(list).to.have.nested.property('meta.itemCount').to.be.most(search.limit ?? 10);
+          expect(list).to.have.nested.property('meta.itemCount').to.be.most(search.limit ?? 100);
           expect(list).to.have.nested .property('meta.totalItems').to.be.at.least(0);
-          expect(list).to.have.nested.property('meta.itemsPerPage', search.limit ?? 10);
+          expect(list).to.have.nested.property('meta.itemsPerPage', search.limit ?? 100);
           expect(list).to.have.nested .property('meta.totalPages').to.be.at.least(1);
           expect(list).to.have.nested .property('meta.currentPage', search.page ?? 1);
           expect(list).to.have.nested .property('meta.hasNextPage').to.be.an('boolean');
