@@ -48,7 +48,7 @@
     "@types/express": "5.0.6",
     "@types/node": "24.13.3",
     "@types/supertest": "7.2.1",
-    "@vitest/coverage-v8": "4.1.11",
+    "@vitest/coverage-v8": "5.0.0",
     "node-mocks-http": "1.18.1",
     "oxlint": "1.81.0",
     "prettier": "3.9.6",
@@ -57,7 +57,7 @@
     "ttsc": "0.28.5",
     "typeorm-extension": "4.1.0",
     "typescript": "6.0.3",
-    "vitest": "4.1.11"
+    "vitest": "5.0.0"
   },
   "packageManager": "pnpm@12.3.1"
 }
