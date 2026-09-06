@@ -16,12 +16,12 @@ import {
 } from '@rapiq/core';
 import { createURLCodec, type URLCodec } from '@rapiq/codec-url';
 
-import { AppModule } from '../src/app.module.js';
-import typeormConfig from '../src/config/typeorm.js';
-import { CreateSupplier } from '../src/supplier/dto/create-supplier.dto.js';
-import { Supplier } from '../src/supplier/entities/supplier.entity.js';
+import { AppModule } from '../../src/app.module.js';
+import typeormConfig from '../../src/config/typeorm.js';
+import { CreateSupplier } from '../../src/supplier/dto/create-supplier.dto.js';
+import { Supplier } from '../../src/supplier/entities/supplier.entity.js';
 import { buildTypeOrmOptions } from './helpers.js';
-import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
+import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
 
 describe('SupplierController (e2e)', () => {
   let app: INestApplication<App>;

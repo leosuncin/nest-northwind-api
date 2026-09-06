@@ -21,11 +21,11 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module.js';
-import typeormConfig from '../src/config/typeorm.js';
-import { CreateProduct } from '../src/product/dto/create-product.dto.js';
-import { Product } from '../src/product/entities/product.entity.js';
-import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
+import { AppModule } from '../../src/app.module.js';
+import typeormConfig from '../../src/config/typeorm.js';
+import { CreateProduct } from '../../src/product/dto/create-product.dto.js';
+import { Product } from '../../src/product/entities/product.entity.js';
+import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
 import { buildTypeOrmOptions } from './helpers.js';
 
 describe('ProductController (e2e)', () => {

@@ -18,13 +18,13 @@ import {
   startsWith,
 } from '@rapiq/core';
 
-import { AppModule } from '../src/app.module.js';
-import typeormConfig from '../src/config/typeorm.js';
-import type { CreateEmployee } from '../src/employee/dto/create-employee.dto.js';
-import type { UpdateEmployee } from '../src/employee/dto/update-employee.dto.js';
-import { Employee } from '../src/employee/entities/employee.entity.js';
+import { AppModule } from '../../src/app.module.js';
+import typeormConfig from '../../src/config/typeorm.js';
+import type { CreateEmployee } from '../../src/employee/dto/create-employee.dto.js';
+import type { UpdateEmployee } from '../../src/employee/dto/update-employee.dto.js';
+import { Employee } from '../../src/employee/entities/employee.entity.js';
 import { buildTypeOrmOptions } from './helpers.js';
-import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
+import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
 
 describe('EmployeeController (e2e)', () => {
   let app: INestApplication<App>;
