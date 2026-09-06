@@ -1,11 +1,12 @@
-import { TestBed } from '@suites/unit';
+import type { IQuery } from '@rapiq/core';
 import type { Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
 
-import { OrderController } from './order.controller.js';
-import { OrderService } from '../services/order.service.js';
 import { CreateOrder } from '../dto/create-order.dto.js';
 import { UpdateOrder } from '../dto/update-order.dto.js';
 import { Order } from '../entities/order.entity.js';
+import { OrderService } from '../services/order.service.js';
+import { OrderController } from './order.controller.js';
 
 describe('OrderController', () => {
   let controller: OrderController;
@@ -34,17 +35,21 @@ describe('OrderController', () => {
     expect(service.create).toHaveBeenCalledWith(createOrder);
   });
 
-  test('given a page and limit when findAll then it delegates to the service', async () => {
-    const page = 2;
-    const limit = 5;
+  test('given filters when findAll then it delegates to the service', async () => {
+    const filters = {
+      pagination: {
+        limit: 5,
+        offset: 5,
+      },
+    } as IQuery;
     const orders: [Order[], number] = [[{ id: 1 } as Order], 1];
 
     service.findAll.mockResolvedValue(orders);
 
-    const result = await controller.findAll(page, limit);
+    const result = await controller.findAll(filters);
 
     expect(result).toEqual(orders);
-    expect(service.findAll).toHaveBeenCalledWith(page, limit);
+    expect(service.findAll).toHaveBeenCalledWith(filters);
   });
 
   test('given an id when findOne then it delegates to the service', async () => {
