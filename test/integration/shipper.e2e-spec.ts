@@ -9,10 +9,10 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module.js';
-import typeormConfig from '../src/config/typeorm.js';
-import type { CreateShipper } from '../src/shipper/dto/create-shipper.dto.js';
-import { Shipper } from '../src/shipper/entities/shipper.entity.js';
+import { AppModule } from '../../src/app.module.js';
+import typeormConfig from '../../src/config/typeorm.js';
+import type { CreateShipper } from '../../src/shipper/dto/create-shipper.dto.js';
+import { Shipper } from '../../src/shipper/entities/shipper.entity.js';
 import { buildTypeOrmOptions } from './helpers.js';
 
 describe('ShipperController (e2e)', () => {

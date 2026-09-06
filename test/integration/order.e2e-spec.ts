@@ -18,12 +18,12 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module.js';
-import typeormConfig from '../src/config/typeorm.js';
-import { CreateOrder } from '../src/order/dto/create-order.dto.js';
-import { OrderDetail } from '../src/order/entities/order-detail.entity.js';
-import { Order } from '../src/order/entities/order.entity.js';
-import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
+import { AppModule } from '../../src/app.module.js';
+import typeormConfig from '../../src/config/typeorm.js';
+import { CreateOrder } from '../../src/order/dto/create-order.dto.js';
+import { OrderDetail } from '../../src/order/entities/order-detail.entity.js';
+import { Order } from '../../src/order/entities/order.entity.js';
+import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
 import { buildTypeOrmOptions } from './helpers.js';
 
 describe('OrderController (e2e)', () => {

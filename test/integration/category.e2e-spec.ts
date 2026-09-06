@@ -11,12 +11,12 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
-import { AppModule } from '../src/app.module.js';
-import type { CreateCategory } from '../src/category/dto/create-category.dto.js';
-import type { UpdateCategory } from '../src/category/dto/update-category.dto.js';
-import { Category } from '../src/category/entities/category.entity.js';
-import typeormConfig from '../src/config/typeorm.js';
-import type { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
+import { AppModule } from '../../src/app.module.js';
+import type { CreateCategory } from '../../src/category/dto/create-category.dto.js';
+import type { UpdateCategory } from '../../src/category/dto/update-category.dto.js';
+import { Category } from '../../src/category/entities/category.entity.js';
+import typeormConfig from '../../src/config/typeorm.js';
+import type { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
 import { buildTypeOrmOptions } from './helpers.js';
 
 const codec = createURLCodec();
