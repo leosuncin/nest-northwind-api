@@ -1,12 +1,19 @@
 import { HttpStatus, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
+import { createURLCodec, URLCodec } from '@rapiq/codec-url';
+import {
+  defineQuery,
+  eq,
+  gte,
+  QueryBuildInput,
+  SchemaRegistry,
+} from '@rapiq/core';
 import {
   MSSQLServerContainer,
   type StartedMSSQLServerContainer,
 } from '@testcontainers/mssqlserver';
 import { useContainer } from 'class-validator';
-
 import request from 'supertest';
 import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
@@ -14,13 +21,15 @@ import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 import { AppModule } from '../src/app.module.js';
 import typeormConfig from '../src/config/typeorm.js';
 import { CreateOrder } from '../src/order/dto/create-order.dto.js';
-import { Order } from '../src/order/entities/order.entity.js';
 import { OrderDetail } from '../src/order/entities/order-detail.entity.js';
+import { Order } from '../src/order/entities/order.entity.js';
+import { Pagination } from '../src/shared/interceptors/pagination.interceptor.js';
 import { buildTypeOrmOptions } from './helpers.js';
 
 describe('OrderController (e2e)', () => {
   let app: INestApplication<App>;
   let container: StartedMSSQLServerContainer;
+  let codec: URLCodec;
 
   beforeAll(async () => {
     container = await new MSSQLServerContainer(
@@ -42,6 +51,8 @@ describe('OrderController (e2e)', () => {
     app = module.createNestApplication();
 
     await app.init();
+
+    codec = createURLCodec(app.get(SchemaRegistry));
   }, 60_000);
 
   beforeEach(async () => {
@@ -67,19 +78,50 @@ describe('OrderController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test('given a GET request to /order when page is zero then it should return a bad request', async () => {
-    await request(app.getHttpServer())
-      .get('/order')
-      .query({ page: 0 })
-      .expect(HttpStatus.BAD_REQUEST);
-  });
+  test.each([
+    [
+      {
+        filters: eq<Order>('shipCountry', 'Germany'),
+        pagination: { limit: 10 },
+      } satisfies QueryBuildInput<Order>,
+      {
+        itemCount: 10,
+        totalItems: 122,
+        itemsPerPage: 10,
+        totalPages: 13,
+        currentPage: 1,
+        hasNextPage: true,
+        hasPreviousPage: false,
+      } satisfies Pagination<Order>['meta'],
+    ],
+    [
+      {
+        filters: gte<Order>('freight', 500),
+      } satisfies QueryBuildInput<Order>,
+      {
+        itemCount: 13,
+        totalItems: 13,
+        itemsPerPage: 100,
+        totalPages: 1,
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      } satisfies Pagination<Order>['meta'],
+    ],
+  ])(
+    'given a GET request to /order when filters %j then it should return a pagination %o',
+    async (filters, meta) => {
+      const query = defineQuery(filters);
+      const response = await request(app.getHttpServer())
+        .get('/order')
+        .query(codec.encode(query)!)
+        .expect(HttpStatus.OK)
+        .expect('Content-Type', /json/);
 
-  test('given a GET request to /order when limit is negative then it should return a bad request', async () => {
-    await request(app.getHttpServer())
-      .get('/order')
-      .query({ limit: -1 })
-      .expect(HttpStatus.BAD_REQUEST);
-  });
+      expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
+      expect(response.body).toHaveProperty('meta', meta);
+    },
+  );
 
   test('given a POST request to /order when a valid order is provided then it should create and return the created order', async () => {
     const newOrder = {
@@ -179,6 +221,43 @@ describe('OrderController (e2e)', () => {
     await request(app.getHttpServer())
       .get(`/order/${order.id}`)
       .expect(HttpStatus.NOT_FOUND);
+  });
+
+  test('given a GET request to /order/:orderId/detail when no params are provided then it should return a paginated list', async () => {
+    const orderId = 10248;
+
+    const response = await request(app.getHttpServer())
+      .get(`/order/${orderId}/detail`)
+      .expect(HttpStatus.OK)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
+    expect(response.body).toHaveProperty('meta');
+    expect(response.body).toHaveProperty('meta.totalItems', 3);
+    expect(response.body).toHaveProperty('meta.itemsPerPage', 100);
+    expect(response.body).toHaveProperty('meta.currentPage', 1);
+  });
+
+  test('given a GET request to /order/:orderId/detail when a filter is provided then it should return a paginated result', async () => {
+    const orderId = '10248';
+    const query = defineQuery({
+      filters: eq<OrderDetail>('quantity', 10),
+    });
+
+    const response = await request(app.getHttpServer())
+      .get(`/order/${orderId}/detail`)
+      .query(codec.encode(query)!)
+      .expect(HttpStatus.OK)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toHaveProperty('items', expect.arrayContaining([]));
+    expect(response.body).toHaveProperty('meta');
+    expect(response.body).toHaveProperty('meta.totalItems', 1);
+    expect(response.body.items[0]).toMatchObject({
+      orderId,
+      productId: '42',
+      quantity: 10,
+    });
   });
 
   test('given a POST request to /order/:orderId/detail when a valid detail is provided then it should create it', async () => {

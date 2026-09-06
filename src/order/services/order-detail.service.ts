@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeormAdapter } from '@rapiq/adapter-typeorm';
+import type { IQuery } from '@rapiq/core';
 import type { Repository } from 'typeorm';
 
 import { CreateOrderDetail } from '../dto/create-order-detail.dto.js';
@@ -13,11 +15,20 @@ export class OrderDetailService {
     private readonly orderDetailRepository: Repository<OrderDetail>,
   ) {}
 
-  findAll(orderId: number) {
-    return this.orderDetailRepository.find({
-      where: { orderId },
-      relations: { product: true },
+  findAll(orderId: number, filters: IQuery) {
+    const queryBuilder =
+      this.orderDetailRepository.createQueryBuilder('orderDetail');
+
+    queryBuilder.where('orderDetail.orderId = :orderId', { orderId });
+
+    const adapter = new TypeormAdapter({
+      queryBuilder,
+      relations: { joinAndSelect: true },
     });
+
+    adapter.execute(filters);
+
+    return queryBuilder.getManyAndCount();
   }
 
   findOne(orderId: number, productId: number) {

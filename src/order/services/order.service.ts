@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeormAdapter } from '@rapiq/adapter-typeorm';
+import type { IQuery } from '@rapiq/core';
 import type { Repository } from 'typeorm';
 
 import { CreateOrder } from '../dto/create-order.dto.js';
@@ -19,11 +21,16 @@ export class OrderService {
     return this.orderRepository.save(order);
   }
 
-  findAll(page = 1, limit = 10) {
-    return this.orderRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
+  findAll(filters: IQuery) {
+    const queryBuilder = this.orderRepository.createQueryBuilder('order');
+    const adapter = new TypeormAdapter({
+      queryBuilder,
+      relations: { joinAndSelect: true },
     });
+
+    adapter.execute(filters);
+
+    return queryBuilder.getManyAndCount();
   }
 
   findOne(id: number) {

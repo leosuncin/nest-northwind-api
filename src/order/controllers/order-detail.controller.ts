@@ -7,12 +7,16 @@ import {
   Param,
   Patch,
   Post,
+  Query,
+  SetMetadata,
   UseFilters,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
+import type { IQuery } from '@rapiq/core';
 
 import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
+import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
 import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
 import { CreateOrderDetail } from '../dto/create-order-detail.dto.js';
 import { UpdateOrderDetail } from '../dto/update-order-detail.dto.js';
@@ -27,8 +31,13 @@ export class OrderDetailController {
   constructor(private readonly orderDetailService: OrderDetailService) {}
 
   @Get()
-  findAll(@Param('orderId', PositiveIntPipe) orderId: number) {
-    return this.orderDetailService.findAll(orderId);
+  @UseInterceptors(PaginationInterceptor)
+  @SetMetadata('schema', 'order-detail')
+  findAll(
+    @Param('orderId', PositiveIntPipe) orderId: number,
+    @Query() filters: IQuery,
+  ) {
+    return this.orderDetailService.findAll(orderId, filters);
   }
 
   @Get(':productId')

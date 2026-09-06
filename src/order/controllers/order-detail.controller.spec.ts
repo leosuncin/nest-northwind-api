@@ -1,3 +1,4 @@
+import type { IQuery } from '@rapiq/core';
 import type { Mocked } from '@suites/doubles.vitest';
 import { TestBed } from '@suites/unit';
 
@@ -23,18 +24,25 @@ describe('OrderDetailController', () => {
     ) as unknown as Mocked<OrderDetailService>;
   });
 
-  test('given an orderId when findAll then it delegates to the service', async () => {
+  test('given an orderId and filters when findAll then it delegates to the service', async () => {
     const orderId = 1;
-    const orderDetails: OrderDetail[] = [
-      { orderId, productId: 1 } as OrderDetail,
+    const filters = {
+      pagination: {
+        limit: 5,
+        offset: 5,
+      },
+    } as IQuery;
+    const orderDetails: [OrderDetail[], number] = [
+      [{ orderId, productId: 1 } as OrderDetail],
+      1,
     ];
 
     void service.findAll.mockResolvedValue(orderDetails);
 
-    const result = await controller.findAll(orderId);
+    const result = await controller.findAll(orderId, filters);
 
     expect(result).toEqual(orderDetails);
-    expect(service.findAll).toHaveBeenCalledWith(orderId);
+    expect(service.findAll).toHaveBeenCalledWith(orderId, filters);
   });
 
   test('given an orderDetail when findOne then it returns the orderDetail', () => {

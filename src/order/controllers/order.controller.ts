@@ -9,15 +9,16 @@ import {
   Patch,
   Post,
   Query,
+  SetMetadata,
   UseFilters,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import type { IQuery } from '@rapiq/core';
 
 import { EntityNotFoundFilter } from '../../shared/filters/entity-not-found.filter.js';
 import { PaginationInterceptor } from '../../shared/interceptors/pagination.interceptor.js';
-import { PositiveIntPipe } from '../../shared/pipes/positive-int.pipe.js';
 import { CreateOrder } from '../dto/create-order.dto.js';
 import { UpdateOrder } from '../dto/update-order.dto.js';
 import { Order } from '../entities/order.entity.js';
@@ -38,13 +39,9 @@ export class OrderController {
 
   @Get()
   @UseInterceptors(PaginationInterceptor)
-  findAll(
-    @Query('page', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    page = 1,
-    @Query('limit', new ParseIntPipe({ optional: true }), PositiveIntPipe)
-    limit = 10,
-  ) {
-    return this.orderService.findAll(page, limit);
+  @SetMetadata('schema', 'order')
+  findAll(@Query() filters: IQuery) {
+    return this.orderService.findAll(filters);
   }
 
   @Get(':id')

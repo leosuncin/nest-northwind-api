@@ -1,12 +1,13 @@
-import { TestBed } from '@suites/unit';
-import type { Mocked } from '@suites/doubles.vitest';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import { defineQuery } from '@rapiq/core';
+import { mock, type Mocked } from '@suites/doubles.vitest';
+import { TestBed } from '@suites/unit';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
-import { OrderDetailService } from './order-detail.service.js';
-import { OrderDetail } from '../entities/order-detail.entity.js';
 import { CreateOrderDetail } from '../dto/create-order-detail.dto.js';
 import { UpdateOrderDetail } from '../dto/update-order-detail.dto.js';
+import { OrderDetail } from '../entities/order-detail.entity.js';
+import { OrderDetailService } from './order-detail.service.js';
 
 describe('OrderDetailService', () => {
   let service: OrderDetailService;
@@ -22,19 +23,26 @@ describe('OrderDetailService', () => {
     ) as unknown as Mocked<Repository<OrderDetail>>;
   });
 
-  test('given an orderId when findAll then it returns the order details', async () => {
+  test('given an orderId and filters when findAll then it returns the order details', async () => {
     const orderId = 1;
-    const details = [{ orderId, productId: 1 } as OrderDetail];
+    const filters = defineQuery({ pagination: { limit: 5, offset: 5 } });
+    const result: [OrderDetail[], number] = [
+      [{ orderId, productId: 1 } as OrderDetail],
+      1,
+    ];
 
-    void orderDetailRepository.find.mockResolvedValue(details);
+    const queryBuilder = mock<SelectQueryBuilder<OrderDetail>>();
+    orderDetailRepository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.getManyAndCount.mockResolvedValue(result);
 
-    const result = await service.findAll(orderId);
+    const details = await service.findAll(orderId, filters);
 
-    expect(result).toEqual(details);
-    expect(orderDetailRepository.find).toHaveBeenCalledWith({
-      where: { orderId },
-      relations: { product: true },
-    });
+    expect(details).toEqual(result);
+    expect(queryBuilder.where).toHaveBeenCalledWith(
+      'orderDetail.orderId = :orderId',
+      { orderId },
+    );
+    expect(queryBuilder.getManyAndCount).toHaveBeenCalled();
   });
 
   test('given an orderId and productId when findOne then it returns the matching detail', async () => {
