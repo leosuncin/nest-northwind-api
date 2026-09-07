@@ -104,7 +104,7 @@ jobs:
       - name: Run bruno tests 🐶
         uses: usebruno/bruno-cli-action@104e180c2e7219a915dc48b6979ddbafe0940fcd
         with:
-          working-directory: test/e2e
+          working-directory: test/api
           command: run --env development
 
       - name: Stop forwarding the port ⛔
