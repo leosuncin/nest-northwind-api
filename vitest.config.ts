@@ -31,6 +31,14 @@ export default defineConfig({
           hookTimeout: 60_000,
         },
       },
+      {
+        test: {
+          ...sharedTest,
+          name: 'FEATURE',
+          include: ['**/*.feature-spec.ts'],
+          setupFiles: ['./vitest.setup.ts'],
+        },
+      },
     ],
   },
 });
