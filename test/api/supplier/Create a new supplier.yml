@@ -1,0 +1,55 @@
+info:
+  name: Create a new supplier
+  type: http
+  seq: 1
+  tags:
+    - supplier
+
+http:
+  method: POST
+  url: '{{BASE_URL}}/supplier'
+  body:
+    type: json
+    data: |-
+      {
+        "companyName": "{{$randomDepartment}}",
+        "contactName": "{{$randomFirstName}}",
+        "contactTitle": "{{$randomJobArea}}",
+        "address": "{{$randomStreetAddress}}",
+        "city": "{{$randomAdjective}}",
+        "region": "{{$randomAdjective}}",
+        "phone": "{{$randomPhoneNumber}}",
+        "fax": "{{$randomPhoneNumber}}",
+        "homePage": "{{$randomUrl}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const supplier = res.getBody();
+
+        bru.setVar('SUPPLIER_ID', supplier.id);
+    - type: tests
+      code: |-
+        test("supplier properties", () => {
+          const payload = req.getBody();
+          const supplier = res.getBody();
+
+          expect(supplier).to.have.property('id');
+
+          Object.entries(payload).forEach(([key, value]) => {
+            expect(supplier).to.have.property(key, value);
+          });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '201'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

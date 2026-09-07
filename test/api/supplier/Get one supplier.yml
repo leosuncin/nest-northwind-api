@@ -1,0 +1,40 @@
+info:
+  name: Get one supplier
+  type: http
+  seq: 3
+  tags:
+    - supplier
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/supplier/:supplierId'
+  params:
+    - name: supplierId
+      value: '{{SUPPLIER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing supplier properties", () => {
+          const supplier = res.getBody();
+          const supplierId = req.getPathParams()[0].value;
+
+          expect(supplier).to.have.property('id', supplierId);
+          expect(supplier).to.have.property('companyName').to.be.an('string');
+          expect(supplier).to.have.property('contactName').to.be.an('string');
+          expect(supplier).to.have.property('contactTitle').to.be.an('string');
+          expect(supplier).to.have.property('phone').to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
