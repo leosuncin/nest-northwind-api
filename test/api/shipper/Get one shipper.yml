@@ -1,0 +1,38 @@
+info:
+  name: Get one shipper
+  type: http
+  seq: 3
+  tags:
+    - shipper
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/shipper/:shipperId'
+  params:
+    - name: shipperId
+      value: '{{SHIPPER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing shipper properties", () => {
+          const shipper = res.getBody();
+          const shipperId = req.getPathParams()[0].value;
+
+          expect(shipper).to.have.property('id', shipperId);
+          expect(shipper).to.have.property('companyName').to.be.an('string');
+          expect(shipper).to.have.property('phone').to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
