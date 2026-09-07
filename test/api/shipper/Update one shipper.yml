@@ -1,0 +1,46 @@
+info:
+  name: Update one shipper
+  type: http
+  seq: 4
+  tags:
+    - shipper
+
+http:
+  method: PATCH
+  url: '{{BASE_URL}}/shipper/:shipperId'
+  params:
+    - name: shipperId
+      value: '{{SHIPPER_ID}}'
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "companyName": "{{$randomCompanyName}}",
+        "phone": "{{$randomPhoneNumber}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("shipper updated properties", () => {
+          const payload = req.getBody();
+          const shipper = res.getBody();
+          const shipperId = req.getPathParams()[0].value;
+
+          expect(shipper).to.have.property('id', shipperId);
+          expect(shipper).to.have.property('companyName', payload.companyName);
+          expect(shipper).to.have.property('phone', payload.phone);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

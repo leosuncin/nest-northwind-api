@@ -1,0 +1,37 @@
+info:
+  name: Remove one shipper
+  type: http
+  seq: 5
+  tags:
+    - shipper
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/shipper/:shipperId'
+  params:
+    - name: shipperId
+      value: '{{SHIPPER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("shipper removed properties", () => {
+          const shipper = res.getBody();
+
+          expect(shipper).not.to.have.property('id');
+          expect(shipper).to.have.property('companyName').and.to.be.an('string');
+          expect(shipper).to.have.property('phone').and.to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

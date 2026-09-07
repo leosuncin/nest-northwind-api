@@ -1,0 +1,46 @@
+info:
+  name: Create a new shipper
+  type: http
+  seq: 1
+  tags:
+    - shipper
+
+http:
+  method: POST
+  url: '{{BASE_URL}}/shipper'
+  body:
+    type: json
+    data: |-
+      {
+        "companyName": "{{$randomCompanyName}}",
+        "phone": "{{$randomPhoneNumber}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const shipper = res.getBody();
+
+        bru.setVar('SHIPPER_ID', shipper.id);
+    - type: tests
+      code: |-
+        test("shipper properties", () => {
+          const payload = req.getBody();
+          const shipper = res.getBody();
+
+          expect(shipper).to.have.property('id');
+          expect(shipper).to.have.property('companyName', payload.companyName);
+          expect(shipper).to.have.property('phone', payload.phone);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '201'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
