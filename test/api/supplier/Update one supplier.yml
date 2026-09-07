@@ -1,0 +1,55 @@
+info:
+  name: Update one supplier
+  type: http
+  seq: 4
+  tags:
+    - supplier
+
+http:
+  method: PATCH
+  url: '{{BASE_URL}}/supplier/:supplierId'
+  params:
+    - name: supplierId
+      value: '{{SUPPLIER_ID}}'
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "companyName": "{{$randomDepartment}}",
+        "contactName": "{{$randomFirstName}}",
+        "contactTitle": "{{$randomJobArea}}",
+        "address": "{{$randomStreetAddress}}",
+        "city": "{{$randomAdjective}}",
+        "region": "{{$randomAdjective}}",
+        "phone": "{{$randomPhoneNumber}}",
+        "fax": "{{$randomPhoneNumber}}",
+        "homePage": "{{$randomUrl}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("supplier updated properties", () => {
+          const payload = req.getBody();
+          const supplier = res.getBody();
+          const supplierId = req.getPathParams()[0].value;
+
+          expect(supplier).to.have.property('id', supplierId);
+
+          Object.entries(payload).forEach(([key, value]) => {
+            expect(supplier).to.have.property(key, value);
+          });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

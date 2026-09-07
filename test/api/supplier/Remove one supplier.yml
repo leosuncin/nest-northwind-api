@@ -1,0 +1,39 @@
+info:
+  name: Remove one supplier
+  type: http
+  seq: 5
+  tags:
+    - supplier
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/supplier/:supplierId'
+  params:
+    - name: supplierId
+      value: '{{SUPPLIER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("supplier removed properties", () => {
+          const supplier = res.getBody();
+
+          expect(supplier).not.to.have.property('id');
+          expect(supplier).to.have.property('companyName').and.to.be.an('string');
+          expect(supplier).to.have.property('contactName').and.to.be.an('string');
+          expect(supplier).to.have.property('contactTitle').and.to.be.an('string');
+          expect(supplier).to.have.property('phone').and.to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
