@@ -200,8 +200,8 @@ importers:
         specifier: 7.2.2
         version: 7.2.2
       ttsc:
-        specifier: 0.28.5
-        version: 0.28.5
+        specifier: 0.28.6
+        version: 0.28.6
       typeorm-extension:
         specifier: 4.1.0
         version: 4.1.0(typeorm@1.1.1(mssql@12.7.0))
@@ -977,38 +977,38 @@ packages:
   '@tokenizer/token@0.3.0':
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
 
-  '@ttsc/darwin-arm64@0.28.5':
-    resolution: {integrity: sha512-XoWpKPbeq1zHCCitCUK514FHf+IQ4NZMGoyZLh+77zIV8Gs+waduvNNJO8CrUTY/bAWSrJpNOdCDEG6/ONrkXQ==}
+  '@ttsc/darwin-arm64@0.28.6':
+    resolution: {integrity: sha512-yBEA5cE1pAuQ1OdrWnv0rkeaXl3tOosQoREFvdLqonlwMajQ6HOF27mxoUdXe9Sa+tDErNxxGAJy48RzG0QfUw==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ttsc/darwin-x64@0.28.5':
-    resolution: {integrity: sha512-zM/WYz8BbIdKSOKRC/NwniKbO5aoYLgYt8bLoYNyFs1ksYf0hCKmgg3ltqs3Nv6bdZjCHzSmTmsJUJ6pAZpc8Q==}
+  '@ttsc/darwin-x64@0.28.6':
+    resolution: {integrity: sha512-PscqeodiLb+heY07ogM8dKb4XTKLWx+UHakVNwImrArdURrgMrmifJFO9VvsUU5KAHfNpvEuAMI22KJj81tKXw==}
     cpu: [x64]
     os: [darwin]
 
-  '@ttsc/linux-arm64@0.28.5':
-    resolution: {integrity: sha512-0yuwoLU+zPRJ8tNtS0wo4hWuGMLeN7rGlE8FlGu99KATbP/6daqfPp/6TfMg7uNPBdkHtTwNMNSWteAywuBTMw==}
+  '@ttsc/linux-arm64@0.28.6':
+    resolution: {integrity: sha512-TrCJXS0P1QnIzs8H5qg4ZfF2n4bfuuXupT3fb1yqGQRqUo7iMYnvARyiMnCWKiyKrz8ogP/6lIr04eutMp2Hiw==}
     cpu: [arm64]
     os: [linux]
 
-  '@ttsc/linux-arm@0.28.5':
-    resolution: {integrity: sha512-hL5y2gFjJa/Lt+oWNjeBk4ro10Q3n9ubqEt0J7w8P6KTl3y5JITuqV8lX5/TmxTFcjOnOxrHpqtl+mjATi6itA==}
+  '@ttsc/linux-arm@0.28.6':
+    resolution: {integrity: sha512-WQeTOUuT1XM/E3Tae5wvXLiGBWx8Ymrvc7/y17HVpBAHmeL0akWGmjV4hiXWF32FNK9NpvjDNEWH8jok/Bcc6A==}
     cpu: [arm]
     os: [linux]
 
-  '@ttsc/linux-x64@0.28.5':
-    resolution: {integrity: sha512-1no16HVutEvDn87Z2Ql/zz5XnxQDjGYnUetDXh63FagRRcJtpSIzVjHXsybuUrCW+F4N2fk/FR37cJpgaY27LQ==}
+  '@ttsc/linux-x64@0.28.6':
+    resolution: {integrity: sha512-8dsXcVyAHOb9f0MG1GuMe+WX205cZYsd7WroGQ6x/IvvRnMbtt3jOsLrZGrMmstm5jbtcFsHc1ALWddg0vabuA==}
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/win32-arm64@0.28.5':
-    resolution: {integrity: sha512-zGyBdbtsf/kXt7utvlWWyQJtc99MV3IK2rF7Nv6eQ2uQ8P7tqux7MAKSeFWpap98vTgvzakOprzljUrjxPs4LQ==}
+  '@ttsc/win32-arm64@0.28.6':
+    resolution: {integrity: sha512-xsLovpgHAZjoKJguLrHU3qDBsKQ9v2xhjZC5p2Kw8e2VS11Axv3Ywd0RgoV6ME5VcaEcCEyXlS0ZXJMSkJJcSg==}
     cpu: [arm64]
     os: [win32]
 
-  '@ttsc/win32-x64@0.28.5':
-    resolution: {integrity: sha512-6ftMkszJMMSww88bMRZZpZqKTDklTT+Pr+/pX6NCW1Xc+TebPQd4POWfdr2FxCCa6gDyoQOk1PEo5oK+qXJ3BA==}
+  '@ttsc/win32-x64@0.28.6':
+    resolution: {integrity: sha512-k2DCIF9LTWlnq4LCgiTBPJ4mtfXnwZetCTLDvAkt37cVi28gWlNkbMr0BnMyimMskHBmKE/pqwxtziiYTx1J6A==}
     cpu: [x64]
     os: [win32]
 
@@ -2726,8 +2726,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  ttsc@0.28.5:
-    resolution: {integrity: sha512-TlWlcxPcko1J8V34+OZVfjRKAbyP+lQ4a+l9OVJwXUbi/nTGvOoMald6uoAKQ+3DgfZFr4PulTLILFMQBmEA8A==}
+  ttsc@0.28.6:
+    resolution: {integrity: sha512-7WLqjU7ggpjJrkfrd55oEad1eA5vEHQZIZrt7fMCkVkzdW9TZ/SI1URz4jN9pPakUYF+AtuEoY+Ul5Gw5CgppQ==}
     engines: {node: '>=22.15.0'}
     hasBin: true
 
@@ -3701,25 +3701,25 @@ snapshots:
 
   '@tokenizer/token@0.3.0': {}
 
-  '@ttsc/darwin-arm64@0.28.5':
+  '@ttsc/darwin-arm64@0.28.6':
     optional: true
 
-  '@ttsc/darwin-x64@0.28.5':
+  '@ttsc/darwin-x64@0.28.6':
     optional: true
 
-  '@ttsc/linux-arm64@0.28.5':
+  '@ttsc/linux-arm64@0.28.6':
     optional: true
 
-  '@ttsc/linux-arm@0.28.5':
+  '@ttsc/linux-arm@0.28.6':
     optional: true
 
-  '@ttsc/linux-x64@0.28.5':
+  '@ttsc/linux-x64@0.28.6':
     optional: true
 
-  '@ttsc/win32-arm64@0.28.5':
+  '@ttsc/win32-arm64@0.28.6':
     optional: true
 
-  '@ttsc/win32-x64@0.28.5':
+  '@ttsc/win32-x64@0.28.6':
     optional: true
 
   '@types/body-parser@1.19.6':
@@ -5468,17 +5468,17 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  ttsc@0.28.5:
+  ttsc@0.28.6:
     dependencies:
       typescript: 7.0.2
     optionalDependencies:
-      '@ttsc/darwin-arm64': 0.28.5
-      '@ttsc/darwin-x64': 0.28.5
-      '@ttsc/linux-arm': 0.28.5
-      '@ttsc/linux-arm64': 0.28.5
-      '@ttsc/linux-x64': 0.28.5
-      '@ttsc/win32-arm64': 0.28.5
-      '@ttsc/win32-x64': 0.28.5
+      '@ttsc/darwin-arm64': 0.28.6
+      '@ttsc/darwin-x64': 0.28.6
+      '@ttsc/linux-arm': 0.28.6
+      '@ttsc/linux-arm64': 0.28.6
+      '@ttsc/linux-x64': 0.28.6
+      '@ttsc/win32-arm64': 0.28.6
+      '@ttsc/win32-x64': 0.28.6
 
   tweetnacl@0.14.5: {}
 
