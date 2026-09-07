@@ -2,6 +2,7 @@
 "github:tj/node-prune" = "latest"
 hk = { version = "latest", postinstall = "hk install --mise" }
 node = { version = "latest" }
+"npm:@usebruno/cli" = "latest"
 "npm:corepack" = { version = "latest", postinstall = "corepack enable" }
 opencode = "latest"
 
@@ -40,3 +41,15 @@ sources = [
   "tsconfig.build.json",
 ]
 outputs = ["dist/tsconfig.build.tsbuildinfo"]
+
+[tasks.test-api]
+description = "Run API tests with Bruno"
+usage = '''
+arg "[environment]" help = "Test environment" env = "NODE_ENV" {
+  choices "development"
+}
+'''
+run = "bru run --reporter-html results.html --env ${environment:-development}"
+dir = "test/api"
+sources = ["**/*.yml"]
+outputs = ["results.html"]
