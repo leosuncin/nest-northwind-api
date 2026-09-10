@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [".opencode/plugins/graphify.js"],
+  "mcp": {
+    "mise": {
+      "type": "local",
+      "command": "mise",
+      "args": ["mcp"],
+      "environment": {
+        "MISE_EXPERIMENTAL": "1"
+      },
+      "enabled": true
+    }
+  }
+}
