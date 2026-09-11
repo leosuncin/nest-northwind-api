@@ -34,7 +34,11 @@
     "ghcr.io/devcontainers-extra/features/ripgrep:1.0.15": {},
     "ghcr.io/devcontainer-community/devcontainer-features/jq:1.0.2": {},
     "ghcr.io/devcontainer-community/devcontainer-features/yq:1.0.3": {},
-    "ghcr.io/jlaundry/devcontainer-features/mssql-odbc-driver:1.0.3": {}
+    "ghcr.io/jlaundry/devcontainer-features/mssql-odbc-driver:1.0.3": {},
+    "ghcr.io/devcontainers-extra/features/uv-tool:1.0.0": {
+      "package": "graphifyy",
+      "with": "graphifyy[terraform]"
+    }
   },
   "containerEnv": {
     "PNPM_HOME": "/home/dev/.local/share/mise/pnpm",
