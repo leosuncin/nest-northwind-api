@@ -1,0 +1,76 @@
+info:
+  name: Create a new employee
+  type: http
+  seq: 1
+  tags:
+    - employee
+
+http:
+  method: POST
+  url: '{{BASE_URL}}/employee'
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "{{$randomFirstName}}",
+        "lastName": "{{$randomLastName}}",
+        "title": "{{$randomJobDescriptor}}",
+        "titleOfCourtesy": "{{$randomNamePrefix}}",
+        "hireDate": "{{$randomDatePast}}",
+        "address": "{{$randomStreetAddress}}",
+        "city": "{{$randomAdjective}}",
+        "region": "{{$randomAdjective}}",
+        "postalCode": "{{$timestamp}}",
+        "country": "{{$randomCountryCode}}",
+        "homePhone": "{{$randomPhoneNumber}}",
+        "extension": "{{$randomInt}}",
+        "notes": "{{$randomLoremSentences}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const body = req.getBody();
+
+        req.setBody({
+          ...body,
+          lastName: bru.interpolate(body.lastName).substring(0, 20),
+          firstName: bru.interpolate(body.firstName).substring(0, 10),
+          title: bru.interpolate(body.title).substring(0, 29),
+          address: bru.interpolate(body.address).substring(0, 60),
+          city: bru.interpolate(body.city).substring(0, 15),
+          region: bru.interpolate(body.region).substring(0, 15),
+          postalCode: bru.interpolate(body.postalCode).substring(0, 10),
+          country: bru.interpolate(body.country).substring(0, 15),
+          homePhone: bru.interpolate(body.homePhone).substring(0, 24),
+          extension: bru.interpolate(body.extension).substring(0, 4),
+        });
+    - type: after-response
+      code: |-
+        const employee = res.getBody();
+
+        bru.setVar('EMPLOYEE_ID', employee.id);
+    - type: tests
+      code: |-
+        test("employee properties", () => {
+          const payload = req.getBody();
+          const employee = res.getBody();
+
+          expect(employee).to.have.property('id');
+
+          Object.entries(payload).forEach(([key, value]) => {
+            expect(employee).to.have.property(key, value);
+          });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '201'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

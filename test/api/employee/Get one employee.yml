@@ -1,0 +1,51 @@
+info:
+  name: Get one employee
+  type: http
+  seq: 3
+  tags:
+    - employee
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/employee/:employeeId'
+  params:
+    - name: employeeId
+      value: '{{EMPLOYEE_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing employee properties", () => {
+          const employee = res.getBody();
+          const employeeId = req.getPathParams()[0].value;
+
+          expect(employee).to.have.property('id', Number(employeeId));
+          expect(employee).to.have.property('firstName').to.be.an('string');
+          expect(employee).to.have.property('lastName').to.be.an('string');
+          expect(employee).to.have.property('title').to.be.an('string');
+          expect(employee).to.have.property('titleOfCourtesy');
+          expect(employee).to.have.property('birthDate');
+          expect(employee).to.have.property('hireDate');
+          expect(employee).to.have.property('address');
+          expect(employee).to.have.property('city');
+          expect(employee).to.have.property('region');
+          expect(employee).to.have.property('postalCode');
+          expect(employee).to.have.property('country');
+          expect(employee).to.have.property('homePhone');
+          expect(employee).to.have.property('extension');
+          expect(employee).to.have.property('notes');
+          expect(employee).to.have.property('photo');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
