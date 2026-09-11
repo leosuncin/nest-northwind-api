@@ -5,6 +5,8 @@ services:
     init: true
     volumes:
       - ..:/workspaces/nest-northwind-api:cached
+    extra_hosts:
+      - host.docker.internal:host-gateway
   sql-server:
     image: mcr.microsoft.com/mssql/server:2025-latest@sha256:2b5b581621126574f3d1f75e78d3eebe8d05aedb59ad0cfdf9aa42cb0634d726
     user: mssql
