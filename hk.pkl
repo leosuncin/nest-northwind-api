@@ -11,5 +11,27 @@ local linters = new Mapping {
     ["tsc"] = Builtins.tsc
     ["zizmor"] = Builtins.zizmor
 }
+local graphify = new Mapping<String, Step> {
+    ["graphify"] = {
+        check = "git diff --name-only HEAD~1 HEAD 2>/dev/null || git diff --name-only HEAD 2>/dev/null"
+        fix = "graphify update"
+    }
+}
 
-steps = linters
+hooks {
+    ["pre-commit"] {
+        fix = true
+        stash = "git"
+        steps = linters
+    }
+    ["post-commit"] {
+        steps = graphify
+        fix = true
+        stash = false
+    }
+    ["post-checkout"] {
+        steps = graphify
+        fix = true
+        stash = false
+    }
+}
