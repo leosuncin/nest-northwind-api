@@ -1,0 +1,48 @@
+info:
+  name: Update one employee
+  type: http
+  seq: 4
+  tags:
+    - employee
+
+http:
+  method: PATCH
+  url: '{{BASE_URL}}/employee/:employeeId'
+  params:
+    - name: employeeId
+      value: '{{EMPLOYEE_ID}}'
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "lastName": "{{$randomLastName}}",
+        "title": "{{$randomJobDescriptor}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("employee updated properties", () => {
+          const payload = req.getBody();
+          const employee = res.getBody();
+          const employeeId = req.getPathParams()[0].value;
+
+          expect(employee).to.have.property('id', Number(employeeId));
+
+          Object.entries(payload).forEach(([key, value]) => {
+            expect(employee).to.have.property(key, value);
+          });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

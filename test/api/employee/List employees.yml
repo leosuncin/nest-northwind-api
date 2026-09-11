@@ -1,0 +1,40 @@
+info:
+  name: List employees
+  type: http
+  seq: 2
+  tags:
+    - employee
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/employee'
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("employees are paginated", () => {
+          const list = res.getBody();
+          const search = Object.fromEntries(req.getQueryString().split('&').map(p => p.split('=')));
+
+          expect(list).to.have.property('items').to.be.an('array');
+          expect(list).to.have.property('meta').to.be.an('object');
+          expect(list).to.have.nested.property('meta.itemCount').to.be.most(search.limit ?? 100);
+          expect(list).to.have.nested.property('meta.totalItems').to.be.at.least(0);
+          expect(list).to.have.nested.property('meta.itemsPerPage', search.limit ?? 100);
+          expect(list).to.have.nested.property('meta.totalPages').to.be.at.least(1);
+          expect(list).to.have.nested.property('meta.currentPage', search.page ?? 1);
+          expect(list).to.have.nested.property('meta.hasNextPage').to.be.an('boolean');
+          expect(list).to.have.nested.property('meta.hasPreviousPage').to.be.an('boolean');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

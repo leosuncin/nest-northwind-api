@@ -1,0 +1,38 @@
+info:
+  name: Remove one employee
+  type: http
+  seq: 5
+  tags:
+    - employee
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/employee/:employeeId'
+  params:
+    - name: employeeId
+      value: '{{EMPLOYEE_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("employee removed properties", () => {
+          const employee = res.getBody();
+
+          expect(employee).not.to.have.property('id');
+          expect(employee).to.have.property('firstName').and.to.be.an('string');
+          expect(employee).to.have.property('lastName').and.to.be.an('string');
+          expect(employee).to.have.property('title').and.to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
