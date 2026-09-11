@@ -10,7 +10,9 @@ node = { version = "latest" }
 "npm:@opencode/cli" = { version = "latest", allow_builds = true }
 pitchfork = "latest"
 pnpm = "latest"
+ripgrep = "latest"
 watchexec = "latest"
+xh = "latest"
 zizmor = "latest"
 
 [env]
