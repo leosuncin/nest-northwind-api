@@ -257,8 +257,8 @@ importers:
         specifier: 7.2.2
         version: 7.2.2
       ttsc:
-        specifier: 0.29.0
-        version: 0.29.0
+        specifier: 0.30.0
+        version: 0.30.0
       typeorm-extension:
         specifier: 4.1.0
         version: 4.1.0(typeorm@1.1.1(mssql@12.7.1))
@@ -1034,38 +1034,38 @@ packages:
   '@tokenizer/token@0.3.0':
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
 
-  '@ttsc/darwin-arm64@0.29.0':
-    resolution: {integrity: sha512-tYGdoLXklqQIaNRFOnS8PWnaVXk18AOqJwHGAj2ZxyOkBb3rF8Hixg8M6FZZ8SPFNcYohKhfYcSOjMHdMw+siA==}
+  '@ttsc/darwin-arm64@0.30.0':
+    resolution: {integrity: sha512-e9prFj0QQoGXpWL3saSvf2Qm6RjZevMxRjbf/klqZ/TDcqyBII0Jsf5DDtFHxiejwWHeqx39yxE4lUAFWkpG1w==}
     cpu: [arm64]
     os: [darwin]
 
-  '@ttsc/darwin-x64@0.29.0':
-    resolution: {integrity: sha512-yYDGFiylDP5WAzCwISikXHZhHV6D8Y9n8bYhrie0U5ED8/M6feUuAwFyp01EQzraOzPQpcE1BWi8RpnlEuPSwg==}
+  '@ttsc/darwin-x64@0.30.0':
+    resolution: {integrity: sha512-Cb0z4CMlpOiUDp3ys19soGiqS+kF4XnYGcMyz05lg3ih/gjA62CxjcP8kR87ryiQWuNW9hDKZHZKR/aOfZ0DZw==}
     cpu: [x64]
     os: [darwin]
 
-  '@ttsc/linux-arm64@0.29.0':
-    resolution: {integrity: sha512-voz+FbicOUiQYIronXkrQTA4ffcTN/s+RisGqBOmrtPM8LMoShvxdBCrh4SHu++xrjjp66uy3Uq/sE9O0U9ajw==}
+  '@ttsc/linux-arm64@0.30.0':
+    resolution: {integrity: sha512-gtgmqhU7YecxwAgQxY0dE4e5mv8UvLbofT4jKHftVIXJYgi0GpnFapTIZGc4sZ8lMggaggB0Svl+9MlNvach3A==}
     cpu: [arm64]
     os: [linux]
 
-  '@ttsc/linux-arm@0.29.0':
-    resolution: {integrity: sha512-5of87QxJVrLgVidk21j688bATThre6VlcviE7MgLfTnn6hlU8aInFkKZo6NqDwrGfJqve13zqFlwixTXRSMmaw==}
+  '@ttsc/linux-arm@0.30.0':
+    resolution: {integrity: sha512-UBIHasTOKyPFeTp3YRqUVywExitYdYyHUSeFmeQTYjECchsWZ8Uq6yoMRGKi8Xwk3rvzOHCu4DDhZbGHLUIjFg==}
     cpu: [arm]
     os: [linux]
 
-  '@ttsc/linux-x64@0.29.0':
-    resolution: {integrity: sha512-OJy/rW6VRZNODq+9u3ywdy1qLEhPJws01MCgjyPyyPchY1ryO6m1yTxKF589Wr5Y1qXtrwLZFYzhysCQNMxUmQ==}
+  '@ttsc/linux-x64@0.30.0':
+    resolution: {integrity: sha512-uy+VhHuDe/IXoC8TKHHHpjNXWQ+SYJa/6zMpllXk3ACcp5BOgTwPswT3MaCUc88Aj4Zv3zIebBwCY7r7BBHCCA==}
     cpu: [x64]
     os: [linux]
 
-  '@ttsc/win32-arm64@0.29.0':
-    resolution: {integrity: sha512-9CAENX11ckdukFCmQpJsxxh8TDeDO355DS9kKTRW8LcVPrs3Zy6JMAdyIY4Dpw8hdpp7Ql3amp007jymS8ZPtA==}
+  '@ttsc/win32-arm64@0.30.0':
+    resolution: {integrity: sha512-uVZbAk+W91PCHzop4AN13fssUVrU6NuxYWUNTY7vcCZ5GUySSuofUvooUnhpSq6y2/NYB0KwjiKGgk7hcRiRNA==}
     cpu: [arm64]
     os: [win32]
 
-  '@ttsc/win32-x64@0.29.0':
-    resolution: {integrity: sha512-8fJY1D2kJF5kIMaR4rqlOcX+LRD/LikxZjRr8n98Aw+WbtilNY/SAamcoaqdcImIZ7qab9pHOt8gBW+Sl2s6Zg==}
+  '@ttsc/win32-x64@0.30.0':
+    resolution: {integrity: sha512-j7qEhjTv2tTzFydSq6aJ+udT04DIPf4dRKsF3yA80AEU80b3y+ijeavnCHJLWFdGsjKUipqSEJ0yPmtwm9DMAg==}
     cpu: [x64]
     os: [win32]
 
@@ -1311,6 +1311,11 @@ packages:
     resolution: {integrity: sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==}
     engines: {node: '>= 0.6'}
 
+  acorn@8.16.0:
+    resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
     engines: {node: '>= 14'}
@@ -1529,6 +1534,9 @@ packages:
 
   citty@0.2.2:
     resolution: {integrity: sha512-+6vJA3L98yv+IdfKGZHBNiGW5KHn22e/JwID0Strsz8h4S/csAu/OuICwxrg44k5MRiZHWIo8XXuJgQTriRP4w==}
+
+  cjs-module-lexer@2.2.1:
+    resolution: {integrity: sha512-Ca8swihM+/4yKecYHY52kgJd300hi2lADU/a1RxNTRe+RJ9jvqQlESpbz9DnG9mowez8qwXHB8qYdIUw9e+F5Q==}
 
   class-transformer@0.5.1:
     resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
@@ -2783,8 +2791,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  ttsc@0.29.0:
-    resolution: {integrity: sha512-51yGOGdocdR5CmlQVs/ZTEwftzWSU16t9mcrSDXNoKGffKYE+bRraDTQY960VEBovNZ84mDzJeBDUjIsq6egLQ==}
+  ttsc@0.30.0:
+    resolution: {integrity: sha512-nbhN73nprJ5oZ5L/nkTXJA8oe2eS9TAJC7Ax8V6d+VxY8HGCrqW/b2JeuBdbuEPTlI5h5Kr9jyP+F04CZYCZlA==}
     engines: {node: '>=22.15.0'}
     hasBin: true
 
@@ -3758,25 +3766,25 @@ snapshots:
 
   '@tokenizer/token@0.3.0': {}
 
-  '@ttsc/darwin-arm64@0.29.0':
+  '@ttsc/darwin-arm64@0.30.0':
     optional: true
 
-  '@ttsc/darwin-x64@0.29.0':
+  '@ttsc/darwin-x64@0.30.0':
     optional: true
 
-  '@ttsc/linux-arm64@0.29.0':
+  '@ttsc/linux-arm64@0.30.0':
     optional: true
 
-  '@ttsc/linux-arm@0.29.0':
+  '@ttsc/linux-arm@0.30.0':
     optional: true
 
-  '@ttsc/linux-x64@0.29.0':
+  '@ttsc/linux-x64@0.30.0':
     optional: true
 
-  '@ttsc/win32-arm64@0.29.0':
+  '@ttsc/win32-arm64@0.30.0':
     optional: true
 
-  '@ttsc/win32-x64@0.29.0':
+  '@ttsc/win32-x64@0.30.0':
     optional: true
 
   '@types/body-parser@1.19.6':
@@ -3990,6 +3998,8 @@ snapshots:
       mime-types: 3.0.2
       negotiator: 1.1.0
 
+  acorn@8.16.0: {}
+
   agent-base@7.1.4: {}
 
   ajv-formats@3.0.1(ajv@8.20.0):
@@ -4199,6 +4209,8 @@ snapshots:
   chownr@1.1.4: {}
 
   citty@0.2.2: {}
+
+  cjs-module-lexer@2.2.1: {}
 
   class-transformer@0.5.1: {}
 
@@ -5525,17 +5537,19 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  ttsc@0.29.0:
+  ttsc@0.30.0:
     dependencies:
+      acorn: 8.16.0
+      cjs-module-lexer: 2.2.1
       typescript: 7.0.2
     optionalDependencies:
-      '@ttsc/darwin-arm64': 0.29.0
-      '@ttsc/darwin-x64': 0.29.0
-      '@ttsc/linux-arm': 0.29.0
-      '@ttsc/linux-arm64': 0.29.0
-      '@ttsc/linux-x64': 0.29.0
-      '@ttsc/win32-arm64': 0.29.0
-      '@ttsc/win32-x64': 0.29.0
+      '@ttsc/darwin-arm64': 0.30.0
+      '@ttsc/darwin-x64': 0.30.0
+      '@ttsc/linux-arm': 0.30.0
+      '@ttsc/linux-arm64': 0.30.0
+      '@ttsc/linux-x64': 0.30.0
+      '@ttsc/win32-arm64': 0.30.0
+      '@ttsc/win32-x64': 0.30.0
 
   tweetnacl@0.14.5: {}
 
