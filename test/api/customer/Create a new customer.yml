@@ -1,0 +1,74 @@
+info:
+  name: Create a new customer
+  type: http
+  seq: 1
+  tags:
+    - customer
+
+http:
+  method: POST
+  url: '{{BASE_URL}}/customer'
+  body:
+    type: json
+    data: |-
+      {
+        "code": "{{$randomNanoId}}",
+        "companyName": "{{$randomCompanyName}}",
+        "contactName": "{{$randomFullName}}",
+        "contactTitle": "{{$randomJobTitle}}",
+        "address": "{{$randomStreetAddress}}",
+        "city": "{{$randomCity}}",
+        "region": "{{$randomCity}}",
+        "postalCode": "{{$timestamp}}",
+        "country": "{{$randomCountryCode}}",
+        "phone": "{{$randomPhoneNumber}}",
+        "fax": "{{$randomPhoneNumber}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const body = req.getBody();
+
+        req.setBody({
+          code: bru.interpolate(body.code).substring(0, 5).toUpperCase(),
+          companyName: bru.interpolate(body.companyName).substring(0, 40),
+          contactName: bru.interpolate(body.contactName).substring(0, 30),
+          contactTitle: bru.interpolate(body.contactTitle).substring(0, 30),
+          address: bru.interpolate(body.address).substring(0, 60),
+          city: bru.interpolate(body.city).substring(0, 15),
+          region: bru.interpolate(body.region).substring(0, 15),
+          postalCode: bru.interpolate(body.postalCode).substring(0, 10),
+          country: bru.interpolate(body.country).substring(0, 15),
+          phone: bru.interpolate(body.phone).substring(0, 24),
+          fax: bru.interpolate(body.fax).substring(0, 24),
+        });
+    - type: after-response
+      code: |-
+        const customer = res.getBody();
+
+        bru.setVar('CUSTOMER_ID', customer.id);
+    - type: tests
+      code: |-
+        test("customer properties", () => {
+          const payload = req.getBody();
+          const customer = res.getBody();
+
+          expect(customer).to.have.property('id');
+
+          Object.entries(payload).forEach(([key, value]) => {
+            expect(customer).to.have.property(key, value);
+          });
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '201'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,46 @@
+info:
+  name: Remove one customer
+  type: http
+  seq: 5
+  tags:
+    - customer
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/customer/:customerId'
+  params:
+    - name: customerId
+      value: '{{CUSTOMER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("customer removed properties", () => {
+          const customer = res.getBody();
+
+          expect(customer).not.to.have.property('id');
+          expect(customer).to.have.property('code').and.to.be.an('string');
+          expect(customer).to.have.property('companyName').and.to.be.an('string');
+          expect(customer).to.have.property('contactName').and.to.be.an('string');
+          expect(customer).to.have.property('contactTitle').and.to.be.an('string');
+          expect(customer).to.have.property('address').and.to.be.an('string');
+          expect(customer).to.have.property('city').and.to.be.an('string');
+          expect(customer).to.have.property('region').and.to.be.an('string');
+          expect(customer).to.have.property('postalCode').and.to.be.an('string');
+          expect(customer).to.have.property('country').and.to.be.an('string');
+          expect(customer).to.have.property('phone').and.to.be.an('string');
+          expect(customer).to.have.property('fax').and.to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
