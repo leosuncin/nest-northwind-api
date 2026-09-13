@@ -1,0 +1,43 @@
+info:
+  name: Remove one order detail
+  type: http
+  seq: 9
+  tags:
+    - order-detail
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/order/:orderId/detail/:productId'
+  params:
+    - name: orderId
+      value: '{{ORDER_ID}}'
+      type: path
+    - name: productId
+      value: '{{ORDER_PRODUCT_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("order detail removed properties", () => {
+          const detail = res.getBody();
+
+          expect(detail).to.not.have.property('orderId');
+          expect(detail).to.not.have.property('productId');
+          expect(detail).to.have.property('product').to.be.an('object');
+          expect(detail).to.have.property('unitPrice').to.be.a('number');
+          expect(detail).to.have.property('quantity').to.be.a('number');
+          expect(detail).to.have.property('discount').to.be.a('number');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

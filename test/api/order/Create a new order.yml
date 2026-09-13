@@ -1,0 +1,122 @@
+info:
+  name: Create a new order
+  type: http
+  seq: 1
+  tags:
+    - order
+
+http:
+  method: POST
+  url: '{{BASE_URL}}/order'
+  body:
+    type: json
+    data: |-
+      {
+        "customer": 1,
+        "employee": 1,
+        "orderDate": "{{$isoTimestamp}}",
+        "requiredDate": "{{$randomDateFuture}}",
+        "shipVia": 1,
+        "freight": "{{$randomPrice}}",
+        "shipName": "{{$randomCompanyName}}",
+        "shipAddress": "{{$randomStreetAddress}}",
+        "shipCity": "{{$randomCity}}",
+        "shipRegion": "{{$randomCity}}",
+        "shipPostalCode": "{{$timestamp}}",
+        "shipCountry": "{{$randomCountryCode}}",
+        "details": [
+          {
+            "product": 1,
+            "unitPrice": "{{$randomPrice}}",
+            "quantity": "{{$randomInt}}",
+            "discount": "{{$randomInt}}"
+          }
+        ]
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const body = req.getBody();
+
+        req.setBody({
+          customer: Number(body.customer),
+          employee: Number(body.employee),
+          orderDate: bru.interpolate(body.orderDate),
+          requiredDate: bru.interpolate(body.requiredDate),
+          shipVia: Number(body.shipVia),
+          freight: Number(bru.interpolate(body.freight)),
+          shipName: bru.interpolate(body.shipName).substring(0, 40),
+          shipAddress: bru.interpolate(body.shipAddress).substring(0, 60),
+          shipCity: bru.interpolate(body.shipCity).substring(0, 15),
+          shipRegion: bru.interpolate(body.shipRegion).substring(0, 15),
+          shipPostalCode: bru.interpolate(body.shipPostalCode).substring(0, 10),
+          shipCountry: bru.interpolate(body.shipCountry).substring(0, 15),
+          details: [
+            {
+              product: Number(body.details[0].product),
+              unitPrice: Number(bru.interpolate(body.details[0].unitPrice)),
+              quantity: Math.max(
+                Number(bru.interpolate(body.details[0].quantity)),
+                1,
+              ),
+              discount:
+                (Number(bru.interpolate(body.details[0].discount)) % 4) / 4,
+            },
+          ],
+        });
+    - type: after-response
+      code: |-
+        const order = res.getBody();
+
+        bru.setVar('ORDER_ID', order.id);
+    - type: tests
+      code: |-
+        test("order properties", () => {
+          const payload = req.getBody();
+          const order = res.getBody();
+
+          expect(order).to.have.property('id');
+          expect(order).to.have.property('customer').to.be.an('object');
+          expect(order.customer).to.have.property('id', payload.customer);
+          expect(order).to.have.property('employee').to.be.an('object');
+          expect(order.employee).to.have.property('id', payload.employee);
+          expect(order).to.have.property('orderDate').to.be.an('string');
+          expect(order).to.have.property('requiredDate').to.be.an('string');
+          expect(order).to.have.property('shipVia').to.be.an('object');
+          expect(order.shipVia).to.have.property('id', payload.shipVia);
+          expect(order).to.have.property('freight', payload.freight);
+          expect(order).to.have.property('shipName', payload.shipName);
+          expect(order).to.have.property('shipAddress', payload.shipAddress);
+          expect(order).to.have.property('shipCity', payload.shipCity);
+          expect(order).to.have.property('shipRegion', payload.shipRegion);
+          expect(order).to.have.property('shipPostalCode', payload.shipPostalCode);
+          expect(order).to.have.property('shipCountry', payload.shipCountry);
+          expect(order).to.have.property('details').to.be.an('array').with.lengthOf(1);
+        });
+
+        test("order cascade detail properties", () => {
+          const payload = req.getBody();
+          const order = res.getBody();
+          const detail = order.details[0];
+
+          expect(detail).to.have.property('orderId');
+          expect(Number(detail.productId)).to.equal(payload.details[0].product);
+          expect(detail).to.have.property('product').to.be.an('object');
+          expect(detail.product).to.have.property('id', payload.details[0].product);
+          expect(detail).to.have.property('unitPrice', payload.details[0].unitPrice);
+          expect(detail).to.have.property('quantity', payload.details[0].quantity);
+          expect(detail).to.have.property('discount').to.be.closeTo(payload.details[0].discount, 0.0001);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '201'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

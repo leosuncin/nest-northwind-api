@@ -1,0 +1,46 @@
+info:
+  name: Get one order detail
+  type: http
+  seq: 7
+  tags:
+    - order-detail
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/order/:orderId/detail/:productId'
+  params:
+    - name: orderId
+      value: '{{ORDER_ID}}'
+      type: path
+    - name: productId
+      value: '{{ORDER_PRODUCT_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing order detail properties", () => {
+          const detail = res.getBody();
+          const orderId = req.getPathParams()[0].value;
+          const productId = req.getPathParams()[1].value;
+
+          expect(String(detail.orderId)).to.equal(String(orderId));
+          expect(String(detail.productId)).to.equal(String(productId));
+          expect(detail).to.have.property('product').to.be.an('object');
+          expect(detail.product).to.have.property('id');
+          expect(detail).to.have.property('unitPrice').to.be.a('number');
+          expect(detail).to.have.property('quantity').to.be.a('number');
+          expect(detail).to.have.property('discount').to.be.a('number');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
