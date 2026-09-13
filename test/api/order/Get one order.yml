@@ -1,0 +1,49 @@
+info:
+  name: Get one order
+  type: http
+  seq: 3
+  tags:
+    - order
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/order/:orderId'
+  params:
+    - name: orderId
+      value: '{{ORDER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing order properties", () => {
+          const order = res.getBody();
+          const orderId = req.getPathParams()[0].value;
+
+          expect(order).to.have.property('id', orderId);
+          expect(order).to.have.property('customer').to.be.an('object');
+          expect(order).to.have.property('employee').to.be.an('object');
+          expect(order).to.have.property('orderDate').to.be.an('string');
+          expect(order).to.have.property('requiredDate').to.be.an('string');
+          expect(order).to.have.property('shipVia').to.be.an('object');
+          expect(order).to.have.property('freight').to.be.a('number');
+          expect(order).to.have.property('shipName').to.be.an('string');
+          expect(order).to.have.property('shipAddress').to.be.an('string');
+          expect(order).to.have.property('shipCity').to.be.an('string');
+          expect(order).to.have.property('shipRegion').to.be.an('string');
+          expect(order).to.have.property('shipPostalCode').to.be.an('string');
+          expect(order).to.have.property('shipCountry').to.be.an('string');
+          expect(order).to.have.property('details').to.be.an('array');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

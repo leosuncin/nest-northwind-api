@@ -1,0 +1,46 @@
+info:
+  name: Remove one order
+  type: http
+  seq: 10
+  tags:
+    - order
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/order/:orderId'
+  params:
+    - name: orderId
+      value: '{{ORDER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("order removed properties", () => {
+          const order = res.getBody();
+
+          expect(order).not.to.have.property('id');
+          expect(order).to.have.property('customer').and.to.be.an('object');
+          expect(order).to.have.property('employee').and.to.be.an('object');
+          expect(order).to.have.property('orderDate').and.to.be.an('string');
+          expect(order).to.have.property('shipVia').and.to.be.an('object');
+          expect(order).to.have.property('freight').and.to.be.a('number');
+          expect(order).to.have.property('shipName').and.to.be.an('string');
+          expect(order).to.have.property('shipAddress').and.to.be.an('string');
+          expect(order).to.have.property('shipCity').and.to.be.an('string');
+          expect(order).to.have.property('shipPostalCode').and.to.be.an('string');
+          expect(order).to.have.property('shipCountry').and.to.be.an('string');
+          expect(order).to.have.property('details').and.to.be.an('array');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

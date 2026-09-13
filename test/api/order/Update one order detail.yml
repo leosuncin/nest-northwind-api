@@ -1,0 +1,66 @@
+info:
+  name: Update one order detail
+  type: http
+  seq: 8
+  tags:
+    - order-detail
+
+http:
+  method: PATCH
+  url: '{{BASE_URL}}/order/:orderId/detail/:productId'
+  params:
+    - name: orderId
+      value: '{{ORDER_ID}}'
+      type: path
+    - name: productId
+      value: '{{ORDER_PRODUCT_ID}}'
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "unitPrice": "{{$randomPrice}}",
+        "quantity": "{{$randomInt}}",
+        "discount": "{{$randomInt}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const body = req.getBody();
+
+        req.setBody({
+          unitPrice: Number(bru.interpolate(body.unitPrice)),
+          quantity: Math.max(
+            Number(bru.interpolate(body.quantity)),
+            1,
+          ),
+          discount: (Number(bru.interpolate(body.discount)) % 4) / 4,
+        });
+    - type: tests
+      code: |-
+        test("order detail updated properties", () => {
+          const payload = req.getBody();
+          const detail = res.getBody();
+          const orderId = req.getPathParams()[0].value;
+          const productId = req.getPathParams()[1].value;
+
+          expect(String(detail.orderId)).to.equal(String(orderId));
+          expect(String(detail.productId)).to.equal(String(productId));
+          expect(detail).to.have.property('product').to.be.an('object');
+          expect(detail).to.have.property('unitPrice', payload.unitPrice);
+          expect(detail).to.have.property('quantity', payload.quantity);
+          expect(detail).to.have.property('discount').to.be.closeTo(payload.discount, 0.0001);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

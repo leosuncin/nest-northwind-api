@@ -1,0 +1,78 @@
+info:
+  name: Update one order
+  type: http
+  seq: 4
+  tags:
+    - order
+
+http:
+  method: PATCH
+  url: '{{BASE_URL}}/order/:orderId'
+  params:
+    - name: orderId
+      value: '{{ORDER_ID}}'
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "orderDate": "{{$isoTimestamp}}",
+        "requiredDate": "{{$randomDateFuture}}",
+        "shippedDate": "{{$randomDateRecent}}",
+        "freight": "{{$randomPrice}}",
+        "shipName": "{{$randomCompanyName}}",
+        "shipAddress": "{{$randomStreetAddress}}",
+        "shipCity": "{{$randomCity}}",
+        "shipRegion": "{{$randomCity}}",
+        "shipPostalCode": "{{$timestamp}}",
+        "shipCountry": "{{$randomCountryCode}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const body = req.getBody();
+
+        req.setBody({
+          orderDate: bru.interpolate(body.orderDate),
+          requiredDate: bru.interpolate(body.requiredDate),
+          shippedDate: bru.interpolate(body.shippedDate),
+          freight: Number(bru.interpolate(body.freight)),
+          shipName: bru.interpolate(body.shipName).substring(0, 40),
+          shipAddress: bru.interpolate(body.shipAddress).substring(0, 60),
+          shipCity: bru.interpolate(body.shipCity).substring(0, 15),
+          shipRegion: bru.interpolate(body.shipRegion).substring(0, 15),
+          shipPostalCode: bru.interpolate(body.shipPostalCode).substring(0, 10),
+          shipCountry: bru.interpolate(body.shipCountry).substring(0, 15),
+        });
+    - type: tests
+      code: |-
+        test("order updated properties", () => {
+          const payload = req.getBody();
+          const order = res.getBody();
+          const orderId = req.getPathParams()[0].value;
+
+          expect(order).to.have.property('id', orderId);
+          expect(order).to.have.property('orderDate').to.be.an('string');
+          expect(order).to.have.property('requiredDate').to.be.an('string');
+          expect(order).to.have.property('shippedDate').to.be.an('string');
+          expect(order).to.have.property('freight', payload.freight);
+          expect(order).to.have.property('shipName', payload.shipName);
+          expect(order).to.have.property('shipAddress', payload.shipAddress);
+          expect(order).to.have.property('shipCity', payload.shipCity);
+          expect(order).to.have.property('shipRegion', payload.shipRegion);
+          expect(order).to.have.property('shipPostalCode', payload.shipPostalCode);
+          expect(order).to.have.property('shipCountry', payload.shipCountry);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
