@@ -1,0 +1,47 @@
+info:
+  name: Get one customer
+  type: http
+  seq: 3
+  tags:
+    - customer
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/customer/:customerId'
+  params:
+    - name: customerId
+      value: '{{CUSTOMER_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing customer properties", () => {
+          const customer = res.getBody();
+          const customerId = req.getPathParams()[0].value;
+
+          expect(customer).to.have.property('id', customerId);
+          expect(customer).to.have.property('code').to.be.an('string');
+          expect(customer).to.have.property('companyName').to.be.an('string');
+          expect(customer).to.have.property('contactName').to.be.an('string');
+          expect(customer).to.have.property('contactTitle').to.be.an('string');
+          expect(customer).to.have.property('address').to.be.an('string');
+          expect(customer).to.have.property('city').to.be.an('string');
+          expect(customer).to.have.property('region').to.be.an('string');
+          expect(customer).to.have.property('postalCode').to.be.an('string');
+          expect(customer).to.have.property('country').to.be.an('string');
+          expect(customer).to.have.property('phone').to.be.an('string');
+          expect(customer).to.have.property('fax').to.be.an('string');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
