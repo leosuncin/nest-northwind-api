@@ -1,0 +1,44 @@
+info:
+  name: Remove one product
+  type: http
+  seq: 5
+  tags:
+    - product
+
+http:
+  method: DELETE
+  url: '{{BASE_URL}}/product/:productId'
+  params:
+    - name: productId
+      value: '{{PRODUCT_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("product removed properties", () => {
+          const product = res.getBody();
+
+          expect(product).not.to.have.property('id');
+          expect(product).to.have.property('name').and.to.be.an('string');
+          expect(product).to.have.property('supplier').and.to.be.an('object');
+          expect(product).to.have.property('category').and.to.be.an('object');
+          expect(product).to.have.property('quantityPerUnit').and.to.be.an('string');
+          expect(product).to.have.property('unitPrice').and.to.be.an('number');
+          expect(product).to.have.property('unitsInStock').and.to.be.an('number');
+          expect(product).to.have.property('unitsOnOrder').and.to.be.an('number');
+          expect(product).to.have.property('reorderLevel').and.to.be.an('number');
+          expect(product).to.have.property('discontinued').and.to.be.an('boolean');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
