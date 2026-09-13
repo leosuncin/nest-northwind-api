@@ -1,0 +1,45 @@
+info:
+  name: Get one product
+  type: http
+  seq: 3
+  tags:
+    - product
+
+http:
+  method: GET
+  url: '{{BASE_URL}}/product/:productId'
+  params:
+    - name: productId
+      value: '{{PRODUCT_ID}}'
+      type: path
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("existing product properties", () => {
+          const product = res.getBody();
+          const productId = req.getPathParams()[0].value;
+
+          expect(product).to.have.property('id', productId);
+          expect(product).to.have.property('name').to.be.an('string');
+          expect(product).to.have.property('supplier').to.be.an('object');
+          expect(product).to.have.property('category').to.be.an('object');
+          expect(product).to.have.property('quantityPerUnit').to.be.an('string');
+          expect(product).to.have.property('unitPrice').to.be.an('number');
+          expect(product).to.have.property('unitsInStock').to.be.an('number');
+          expect(product).to.have.property('unitsOnOrder').to.be.an('number');
+          expect(product).to.have.property('reorderLevel').to.be.an('number');
+          expect(product).to.have.property('discontinued').to.be.an('boolean');
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

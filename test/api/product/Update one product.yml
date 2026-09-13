@@ -1,0 +1,71 @@
+info:
+  name: Update one product
+  type: http
+  seq: 4
+  tags:
+    - product
+
+http:
+  method: PATCH
+  url: '{{BASE_URL}}/product/:productId'
+  params:
+    - name: productId
+      value: '{{PRODUCT_ID}}'
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "{{$randomProductName}}",
+        "quantityPerUnit": "{{$randomInt}}",
+        "unitPrice": "{{$randomPrice}}",
+        "unitsInStock": "{{$randomInt}}",
+        "unitsOnOrder": "{{$randomInt}}",
+        "reorderLevel": "{{$randomInt}}",
+        "discontinued": true
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const body = req.getBody();
+
+        req.setBody({
+          name: bru.interpolate(body.name).substring(0, 40),
+          quantityPerUnit: bru.interpolate(body.quantityPerUnit),
+          unitPrice: Number(bru.interpolate(body.unitPrice)),
+          unitsInStock: Number(bru.interpolate(body.unitsInStock)),
+          unitsOnOrder: Number(bru.interpolate(body.unitsOnOrder)),
+          reorderLevel: Number(bru.interpolate(body.reorderLevel)),
+          discontinued: body.discontinued,
+        });
+    - type: tests
+      code: |-
+        test("product updated properties", () => {
+          const payload = req.getBody();
+          const product = res.getBody();
+          const productId = req.getPathParams()[0].value;
+
+          expect(product).to.have.property('id', productId);
+          expect(product).to.have.property('name', payload.name);
+          expect(product).to.have.property('supplier').to.be.an('object');
+          expect(product).to.have.property('category').to.be.an('object');
+          expect(product).to.have.property('quantityPerUnit', payload.quantityPerUnit);
+          expect(product).to.have.property('unitPrice', payload.unitPrice);
+          expect(product).to.have.property('unitsInStock', payload.unitsInStock);
+          expect(product).to.have.property('unitsOnOrder', payload.unitsOnOrder);
+          expect(product).to.have.property('reorderLevel', payload.reorderLevel);
+          expect(product).to.have.property('discontinued', payload.discontinued);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: '200'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
