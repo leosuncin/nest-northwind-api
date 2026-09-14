@@ -29,7 +29,7 @@ RUN --mount=type=cache,target=/pnpm/store,sharing=locked \
     pnpm prune --prod && \
     pnpm dlx node-prune
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:f7e3539249fa844f7019255d3ed1acb5faf626006607a602f8a24d59f0a97c6c AS migrations
+FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:ea845027bc638317c4b14a8969cc931efc7546ecabb2de1e4dfb2fee835cca2c AS migrations
 
 WORKDIR /typeorm
 
@@ -40,7 +40,7 @@ ENTRYPOINT ["/nodejs/bin/node", "./node_modules/typeorm/cli.js"]
 
 CMD ["migration:run", "-d", "/typeorm/data-source.js"]
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:f7e3539249fa844f7019255d3ed1acb5faf626006607a602f8a24d59f0a97c6c
+FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:ea845027bc638317c4b14a8969cc931efc7546ecabb2de1e4dfb2fee835cca2c
 
 ARG PORT=3000
 
