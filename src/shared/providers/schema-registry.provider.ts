@@ -1,13 +1,5 @@
-import type { FactoryProvider, InjectionToken, Provider } from '@nestjs/common';
+import type { InjectionToken, Provider } from '@nestjs/common';
 import { SchemaRegistry, type Schema } from '@rapiq/core';
-
-export const schemaRegistryProvider: FactoryProvider = {
-  provide: SchemaRegistry,
-  useFactory() {
-    return new SchemaRegistry();
-  },
-  durable: true,
-};
 
 export function createSchemaRegistryProviders(
   ...schemas: Schema[]
