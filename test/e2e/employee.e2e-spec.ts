@@ -112,7 +112,7 @@ describe('EmployeeController (e2e)', () => {
     });
   });
 
-  test('given a GET request to /employee when no limit or page parameters are provided then it should use the default pagination values', async () => {
+  test('given a GET request to /employee when no parameters are provided then it should use the default pagination values', async () => {
     const response = await request(app.getHttpServer())
       .get('/employee')
       .expect(HttpStatus.OK)
@@ -158,7 +158,7 @@ describe('EmployeeController (e2e)', () => {
       } satisfies Pagination<Employee>['meta'],
     ],
   ])(
-    'given a GET request to /employee when no limit or page parameters are provided then it should use the default pagination values',
+    'given a GET request to /employee when filters %o then it should return a pagination %o',
     async (filters, meta) => {
       const query = defineQuery<Employee>(filters);
       const response = await request(app.getHttpServer())

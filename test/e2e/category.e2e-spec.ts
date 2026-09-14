@@ -80,7 +80,7 @@ describe('CategoryController (e2e)', () => {
     });
   });
 
-  test('given a GET request to /category when no limit or page parameters are provided then it should use the default pagination values', async () => {
+  test('given a GET request to /category when no parameters are provided then it should use the default pagination values', async () => {
     const response = await request(app.getHttpServer())
       .get('/category')
       .expect(HttpStatus.OK)
