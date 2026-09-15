@@ -1,20 +1,15 @@
 import {
   BadRequestException,
-  CallHandler,
-  ExecutionContext,
   Injectable,
-  NestInterceptor,
+  type CallHandler,
+  type ExecutionContext,
+  type NestInterceptor,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { createURLCodec, formatErrors } from '@rapiq/codec-url';
-import {
-  isBaseError,
-  isPagination,
-  isParseError,
-  SchemaRegistry,
-} from '@rapiq/core';
+import { isBaseError, isParseError, SchemaRegistry } from '@rapiq/core';
 import type { Request } from 'express';
-import { map, Observable } from 'rxjs';
+import { map, type Observable } from 'rxjs';
 
 export interface Pagination<I> {
   items: I[];
@@ -43,49 +38,40 @@ export class PaginationInterceptor<
     next: CallHandler<[Item[], number]>,
   ): Observable<Pagination<Item>> {
     const request = context.switchToHttp().getRequest<Request>();
-    const schema =
-      this.reflector.getAllAndOverride<string>('schema', [
-        context.getHandler(),
-        context.getClass(),
-      ]) ?? request.path.split('/')[1];
-    let limit: number, offset: number, page: number;
+    const schema = this.reflector.getAllAndOverride<string>('schema', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    const codec = createURLCodec(this.registry);
 
-    if (this.registry.get(schema)) {
-      try {
-        const codec = createURLCodec(this.registry);
-        const query = codec.decode(request.url, { schema });
+    try {
+      const query = codec.decode(request.url, { schema })!;
 
-        Object.defineProperty(request, 'query', {
-          value: query,
+      Object.defineProperty(request, 'query', {
+        value: query,
+      });
+    } catch (error) {
+      if (isBaseError(error) || isParseError(error)) {
+        throw new BadRequestException({
+          errors: formatErrors(error.issues),
+          message: 'Failed to parse the filters',
+          why: error.message,
         });
-
-        limit = query?.pagination.limit ?? 100;
-        offset = query?.pagination.offset ?? 0;
-        page = Math.floor(+offset / +limit) + 1;
-      } catch (error) {
-        if (isBaseError(error) || isParseError(error)) {
-          throw new BadRequestException({
-            errors: formatErrors(error.issues),
-            message: 'Failed to parse the filters',
-            why: error.message,
-          });
-        }
-
-        throw error;
       }
-    } else {
-      limit = Number.parseInt(request.query.limit as string, 10) || 100;
-      page = Number.parseInt(request.query.page as string, 10) || 1;
-      offset = Math.floor(page / limit) + 1;
+
+      throw error;
     }
 
-    const itemsPerPage = limit;
-    const currentPage = page;
-
-    if (!isPagination(request.query.pagination)) {
-      // @ts-expect-error set pagination
-      request.query.pagination = { limit, offset };
-    }
+    // @ts-expect-error pagination
+    const itemsPerPage = request.query.pagination?.limit ?? 100;
+    const currentPage =
+      // @ts-expect-error pagination
+      Number.isInteger(request.query.pagination?.offset) &&
+      // @ts-expect-error pagination
+      request.query.pagination?.offset > 0
+        ? // @ts-expect-error pagination
+          Math.floor(request.query.pagination.offset / itemsPerPage) + 1
+        : 1;
 
     return next.handle().pipe(
       map(([items, totalItems]) => ({
