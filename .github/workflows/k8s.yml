@@ -62,6 +62,7 @@ jobs:
 
       - name: Replace values ✍️
         run: |
+          cat k8s/migrations-job.yaml | sed 's/migrations/seeds/g' | yq 'with(.spec.template.spec.containers[]; .command = ["/pnpm/bin/node", "/typeorm/node_modules/typeorm-extension/bin/cli.mjs"] | .args = ["seed:run", "--log-level", "debug", "-d", "/typeorm/data-source.js"] | .image = "ttl.sh/migrations-${{ github.sha }}:1h")' | tee k8s/seeds-job.yaml
           yq -i '.spec.template.spec.containers.[0].image = "ttl.sh/api-${{ github.sha }}:1h"' k8s/server-deployment.yaml
           yq -i '.spec.template.spec.containers.[0].image = "ttl.sh/migrations-${{ github.sha }}:1h"' k8s/migrations-job.yaml
           yq '.stringData.MSSQL_PASSWORD = "${{ secrets.MSSQL_SA_PASSWORD }}" | .stringData.MSSQL_SA_PASSWORD = "${{ secrets.MSSQL_SA_PASSWORD }}"' k8s/database-secret.example.yaml > k8s/database-secret.yaml
@@ -84,6 +85,17 @@ jobs:
             kubectl wait job/migrations --for=condition=failed --timeout=15s >/dev/null 2>&1
           do
             echo "Waiting for migrations to finish..."
+            sleep 15
+          done
+
+      - name: Seed the database 🚛
+        run: |
+          kubectl apply -f k8s/seeds-job.yaml
+          until
+            kubectl wait job/seeds --for=condition=complete --timeout=15s >/dev/null 2>&1 ||
+            kubectl wait job/seeds --for=condition=failed --timeout=15s >/dev/null 2>&1
+          do
+            echo "Waiting for seeds to finish..."
             sleep 15
           done
 
@@ -116,6 +128,7 @@ jobs:
       - name: Print cluster status on failure 🖨️
         if: failure()
         run: |
+          kubectl logs job/seeds
           kubectl logs job/migrations
           kubectl logs deployment/server
           kubectl get pods --all-namespaces
