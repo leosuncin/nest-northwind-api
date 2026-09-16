@@ -35,14 +35,14 @@ jobs:
           cache: true
 
       - name: Check formatting
-        run: npx prettier --check "src/**/*.ts" "test/**/*.ts"
+        run: pnx prettier --check "src/**/*.ts" "test/**/*.ts"
 
       - name: Lint
         run: pnpm lint
 
       - name: Build
         run: |
-          pnpm ttsc --noEmit
+          pnx ttsc --noEmit
           pnpm build
 
   unit:
