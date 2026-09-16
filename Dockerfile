@@ -1,10 +1,8 @@
 # syntax=docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
 
-ARG NODE_VERSION=26-slim@sha256:14bf3eac4bf209d906d3c41256597d3ab1f926b2e93a79e9bdfe1efd32454239
+ARG PNPM_VERSION=12@sha256:f37ab4b175b5b3bcd8f7334287f908959b09a849b73d5e13678d9fa70ffdb246
 
-FROM node:${NODE_VERSION} AS deps
-
-ENV PNPM_HOME="/pnpm"
+FROM ghcr.io/pnpm/pnpm:${PNPM_VERSION} AS deps
 
 WORKDIR /usr/src/app
 
@@ -12,7 +10,7 @@ RUN --mount=type=cache,target=/pnpm/store,sharing=locked \
     --mount=type=bind,source=package.json,target=/usr/src/app/package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=/usr/src/app/pnpm-lock.yaml \
     --mount=type=bind,source=pnpm-workspace.yaml,target=/usr/src/app/pnpm-workspace.yaml \
-    npm install -g pnpm && \
+    pnpm shim add node && \
     pnpm install --frozen-lockfile
 
 FROM deps AS build
