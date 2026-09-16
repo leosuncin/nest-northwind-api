@@ -3,8 +3,8 @@
 hk = { version = "latest", postinstall = "hk install --mise" }
 node = { version = "latest" }
 "npm:@usebruno/cli" = "latest"
-"npm:corepack" = { version = "latest", postinstall = "corepack enable" }
 opencode = "latest"
+pnpm = "latest"
 
 [env]
 MSSQL_DB = "northwind"
@@ -18,7 +18,6 @@ HK_MISE = 1
 [settings]
 experimental = true
 env_shell_expand = true
-node.corepack = true
 
 [hooks]
 postinstall = { task = "pnpm-install" }
