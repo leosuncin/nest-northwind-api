@@ -1,8 +1,8 @@
 apiVersion: v1
 data:
   data-source.js: |
-    const { DataSource } = require('typeorm');
-    module.exports = new DataSource({
+    import { DataSource } from 'typeorm';
+    export default new DataSource({
       type: 'mssql',
       host: 'sql-server',
       port: 1433,
@@ -10,11 +10,12 @@ data:
       password: process.env.MSSQL_PASSWORD,
       database: process.env.MSSQL_DB ?? 'northwind',
       synchronize: false,
-      migrations: ['migrations/*.js'],
+      migrations: ['database/migrations/*.js'],
+      seeds: ['database/seeds/*.seeder.js'],
       options: {
         encrypt: false,
         trustServerCertificate: true,
-        appName: 'TypeORM migrations',
+        appName: 'TypeORM',
       },
     });
 kind: ConfigMap
