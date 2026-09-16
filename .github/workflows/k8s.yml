@@ -60,18 +60,11 @@ jobs:
           kubectl cluster-info
           kubectl get nodes
 
-      - name: Generate an ephemeral password 🎰
-        id: password
-        run: |
-          PASSWORD="$(openssl rand -base64 32)"
-          echo "::add-mask::$PASSWORD"
-          echo "password=$PASSWORD" >> $GITHUB_OUTPUT
-
       - name: Replace values ✍️
         run: |
           yq -i '.spec.template.spec.containers.[0].image = "ttl.sh/api-${{ github.sha }}:1h"' k8s/server-deployment.yaml
           yq -i '.spec.template.spec.containers.[0].image = "ttl.sh/migrations-${{ github.sha }}:1h"' k8s/migrations-job.yaml
-          yq '.stringData.MSSQL_PASSWORD = "${{ steps.password.outputs.password }}" | .stringData.MSSQL_SA_PASSWORD = "${{ steps.password.outputs.password }}"' k8s/database-secret.example.yaml > k8s/database-secret.yaml
+          yq '.stringData.MSSQL_PASSWORD = "${{ secrets.MSSQL_SA_PASSWORD }}" | .stringData.MSSQL_SA_PASSWORD = "${{ secrets.MSSQL_SA_PASSWORD }}"' k8s/database-secret.example.yaml > k8s/database-secret.yaml
 
       - name: Deploy SQL Server 🏁
         run: |
