@@ -27,14 +27,19 @@ RUN --mount=type=cache,target=/pnpm/store,sharing=locked \
     pnpm prune --prod && \
     pnpm dlx node-prune
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:ea845027bc638317c4b14a8969cc931efc7546ecabb2de1e4dfb2fee835cca2c AS migrations
+FROM ghcr.io/pnpm/pnpm:${PNPM_VERSION} AS migrations
 
 WORKDIR /typeorm
 
-COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/dist/database/migrations ./migrations
+RUN --mount=type=cache,target=/pnpm/store,sharing=locked \
+    pnpm init && \
+    pnpm runtime set node && \
+    pnpm shim add node && \
+    pnpm add mssql typeorm typeorm-extension
 
-ENTRYPOINT ["/nodejs/bin/node", "./node_modules/typeorm/cli.js"]
+COPY --from=build /usr/src/app/dist .
+
+ENTRYPOINT ["/pnpm/bin/node", "./node_modules/typeorm/cli.js"]
 
 CMD ["migration:run", "-d", "/typeorm/data-source.js"]
 
