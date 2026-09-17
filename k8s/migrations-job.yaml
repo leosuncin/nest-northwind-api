@@ -16,7 +16,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrations
-          image: migrations:latest
+          image: nest-northwind-migrations:latest
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
