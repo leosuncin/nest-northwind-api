@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsDateString,
@@ -14,11 +14,11 @@ import {
 } from 'class-validator';
 
 import { Customer } from '../../customer/entities/customer.entity.js';
-import { Employee } from '../../employee/entities/employee.entity.js';
 import { IsExistingCustomer } from '../../customer/validators/is-existing-customer.validator.js';
+import { Employee } from '../../employee/entities/employee.entity.js';
 import { IsExistingEmployee } from '../../employee/validators/is-existing-employee.validator.js';
-import { IsExistingShipper } from '../../shipper/validators/is-existing-shipper.validator.js';
 import { Shipper } from '../../shipper/entities/shipper.entity.js';
+import { IsExistingShipper } from '../../shipper/validators/is-existing-shipper.validator.js';
 import { CreateOrderDetail } from './create-order-detail.dto.js';
 
 export class CreateOrder {
@@ -55,6 +55,11 @@ export class CreateOrder {
   @IsOptional()
   @IsNumber()
   @Min(0)
+  @Transform(({ value }) =>
+    Number.isFinite(value)
+      ? Math.round((value + Number.EPSILON) * 100) / 100
+      : value,
+  )
   readonly freight?: number;
 
   @IsOptional()

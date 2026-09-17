@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   Check,
   Column,
@@ -41,6 +42,11 @@ export class Order {
 
   @Column({ type: 'money', nullable: true, default: 0 })
   @Check('freight >= 0')
+  @Transform(({ value }) =>
+    Number.isFinite(value)
+      ? Math.round((value + Number.EPSILON) * 100) / 100
+      : value,
+  )
   freight = 0;
 
   @Column({ length: 40, nullable: true })
