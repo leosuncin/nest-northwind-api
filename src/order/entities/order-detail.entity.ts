@@ -7,6 +7,7 @@ import {
   PrimaryColumn,
   type Relation,
 } from 'typeorm';
+import { Transform } from 'class-transformer';
 
 import { Order } from './order.entity.js';
 import { Product } from '../../product/entities/product.entity.js';
@@ -29,6 +30,11 @@ export class OrderDetail {
 
   @Column({ type: 'money', default: 0 })
   @Check('unitPrice >= 0')
+  @Transform(({ value }) =>
+    Number.isFinite(value)
+      ? Math.round((value + Number.EPSILON) * 100) / 100
+      : value,
+  )
   unitPrice = 0;
 
   @Column({ type: 'smallint', default: 1 })
