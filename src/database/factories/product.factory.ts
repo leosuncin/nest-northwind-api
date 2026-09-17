@@ -15,10 +15,10 @@ export const productFactory = setSeederFactory(Product, () => {
   product.quantityPerUnit = faker.string
     .alpha({ length: { min: 3, max: 20 } })
     .substring(0, 20);
-  product.unitPrice = faker.number.float({
+  product.unitPrice = +faker.finance.amount({
     min: 0,
     max: 999,
-    fractionDigits: 2,
+    dec: 2,
   });
   product.unitsInStock = faker.number.int({ min: 0, max: 1000 });
   product.unitsOnOrder = faker.number.int({ min: 0, max: 1000 });
