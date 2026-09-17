@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: api:latest
+          image: nest-northwind-api:latest
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
