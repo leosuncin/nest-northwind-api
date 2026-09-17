@@ -1,43 +1,10 @@
+import type { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
-import { Shipper } from '../../shipper/entities/shipper.entity.js';
-import type { DataSource } from 'typeorm';
+import shipperFixtures from './shipper.json';
 
-export const speedyExpress = Object.assign<Shipper, Partial<Shipper>>(
-  new Shipper(),
-  {
-    id: 1,
-    companyName: 'Speedy Express',
-    phone: '(503) 555-9831',
-  },
-);
-
-export const unitedPackage = Object.assign<Shipper, Partial<Shipper>>(
-  new Shipper(),
-  {
-    id: 2,
-    companyName: 'United Package',
-    phone: '(503) 555-3199',
-  },
-);
-
-export const federalShipping = Object.assign<Shipper, Partial<Shipper>>(
-  new Shipper(),
-  {
-    id: 3,
-    companyName: 'Federal Shipping',
-    phone: '(503) 555-9931',
-  },
-);
-
-const shipperJsonFixtures = JSON.stringify(
-  [speedyExpress, unitedPackage, federalShipping],
-  (_key, value) => {
-    if (typeof value === 'boolean') {
-      return value ? 1 : 0;
-    }
-    return value as unknown;
-  },
+const shipperJsonFixtures = JSON.stringify(shipperFixtures, (_key, value) =>
+  typeof value === 'boolean' ? (value ? 1 : 0) : (value as unknown),
 );
 
 export default class ShipperSeeder implements Seeder {
