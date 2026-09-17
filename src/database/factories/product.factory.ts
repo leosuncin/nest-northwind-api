@@ -2,89 +2,11 @@ import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
 import { Product } from '../../product/entities/product.entity.js';
-import {
-  beverages,
-  condiments,
-  confections,
-  dairyProducts,
-  grainsCereals,
-  meatPoultry,
-  produce,
-  seafood,
-} from '../seeds/category.seeder.js';
-import {
-  auxJoyeuxEcclesiastiques,
-  bigfootBreweries,
-  cooperativaDeQuesosLasCabras,
-  escargotsNouveaux,
-  exoticLiquids,
-  foretsDerables,
-  formaggiFortiniSRL,
-  gaiPaturage,
-  gdayMate,
-  grandmaKellysHomestead,
-  heliSusswarenGmbHCoKG,
-  karkkiOy,
-  lekaTrading,
-  lyngbysild,
-  maMaison,
-  mayumis,
-  newEnglandSeafoodCannery,
-  newOrleansCajunDelights,
-  nordOstFischHandelsgesellschaftMbH,
-  norskeMeierier,
-  pastaButtiniSRL,
-  pavlovaLtd,
-  pbKnackebrodAB,
-  plutzerLebensmittelgrossmarkteAG,
-  refrescosAmericanasLTDA,
-  specialtyBiscuitsLtd,
-  svenskSjofoodaAB,
-  tokyoTraders,
-  zaanseSnoepfabriek,
-} from '../seeds/supplier.seeder.js';
+import categoryFixtures from '../seeds/category.json';
+import supplierFixtures from '../seeds/supplier.json';
 
-const categories = [
-  beverages,
-  condiments,
-  confections,
-  dairyProducts,
-  grainsCereals,
-  meatPoultry,
-  produce,
-  seafood,
-];
-const suppliers = [
-  auxJoyeuxEcclesiastiques,
-  bigfootBreweries,
-  cooperativaDeQuesosLasCabras,
-  escargotsNouveaux,
-  exoticLiquids,
-  foretsDerables,
-  formaggiFortiniSRL,
-  gaiPaturage,
-  gdayMate,
-  grandmaKellysHomestead,
-  heliSusswarenGmbHCoKG,
-  karkkiOy,
-  lekaTrading,
-  lyngbysild,
-  maMaison,
-  mayumis,
-  newEnglandSeafoodCannery,
-  newOrleansCajunDelights,
-  nordOstFischHandelsgesellschaftMbH,
-  norskeMeierier,
-  pastaButtiniSRL,
-  pavlovaLtd,
-  pbKnackebrodAB,
-  plutzerLebensmittelgrossmarkteAG,
-  refrescosAmericanasLTDA,
-  specialtyBiscuitsLtd,
-  svenskSjofoodaAB,
-  tokyoTraders,
-  zaanseSnoepfabriek,
-];
+const suppliers = Object.values(supplierFixtures);
+const categories = Object.values(categoryFixtures);
 
 export const productFactory = setSeederFactory(Product, () => {
   const product = new Product();
