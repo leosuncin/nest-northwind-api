@@ -31,6 +31,9 @@ jobs:
         with:
           cache: true
 
+      - name: Audit dependencies
+        run: pnpm audit signatures
+
       - name: Semantic release
         run: >-
           pnx --package=@semantic-release/changelog
