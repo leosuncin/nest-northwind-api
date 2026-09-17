@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsDefined,
@@ -11,10 +12,10 @@ import {
   Min,
 } from 'class-validator';
 
-import { IsExistingCategory } from '../../category/validators/is-existing-category.validator.js';
-import { IsExistingSupplier } from '../../supplier/validators/is-existing-supplier.validator.js';
-import { Supplier } from '../../supplier/entities/supplier.entity.js';
 import { Category } from '../../category/entities/category.entity.js';
+import { IsExistingCategory } from '../../category/validators/is-existing-category.validator.js';
+import { Supplier } from '../../supplier/entities/supplier.entity.js';
+import { IsExistingSupplier } from '../../supplier/validators/is-existing-supplier.validator.js';
 
 export class CreateProduct {
   @IsDefined()
@@ -43,6 +44,11 @@ export class CreateProduct {
   @IsOptional()
   @IsNumber()
   @Min(0)
+  @Transform(({ value }) =>
+    Number.isFinite(value)
+      ? Math.round((value + Number.EPSILON) * 100) / 100
+      : value,
+  )
   readonly unitPrice?: number;
 
   @IsOptional()
