@@ -25,10 +25,10 @@ jobs:
           cache: true
 
       - name: Semantic release
-        run: |-
-          pnx --allow-build \
-          --package=@semantic-release/changelog \
-          --package=@semantic-release/git \
+        run: >-
+          pnx --package=@semantic-release/changelog
+          --package=@semantic-release/git
+          --package=semantic-release
           semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN || secrets.GITHUB_TOKEN }}
