@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsDefined,
   IsInt,
@@ -7,8 +8,8 @@ import {
   Min,
 } from 'class-validator';
 
-import { IsExistingProduct } from '../../product/validators/is-existing-product.validator.js';
 import { Product } from '../../product/entities/product.entity.js';
+import { IsExistingProduct } from '../../product/validators/is-existing-product.validator.js';
 
 export class CreateOrderDetail {
   @IsDefined()
@@ -20,6 +21,11 @@ export class CreateOrderDetail {
   @IsDefined()
   @IsNumber()
   @Min(0)
+  @Transform(({ value }) =>
+    Number.isFinite(value)
+      ? Math.round((value + Number.EPSILON) * 100) / 100
+      : value,
+  )
   readonly unitPrice!: number;
 
   @IsDefined()
