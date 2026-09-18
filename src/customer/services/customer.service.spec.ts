@@ -108,11 +108,17 @@ describe('CustomerService', () => {
   test('given the customer id when the customer exist then it returns true', async () => {
     const id = 1;
 
-    void repository.countBy.mockResolvedValue(1);
+    const queryBuilder = mock<SelectQueryBuilder<Customer>>();
+    repository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.where.mockReturnThis();
+    queryBuilder.andWhere.mockReturnThis();
+    queryBuilder.setParameter.mockReturnThis();
+    void queryBuilder.getCount.mockResolvedValue(1);
 
-    const result = await service.exists(1);
+    const result = await service.exists({ id: 1 });
 
     expect(result).toBe(true);
-    expect(repository.countBy).toHaveBeenCalledWith({ id });
+    expect(repository.createQueryBuilder).toHaveBeenCalledOnce();
+    expect(queryBuilder.getCount).toHaveBeenCalled();
   });
 });

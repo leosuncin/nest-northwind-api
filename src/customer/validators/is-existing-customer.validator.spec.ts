@@ -51,7 +51,7 @@ describe('IsExistingCustomer validator', () => {
     expect(errors).toHaveLength(1);
     expect(errors[0].constraints).toMatchInlineSnapshot(`
       {
-        "IsExistingCustomer": "Customer with id 1 does not exist",
+        "IsExistingCustomer": "Customer with id equal to 1 does not exist",
       }
     `);
   });
