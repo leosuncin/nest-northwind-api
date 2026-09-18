@@ -1,7 +1,8 @@
 import { Test } from '@nestjs/testing';
+import { PartialType } from '@nestjs/mapped-types';
 import { mock, type Mocked } from '@suites/doubles.vitest';
 import { plainToInstance } from 'class-transformer';
-import { IsDefined, useContainer, validate } from 'class-validator';
+import { Allow, IsDefined, useContainer, validate } from 'class-validator';
 
 import { CustomerService } from '../services/customer.service.js';
 import {
@@ -76,11 +77,34 @@ describe('IsExistingCustomer validator', () => {
       expect(errors).toHaveLength(0);
       expect(service.exists).toHaveBeenCalledWith({ code: 'ACME' });
     });
+  });
 
-    it('given a DTO when the customer code exists then it should return an error', async () => {
+  describe('Update', () => {
+    class CreateDto {
+      @IsDefined()
+      @ExistingCustomer()
+      readonly code!: string;
+    }
+
+    class UpdateDto extends PartialType(CreateDto) {
+      @Allow()
+      readonly id!: number;
+    }
+
+    it('given a DTO when there is no customer with the same code then it should not be any errors', async () => {
+      void service.exists.mockResolvedValue(false);
+
+      const dto = plainToInstance(UpdateDto, { code: 'ACME', id: 2 });
+      const errors = await validate(dto);
+
+      expect(errors).toHaveLength(0);
+      expect(service.exists).toHaveBeenCalledWith({ code: 'ACME', id: 2 });
+    });
+
+    it('given a DTO when there is a customer with the same code then it should return an error', async () => {
       void service.exists.mockResolvedValue(true);
 
-      const dto = plainToInstance(CreateDto, { code: 'ALFKI' });
+      const dto = plainToInstance(UpdateDto, { code: 'ALFKI', id: 2 });
       const errors = await validate(dto);
 
       expect(errors).toHaveLength(1);
@@ -89,7 +113,7 @@ describe('IsExistingCustomer validator', () => {
           "ExistingCustomer": "Customer with code equal to ALFKI exists",
         }
       `);
-      expect(service.exists).toHaveBeenCalledWith({ code: 'ALFKI' });
+      expect(service.exists).toHaveBeenCalledWith({ code: 'ALFKI', id: 2 });
     });
   });
 });

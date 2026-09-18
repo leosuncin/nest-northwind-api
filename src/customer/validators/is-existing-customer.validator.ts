@@ -22,7 +22,13 @@ export class IsExistingCustomerConstraint implements ValidatorConstraintInterfac
         return false;
       }
 
-      const exist = await this.customerService.exists({ code: value });
+      const exist = await this.customerService.exists({
+        code: value,
+        id:
+          'id' in args.object && isId<Customer>(args.object.id)
+            ? args.object.id
+            : undefined,
+      });
 
       return !exist;
     }

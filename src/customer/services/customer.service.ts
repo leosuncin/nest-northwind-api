@@ -48,7 +48,9 @@ export class CustomerService {
       return false;
     }
 
-    let queryBuilder = this.customerRepository.createQueryBuilder('customer');
+    let queryBuilder = this.customerRepository
+      .createQueryBuilder('customer')
+      .select('customer.id');
 
     if (id && !code) {
       queryBuilder = queryBuilder
