@@ -14,7 +14,7 @@ import {
 } from 'class-validator';
 
 import { Customer } from '../../customer/entities/customer.entity.js';
-import { IsExistingCustomer } from '../../customer/validators/is-existing-customer.validator.js';
+import { ExistingCustomer } from '../../customer/validators/is-existing-customer.validator.js';
 import { Employee } from '../../employee/entities/employee.entity.js';
 import { IsExistingEmployee } from '../../employee/validators/is-existing-employee.validator.js';
 import { Shipper } from '../../shipper/entities/shipper.entity.js';
@@ -25,7 +25,7 @@ export class CreateOrder {
   @IsDefined()
   @IsInt()
   @IsPositive()
-  @IsExistingCustomer()
+  @ExistingCustomer()
   readonly customer!: Customer;
 
   @IsDefined()

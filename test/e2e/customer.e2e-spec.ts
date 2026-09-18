@@ -7,6 +7,7 @@ import {
   MSSQLServerContainer,
   type StartedMSSQLServerContainer,
 } from '@testcontainers/mssqlserver';
+import { useContainer } from 'class-validator';
 import request from 'supertest';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
@@ -43,6 +44,8 @@ describe('CustomerController (e2e)', () => {
     app = module.createNestApplication();
 
     await app.init();
+
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
   }, 60_000);
 
   beforeEach(async () => {
@@ -170,6 +173,28 @@ describe('CustomerController (e2e)', () => {
 
     expect(response.body).toHaveProperty('id');
     expect(response.body).toMatchObject(expect.objectContaining(newCustomer));
+  });
+
+  test('given a POST request to /customer when a customer with the same code is provided then it should abort the creation', async () => {
+    const newCustomer = await useSeederFactory(Customer).make({
+      code: 'ANATR',
+    });
+
+    const response = await request(app.getHttpServer())
+      .post('/customer')
+      .send(newCustomer)
+      .expect(HttpStatus.BAD_REQUEST)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toMatchInlineSnapshot(`
+      {
+        "error": "Bad Request",
+        "message": [
+          "Customer with code equal to ANATR exists",
+        ],
+        "statusCode": 400,
+      }
+    `);
   });
 
   test('given a GET request to /customer/:id when the customer exists then it should return the customer', async () => {
