@@ -10,9 +10,9 @@
     ],
     "@semantic-release/github",
     [
-      "@semantic-release/npm",
+      "@semantic-release/exec",
       {
-        "npmPublish": false
+        "prepareCmd": "pnpm version ${nextRelease.version} --no-git-tag-version --no-git-checks"
       }
     ],
     [
