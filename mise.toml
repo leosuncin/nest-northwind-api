@@ -1,5 +1,8 @@
 [tools]
+"github:immanuwell/dockerfile-roast" = "latest"
+"github:kjanat/actionlint" = "latest"
 "github:tj/node-prune" = "latest"
+hadolint = "latest"
 hk = { version = "latest", postinstall = "hk install --mise" }
 node = { version = "latest" }
 "npm:@usebruno/cli" = "latest"
@@ -7,6 +10,7 @@ opencode = "latest"
 pitchfork = "latest"
 pnpm = "latest"
 watchexec = "latest"
+zizmor = "latest"
 
 [env]
 MSSQL_DB = "northwind"
