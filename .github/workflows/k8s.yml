@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build the image 🐋
@@ -51,6 +54,8 @@ jobs:
     steps:
       - name: Checkout 📥
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Create a ephemeral Kubernetes cluster with Kind ⚓
         uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc
