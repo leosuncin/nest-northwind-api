@@ -213,12 +213,30 @@ describe('CustomerController (e2e)', () => {
 
     const response = await request(app.getHttpServer())
       .patch(`/customer/${customer.id}`)
-      .send({ companyName: 'Updated Company' })
+      .send({ code: customer.code, companyName: 'Updated Company' })
       .expect(HttpStatus.OK)
       .expect('Content-Type', /json/);
 
     expect(response.body).toHaveProperty('id', customer.id);
     expect(response.body).toHaveProperty('companyName', 'Updated Company');
+  });
+
+  test('given a PATCH request to /customer/:id when the code of other customer is provided then it should abort the update', async () => {
+    const response = await request(app.getHttpServer())
+      .patch('/customer/10')
+      .send({ code: 'ANATR' })
+      .expect(HttpStatus.BAD_REQUEST)
+      .expect('Content-Type', /json/);
+
+    expect(response.body).toMatchInlineSnapshot(`
+      {
+        "error": "Bad Request",
+        "message": [
+          "Customer with code equal to ANATR exists",
+        ],
+        "statusCode": 400,
+      }
+    `);
   });
 
   test('given a DELETE request to /customer/:id when the customer exists then it should delete the customer', async () => {

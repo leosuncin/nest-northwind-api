@@ -24,6 +24,7 @@ import { UpdateCustomer } from '../dto/update-customer.dto.js';
 import { Customer } from '../entities/customer.entity.js';
 import { CustomerPipe } from '../pipes/customer.pipe.js';
 import { CustomerService } from '../services/customer.service.js';
+import { SetIdInterceptor } from '../interceptors/set-id.interceptor.js';
 
 @Controller('customer')
 @UseFilters(EntityNotFoundFilter)
@@ -50,6 +51,7 @@ export class CustomerController {
   }
 
   @Patch(':id')
+  @UseInterceptors(SetIdInterceptor)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
   update(
     @Param('id', ParseIntPipe, CustomerPipe) customer: Customer,

@@ -78,7 +78,7 @@ describe('CustomerService', () => {
       code: 'TEST1',
       companyName: 'Test Company',
     } as Customer;
-    const changes: UpdateCustomer = { companyName: 'Updated Company' };
+    const changes: UpdateCustomer = { id: 1, companyName: 'Updated Company' };
 
     repository.merge.mockReturnValue(customer);
     repository.save.mockResolvedValue(customer);
@@ -106,10 +106,9 @@ describe('CustomerService', () => {
   });
 
   test('given the customer id when the customer exist then it returns true', async () => {
-    const id = 1;
-
     const queryBuilder = mock<SelectQueryBuilder<Customer>>();
     repository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.select.mockReturnThis();
     queryBuilder.where.mockReturnThis();
     queryBuilder.andWhere.mockReturnThis();
     queryBuilder.setParameter.mockReturnThis();
@@ -119,6 +118,52 @@ describe('CustomerService', () => {
 
     expect(result).toBe(true);
     expect(repository.createQueryBuilder).toHaveBeenCalledOnce();
+    expect(queryBuilder.where).toHaveBeenCalledWith('customer.id = :id');
+    expect(queryBuilder.setParameter).toHaveBeenCalledWith('id', 1);
+    expect(queryBuilder.setParameter).toHaveBeenCalledAfter(queryBuilder.where);
+    expect(queryBuilder.getCount).toHaveBeenCalled();
+  });
+
+  test('given the customer code when the customer exist then it returns true', async () => {
+    const queryBuilder = mock<SelectQueryBuilder<Customer>>();
+    repository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.select.mockReturnThis();
+    queryBuilder.where.mockReturnThis();
+    queryBuilder.andWhere.mockReturnThis();
+    queryBuilder.setParameter.mockReturnThis();
+    void queryBuilder.getCount.mockResolvedValue(1);
+
+    const result = await service.exists({ code: 'BOTTM' });
+
+    expect(result).toBe(true);
+    expect(repository.createQueryBuilder).toHaveBeenCalledOnce();
+    expect(queryBuilder.where).toHaveBeenCalledWith('customer.code = :code');
+    expect(queryBuilder.setParameter).toHaveBeenCalledWith('code', 'BOTTM');
+    expect(queryBuilder.setParameter).toHaveBeenCalledAfter(queryBuilder.where);
+    expect(queryBuilder.getCount).toHaveBeenCalled();
+  });
+
+  test('given the customer code and the id when the customer does not exist then it returns true', async () => {
+    const queryBuilder = mock<SelectQueryBuilder<Customer>>();
+    repository.createQueryBuilder.mockReturnValue(queryBuilder);
+    queryBuilder.select.mockReturnThis();
+    queryBuilder.where.mockReturnThis();
+    queryBuilder.andWhere.mockReturnThis();
+    queryBuilder.setParameter.mockReturnThis();
+    void queryBuilder.getCount.mockResolvedValue(1);
+
+    const result = await service.exists({ code: 'ACME', id: 1 });
+
+    expect(result).toBe(true);
+    expect(repository.createQueryBuilder).toHaveBeenCalledOnce();
+    expect(queryBuilder.where).toHaveBeenCalledWith('customer.id <> :id');
+    expect(queryBuilder.setParameter).toHaveBeenNthCalledWith(1, 'id', 1);
+    expect(queryBuilder.andWhere).toHaveBeenCalledWith('customer.code = :code');
+    expect(queryBuilder.setParameter).toHaveBeenNthCalledWith(
+      2,
+      'code',
+      'ACME',
+    );
     expect(queryBuilder.getCount).toHaveBeenCalled();
   });
 });

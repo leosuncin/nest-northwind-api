@@ -79,7 +79,7 @@ describe('CustomerController', () => {
       code: 'TEST1',
       companyName: 'Test Company',
     } as Customer;
-    const changes: UpdateCustomer = { companyName: 'Updated Company' };
+    const changes: UpdateCustomer = { id: 1, companyName: 'Updated Company' };
     const updatedCustomer = { ...customer, ...changes };
 
     service.update.mockResolvedValue(updatedCustomer);
