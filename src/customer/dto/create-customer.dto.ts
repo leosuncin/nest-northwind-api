@@ -6,11 +6,14 @@ import {
   MaxLength,
 } from 'class-validator';
 
+import { ExistingCustomer } from '../validators/is-existing-customer.validator.js';
+
 export class CreateCustomer {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
   @MaxLength(5)
+  @ExistingCustomer()
   readonly code!: string;
 
   @IsDefined()

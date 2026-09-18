@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  type ValidationArguments,
   type ValidationOptions,
   ValidatorConstraint,
   type ValidatorConstraintInterface,
@@ -11,11 +12,21 @@ import { Customer } from '../entities/customer.entity.js';
 import { CustomerService } from '../services/customer.service.js';
 
 @Injectable()
-@ValidatorConstraint({ name: 'IsExistingCustomer', async: true })
+@ValidatorConstraint({ name: 'ExistingCustomer', async: true })
 export class IsExistingCustomerConstraint implements ValidatorConstraintInterface {
   constructor(private customerService: CustomerService) {}
 
-  async validate(value: unknown): Promise<boolean> {
+  async validate(value: unknown, args: ValidationArguments): Promise<boolean> {
+    if (args.property === 'code') {
+      if (typeof value !== 'string') {
+        return false;
+      }
+
+      const exist = await this.customerService.exists({ code: value });
+
+      return !exist;
+    }
+
     if (!isId<Customer>(value)) {
       return false;
     }
@@ -23,12 +34,14 @@ export class IsExistingCustomerConstraint implements ValidatorConstraintInterfac
     return this.customerService.exists({ id: value });
   }
 
-  defaultMessage(): string {
-    return 'Customer with id equal to $value does not exist';
+  defaultMessage({ property }: ValidationArguments): string {
+    return property === 'code'
+      ? `Customer with code equal to $value exists`
+      : `Customer with id equal to $value does not exist`;
   }
 }
 
-export const IsExistingCustomer =
+export const ExistingCustomer =
   (options?: ValidationOptions): PropertyDecorator =>
   (object, propertyKey) => {
     registerDecorator({
