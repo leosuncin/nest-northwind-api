@@ -43,8 +43,30 @@ export class CustomerService {
     return this.customerRepository.remove(customer);
   }
 
-  async exists(id: Customer['id']) {
-    const count = await this.customerRepository.countBy({ id });
+  async exists({ code, id }: Partial<Pick<Customer, 'id' | 'code'>>) {
+    if (code == null && id == null) {
+      return false;
+    }
+
+    let queryBuilder = this.customerRepository.createQueryBuilder('customer');
+
+    if (id && !code) {
+      queryBuilder = queryBuilder
+        .where('customer.id = :id')
+        .setParameter('id', id);
+    } else if (code && !id) {
+      queryBuilder = queryBuilder
+        .where('customer.code = :code')
+        .setParameter('code', code);
+    } else {
+      queryBuilder = queryBuilder
+        .where('customer.id <> :id')
+        .setParameter('id', id)
+        .andWhere('customer.code = :code')
+        .setParameter('code', code);
+    }
+
+    const count = await queryBuilder.getCount();
 
     return count > 0;
   }

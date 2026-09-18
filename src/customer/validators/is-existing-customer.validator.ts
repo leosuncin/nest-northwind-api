@@ -20,11 +20,11 @@ export class IsExistingCustomerConstraint implements ValidatorConstraintInterfac
       return false;
     }
 
-    return this.customerService.exists(value);
+    return this.customerService.exists({ id: value });
   }
 
   defaultMessage(): string {
-    return 'Customer with id $value does not exist';
+    return 'Customer with id equal to $value does not exist';
   }
 }
 
