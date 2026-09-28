@@ -1,73 +1,26 @@
-import { HttpStatus, type INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
-
-import { createURLCodec, type URLCodec } from '@rapiq/codec-url';
+import { HttpStatus } from '@nestjs/common';
+import { createURLCodec } from '@rapiq/codec-url';
 import {
   defineQuery,
   notContains,
   type QueryBuildInput,
-  SchemaRegistry,
   startsWith,
 } from '@rapiq/core';
-import {
-  MSSQLServerContainer,
-  type StartedMSSQLServerContainer,
-} from '@testcontainers/mssqlserver';
 import request from 'supertest';
-import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import { useSeederFactory } from 'typeorm-extension';
 
-import { App } from 'supertest/types.js';
-import { AppModule } from '../../src/app.module.js';
-import typeormConfig from '../../src/config/typeorm.js';
 import type { CreateEmployee } from '../../src/employee/dto/create-employee.dto.js';
 import type { UpdateEmployee } from '../../src/employee/dto/update-employee.dto.js';
 import { Employee } from '../../src/employee/entities/employee.entity.js';
-import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
-import { buildTypeOrmOptions } from './helpers.js';
+import type { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
+import { test } from './extend-test.js';
+
+const codec = createURLCodec();
 
 describe('EmployeeController (e2e)', () => {
-  let app: INestApplication<App>;
-  let container: StartedMSSQLServerContainer;
-  let codec: URLCodec;
-
-  beforeAll(async () => {
-    container = await new MSSQLServerContainer(
-      'mcr.microsoft.com/mssql/server:2022-latest',
-    )
-      .acceptLicense()
-      .withEnvironment({ MSSQL_PID: 'Express' })
-      .withWaitForMessage(/.*Attribute synchronization manager initialized*/)
-      .start();
-
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(typeormConfig.KEY)
-      .useValue(await buildTypeOrmOptions(container))
-      .compile();
-
-    app = module.createNestApplication();
-
-    await app.init();
-
-    codec = createURLCodec(app.get(SchemaRegistry));
-  }, 60_000);
-
-  beforeEach(async () => {
-    const dataSource = app.get(getDataSourceToken());
-
-    setDataSource(dataSource);
-
-    await runSeeders(dataSource);
-  });
-
-  afterAll(async () => {
-    await app.close();
-    await container.stop();
-  });
-
-  test('given a POST request to /employee when a valid employee is provided then it should create and return the created employee', async () => {
+  test('given a POST request to /employee when a valid employee is provided then it should create and return the created employee', async ({
+    app,
+  }) => {
     const newEmployee: CreateEmployee = {
       lastName: 'Doe',
       firstName: 'John',
@@ -112,7 +65,9 @@ describe('EmployeeController (e2e)', () => {
     });
   });
 
-  test('given a GET request to /employee when no parameters are provided then it should use the default pagination values', async () => {
+  test('given a GET request to /employee when no parameters are provided then it should use the default pagination values', async ({
+    app,
+  }) => {
     const response = await request(app.getHttpServer())
       .get('/employee')
       .expect(HttpStatus.OK)
@@ -124,7 +79,7 @@ describe('EmployeeController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test.each([
+  test.for([
     [
       {
         fields: ['firstName', 'lastName', 'title'],
@@ -159,7 +114,7 @@ describe('EmployeeController (e2e)', () => {
     ],
   ])(
     'given a GET request to /employee when filters %o then it should return a pagination %o',
-    async (filters, meta) => {
+    async ([filters, meta], { app }) => {
       const query = defineQuery<Employee>(filters);
       const response = await request(app.getHttpServer())
         .get('/employee')
@@ -172,7 +127,9 @@ describe('EmployeeController (e2e)', () => {
     },
   );
 
-  test('given a GET request to /employee/:id when the employee exists then it should return the employee', async () => {
+  test('given a GET request to /employee/:id when the employee exists then it should return the employee', async ({
+    app,
+  }) => {
     const employee = await useSeederFactory(Employee).save({
       firstName: 'Jane',
       lastName: 'Doe',
@@ -193,7 +150,9 @@ describe('EmployeeController (e2e)', () => {
     );
   });
 
-  test('given a PATCH request to /employee/:id when the employee exists then it should update and return the updated employee', async () => {
+  test('given a PATCH request to /employee/:id when the employee exists then it should update and return the updated employee', async ({
+    app,
+  }) => {
     const employee = await useSeederFactory(Employee).save({
       firstName: 'Jane',
       lastName: 'Doe',
@@ -213,7 +172,9 @@ describe('EmployeeController (e2e)', () => {
     expect(response.body).toMatchObject(expect.objectContaining(updatedData));
   });
 
-  test('given a DELETE request to /employee/:id when the employee exists then it should delete the employee', async () => {
+  test('given a DELETE request to /employee/:id when the employee exists then it should delete the employee', async ({
+    app,
+  }) => {
     const employee = await useSeederFactory(Employee).save({
       firstName: 'Jane',
       lastName: 'Doe',

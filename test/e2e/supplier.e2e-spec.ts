@@ -1,69 +1,20 @@
-import { HttpStatus, type INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
-import { createURLCodec, type URLCodec } from '@rapiq/codec-url';
-import {
-  contains,
-  defineQuery,
-  type QueryBuildInput,
-  SchemaRegistry,
-} from '@rapiq/core';
-import {
-  MSSQLServerContainer,
-  type StartedMSSQLServerContainer,
-} from '@testcontainers/mssqlserver';
+import { HttpStatus } from '@nestjs/common';
+import { createURLCodec } from '@rapiq/codec-url';
+import { contains, defineQuery, type QueryBuildInput } from '@rapiq/core';
 import request from 'supertest';
-import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import { useSeederFactory } from 'typeorm-extension';
 
-import { App } from 'supertest/types.js';
-import { AppModule } from '../../src/app.module.js';
-import typeormConfig from '../../src/config/typeorm.js';
-import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
-import { CreateSupplier } from '../../src/supplier/dto/create-supplier.dto.js';
+import type { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
+import type { CreateSupplier } from '../../src/supplier/dto/create-supplier.dto.js';
 import { Supplier } from '../../src/supplier/entities/supplier.entity.js';
-import { buildTypeOrmOptions } from './helpers.js';
+import { test } from './extend-test.js';
+
+const codec = createURLCodec();
 
 describe('SupplierController (e2e)', () => {
-  let app: INestApplication<App>;
-  let container: StartedMSSQLServerContainer;
-  let codec: URLCodec;
-
-  beforeAll(async () => {
-    container = await new MSSQLServerContainer(
-      'mcr.microsoft.com/mssql/server:2022-latest',
-    )
-      .acceptLicense()
-      .withEnvironment({ MSSQL_PID: 'Express' })
-      .withWaitForMessage(/.*Attribute synchronization manager initialized*/)
-      .start();
-
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(typeormConfig.KEY)
-      .useValue(await buildTypeOrmOptions(container))
-      .compile();
-
-    app = module.createNestApplication();
-
-    await app.init();
-
-    codec = createURLCodec(app.get(SchemaRegistry));
-  }, 60_000);
-
-  beforeEach(async () => {
-    const dataSource = app.get(getDataSourceToken());
-
-    setDataSource(dataSource);
-    await runSeeders(dataSource);
-  });
-
-  afterAll(async () => {
-    await app.close();
-    await container.stop();
-  });
-
-  test('given a GET request to /supplier when no params are provided then it returns a paginated list', async () => {
+  test('given a GET request to /supplier when no params are provided then it returns a paginated list', async ({
+    app,
+  }) => {
     const response = await request(app.getHttpServer())
       .get('/supplier')
       .expect(HttpStatus.OK)
@@ -75,7 +26,7 @@ describe('SupplierController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test.each([
+  test.for([
     [
       {
         fields: ['companyName', 'contactName', 'contactTitle'],
@@ -114,10 +65,7 @@ describe('SupplierController (e2e)', () => {
     ],
   ])(
     'given a GET request to /supplier when filters %j then it returns a pagination %o',
-    async (
-      filters: QueryBuildInput<Supplier>,
-      meta: Pagination<Supplier>['meta'],
-    ) => {
+    async ([filters, meta], { app }) => {
       const query = defineQuery<Supplier>(filters);
       const response = await request(app.getHttpServer())
         .get('/supplier')
@@ -139,7 +87,9 @@ describe('SupplierController (e2e)', () => {
     },
   );
 
-  test('given a POST request to /supplier when a valid supplier is provided then it creates and returns it', async () => {
+  test('given a POST request to /supplier when a valid supplier is provided then it creates and returns it', async ({
+    app,
+  }) => {
     const newSupplier: CreateSupplier = {
       companyName: 'Test Supplier',
       contactName: 'John Doe',
@@ -157,28 +107,36 @@ describe('SupplierController (e2e)', () => {
     expect(response.body).toMatchObject(expect.objectContaining(newSupplier));
   });
 
-  test('given a POST request to /supplier when companyName is missing then it returns a validation error', async () => {
+  test('given a POST request to /supplier when companyName is missing then it returns a validation error', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/supplier')
       .send({ contactName: 'John Doe' })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /supplier when companyName exceeds 40 characters then it returns a validation error', async () => {
+  test('given a POST request to /supplier when companyName exceeds 40 characters then it returns a validation error', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/supplier')
       .send({ companyName: 'a'.repeat(41) })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /supplier when homePage exceeds 255 characters then it returns a validation error', async () => {
+  test('given a POST request to /supplier when homePage exceeds 255 characters then it returns a validation error', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/supplier')
       .send({ companyName: 'Test Supplier', homePage: 'a'.repeat(256) })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a GET request to /supplier/:id when the supplier exists then it returns the supplier', async () => {
+  test('given a GET request to /supplier/:id when the supplier exists then it returns the supplier', async ({
+    app,
+  }) => {
     const supplier = await useSeederFactory(Supplier).save();
 
     const response = await request(app.getHttpServer())
@@ -189,7 +147,9 @@ describe('SupplierController (e2e)', () => {
     expect(response.body).toMatchObject(expect.objectContaining(supplier));
   });
 
-  test('given a PATCH request to /supplier/:id when the supplier exists then it updates and returns it', async () => {
+  test('given a PATCH request to /supplier/:id when the supplier exists then it updates and returns it', async ({
+    app,
+  }) => {
     const supplier = await useSeederFactory(Supplier).save();
 
     const response = await request(app.getHttpServer())
@@ -202,7 +162,9 @@ describe('SupplierController (e2e)', () => {
     expect(response.body).toHaveProperty('companyName', 'Updated Supplier');
   });
 
-  test('given a PATCH request to /supplier/:id when companyName exceeds 40 characters then it returns a validation error', async () => {
+  test('given a PATCH request to /supplier/:id when companyName exceeds 40 characters then it returns a validation error', async ({
+    app,
+  }) => {
     const supplier = await useSeederFactory(Supplier).save();
 
     await request(app.getHttpServer())
@@ -211,7 +173,9 @@ describe('SupplierController (e2e)', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a DELETE request to /supplier/:id when the supplier exists then it deletes the supplier', async () => {
+  test('given a DELETE request to /supplier/:id when the supplier exists then it deletes the supplier', async ({
+    app,
+  }) => {
     const supplier = await useSeederFactory(Supplier).save();
 
     await request(app.getHttpServer())

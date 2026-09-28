@@ -1,7 +1,5 @@
-import { HttpStatus, type INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
-import { createURLCodec, URLCodec } from '@rapiq/codec-url';
+import { HttpStatus } from '@nestjs/common';
+import { createURLCodec } from '@rapiq/codec-url';
 import {
   and,
   defineQuery,
@@ -9,67 +7,22 @@ import {
   gt,
   gte,
   lte,
-  QueryBuildInput,
-  SchemaRegistry,
+  type QueryBuildInput,
 } from '@rapiq/core';
-import {
-  MSSQLServerContainer,
-  type StartedMSSQLServerContainer,
-} from '@testcontainers/mssqlserver';
-import { useContainer } from 'class-validator';
 import request from 'supertest';
-import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import { useSeederFactory } from 'typeorm-extension';
 
-import { App } from 'supertest/types.js';
-import { AppModule } from '../../src/app.module.js';
-import typeormConfig from '../../src/config/typeorm.js';
-import { CreateProduct } from '../../src/product/dto/create-product.dto.js';
+import type { CreateProduct } from '../../src/product/dto/create-product.dto.js';
 import { Product } from '../../src/product/entities/product.entity.js';
-import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
-import { buildTypeOrmOptions } from './helpers.js';
+import type { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
+import { test } from './extend-test.js';
+
+const codec = createURLCodec();
 
 describe('ProductController (e2e)', () => {
-  let app: INestApplication<App>;
-  let container: StartedMSSQLServerContainer;
-  let codec: URLCodec;
-
-  beforeAll(async () => {
-    container = await new MSSQLServerContainer(
-      'mcr.microsoft.com/mssql/server:2022-latest',
-    )
-      .acceptLicense()
-      .withEnvironment({ MSSQL_PID: 'Express' })
-      .withWaitForMessage(/.*Attribute synchronization manager initialized*/)
-      .start();
-
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(typeormConfig.KEY)
-      .useValue(await buildTypeOrmOptions(container))
-      .compile();
-
-    useContainer(module, { fallbackOnErrors: true });
-    app = module.createNestApplication();
-
-    await app.init();
-
-    codec = createURLCodec(app.get(SchemaRegistry));
-  }, 60_000);
-
-  beforeEach(async () => {
-    const dataSource = app.get(getDataSourceToken());
-
-    setDataSource(dataSource);
-    await runSeeders(dataSource);
-  });
-
-  afterAll(async () => {
-    await app.close();
-    await container.stop();
-  });
-
-  test('given a GET request to /product when no params are provided then it should return a paginated list', async () => {
+  test('given a GET request to /product when no params are provided then it should return a paginated list', async ({
+    app,
+  }) => {
     const response = await request(app.getHttpServer())
       .get('/product')
       .expect(HttpStatus.OK)
@@ -81,7 +34,7 @@ describe('ProductController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test.each([
+  test.for([
     [
       {
         filters: and(
@@ -117,7 +70,7 @@ describe('ProductController (e2e)', () => {
     ],
   ])(
     'given a GET request to /product when filters %j then it should return a pagination %o',
-    async (filters, meta) => {
+    async ([filters, meta], { app }) => {
       const query = defineQuery(filters);
       const response = await request(app.getHttpServer())
         .get('/product')
@@ -130,7 +83,9 @@ describe('ProductController (e2e)', () => {
     },
   );
 
-  test('given a POST request to /product when a valid product is provided then it should create and return the created product', async () => {
+  test('given a POST request to /product when a valid product is provided then it should create and return the created product', async ({
+    app,
+  }) => {
     const newProduct = {
       name: 'Test Product',
       supplier: 1,
@@ -157,42 +112,54 @@ describe('ProductController (e2e)', () => {
     });
   });
 
-  test('given a POST request to /product when name is missing then it should return a bad request', async () => {
+  test('given a POST request to /product when name is missing then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/product')
       .send({ unitPrice: 9.99 })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /product when name exceeds 40 characters then it should return a bad request', async () => {
+  test('given a POST request to /product when name exceeds 40 characters then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/product')
       .send({ name: 'x'.repeat(41) })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /product when unitPrice is negative then it should return a bad request', async () => {
+  test('given a POST request to /product when unitPrice is negative then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/product')
       .send({ name: 'Test Product', unitPrice: -1 })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /product when unitsInStock is negative then it should return a bad request', async () => {
+  test('given a POST request to /product when unitsInStock is negative then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/product')
       .send({ name: 'Test Product', unitsInStock: -1 })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /product when category is not an integer then it should return a bad request', async () => {
+  test('given a POST request to /product when category is not an integer then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/product')
       .send({ name: 'Test Product', category: 'abc' })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a GET request to /product/:id when the product exists then it should return the product', async () => {
+  test('given a GET request to /product/:id when the product exists then it should return the product', async ({
+    app,
+  }) => {
     const product = await useSeederFactory(Product).save();
 
     const response = await request(app.getHttpServer())
@@ -219,7 +186,9 @@ describe('ProductController (e2e)', () => {
     );
   });
 
-  test('given a PATCH request to /product/:id when the product exists then it should update and return the updated product', async () => {
+  test('given a PATCH request to /product/:id when the product exists then it should update and return the updated product', async ({
+    app,
+  }) => {
     const product = await useSeederFactory(Product).save();
 
     const response = await request(app.getHttpServer())
@@ -232,7 +201,9 @@ describe('ProductController (e2e)', () => {
     expect(response.body).toHaveProperty('name', 'Updated Product');
   });
 
-  test('given a PATCH request to /product/:id when name exceeds 40 characters then it should return a bad request', async () => {
+  test('given a PATCH request to /product/:id when name exceeds 40 characters then it should return a bad request', async ({
+    app,
+  }) => {
     const product = await useSeederFactory(Product).save();
 
     await request(app.getHttpServer())
@@ -241,7 +212,9 @@ describe('ProductController (e2e)', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a DELETE request to /product/:id when the product exists then it should delete the product', async () => {
+  test('given a DELETE request to /product/:id when the product exists then it should delete the product', async ({
+    app,
+  }) => {
     const product = await useSeederFactory(Product).save();
 
     await request(app.getHttpServer())
