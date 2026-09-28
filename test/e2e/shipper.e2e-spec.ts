@@ -1,58 +1,15 @@
-import { HttpStatus, type INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
-import {
-  MSSQLServerContainer,
-  type StartedMSSQLServerContainer,
-} from '@testcontainers/mssqlserver';
+import { HttpStatus } from '@nestjs/common';
 import request from 'supertest';
-import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import { useSeederFactory } from 'typeorm-extension';
 
-import { App } from 'supertest/types.js';
-import { AppModule } from '../../src/app.module.js';
-import typeormConfig from '../../src/config/typeorm.js';
 import type { CreateShipper } from '../../src/shipper/dto/create-shipper.dto.js';
 import { Shipper } from '../../src/shipper/entities/shipper.entity.js';
-import { buildTypeOrmOptions } from './helpers.js';
+import { test } from './extend-test.js';
 
 describe('ShipperController (e2e)', () => {
-  let app: INestApplication<App>;
-  let container: StartedMSSQLServerContainer;
-
-  beforeAll(async () => {
-    container = await new MSSQLServerContainer(
-      'mcr.microsoft.com/mssql/server:2022-latest',
-    )
-      .acceptLicense()
-      .withEnvironment({ MSSQL_PID: 'Express' })
-      .withWaitForMessage(/.*Attribute synchronization manager initialized*/)
-      .start();
-
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(typeormConfig.KEY)
-      .useValue(await buildTypeOrmOptions(container))
-      .compile();
-
-    app = module.createNestApplication();
-
-    await app.init();
-  }, 60_000);
-
-  beforeEach(async () => {
-    const dataSource = app.get(getDataSourceToken());
-
-    setDataSource(dataSource);
-    await runSeeders(dataSource);
-  });
-
-  afterAll(async () => {
-    await app.close();
-    await container.stop();
-  });
-
-  test('given a GET request to /shipper when no query params are provided then it should return a paginated list', async () => {
+  test('given a GET request to /shipper when no query params are provided then it should return a paginated list', async ({
+    app,
+  }) => {
     const response = await request(app.getHttpServer())
       .get('/shipper')
       .expect(HttpStatus.OK)
@@ -69,7 +26,9 @@ describe('ShipperController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.hasPreviousPage', false);
   });
 
-  test('given a POST request to /shipper when a valid shipper is provided then it should create and return the created shipper', async () => {
+  test('given a POST request to /shipper when a valid shipper is provided then it should create and return the created shipper', async ({
+    app,
+  }) => {
     const newShipper: CreateShipper = {
       companyName: 'Test Shipper',
       phone: '(503) 555-9831',
@@ -85,7 +44,9 @@ describe('ShipperController (e2e)', () => {
     expect(response.body).toMatchObject(expect.objectContaining(newShipper));
   });
 
-  test('given a GET request to /shipper/:id when the shipper exists then it should return the shipper', async () => {
+  test('given a GET request to /shipper/:id when the shipper exists then it should return the shipper', async ({
+    app,
+  }) => {
     const shipper = await useSeederFactory(Shipper).save();
 
     const response = await request(app.getHttpServer())
@@ -96,7 +57,9 @@ describe('ShipperController (e2e)', () => {
     expect(response.body).toMatchObject(expect.objectContaining(shipper));
   });
 
-  test('given a PATCH request to /shipper/:id when the shipper exists then it should update and return the updated shipper', async () => {
+  test('given a PATCH request to /shipper/:id when the shipper exists then it should update and return the updated shipper', async ({
+    app,
+  }) => {
     const shipper = await useSeederFactory(Shipper).save();
 
     const response = await request(app.getHttpServer())
@@ -109,7 +72,9 @@ describe('ShipperController (e2e)', () => {
     expect(response.body).toHaveProperty('companyName', 'Updated Shipper');
   });
 
-  test('given a DELETE request to /shipper/:id when the shipper exists then it should delete the shipper', async () => {
+  test('given a DELETE request to /shipper/:id when the shipper exists then it should delete the shipper', async ({
+    app,
+  }) => {
     const shipper = await useSeederFactory(Shipper).save();
 
     await request(app.getHttpServer())

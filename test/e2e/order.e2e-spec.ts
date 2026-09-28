@@ -1,72 +1,21 @@
-import { HttpStatus, type INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
-import { createURLCodec, URLCodec } from '@rapiq/codec-url';
-import {
-  defineQuery,
-  eq,
-  gte,
-  QueryBuildInput,
-  SchemaRegistry,
-} from '@rapiq/core';
-import {
-  MSSQLServerContainer,
-  type StartedMSSQLServerContainer,
-} from '@testcontainers/mssqlserver';
-import { useContainer } from 'class-validator';
+import { HttpStatus } from '@nestjs/common';
+import { createURLCodec } from '@rapiq/codec-url';
+import { defineQuery, eq, gte, type QueryBuildInput } from '@rapiq/core';
 import request from 'supertest';
-import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import { useSeederFactory } from 'typeorm-extension';
 
-import { App } from 'supertest/types.js';
-import { AppModule } from '../../src/app.module.js';
-import typeormConfig from '../../src/config/typeorm.js';
-import { CreateOrder } from '../../src/order/dto/create-order.dto.js';
+import type { CreateOrder } from '../../src/order/dto/create-order.dto.js';
 import { OrderDetail } from '../../src/order/entities/order-detail.entity.js';
 import { Order } from '../../src/order/entities/order.entity.js';
-import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
-import { buildTypeOrmOptions } from './helpers.js';
+import type { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
+import { test } from './extend-test.js';
+
+const codec = createURLCodec();
 
 describe('OrderController (e2e)', () => {
-  let app: INestApplication<App>;
-  let container: StartedMSSQLServerContainer;
-  let codec: URLCodec;
-
-  beforeAll(async () => {
-    container = await new MSSQLServerContainer(
-      'mcr.microsoft.com/mssql/server:2022-latest',
-    )
-      .acceptLicense()
-      .withEnvironment({ MSSQL_PID: 'Express' })
-      .withWaitForMessage(/.*Attribute synchronization manager initialized*/)
-      .start();
-
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(typeormConfig.KEY)
-      .useValue(await buildTypeOrmOptions(container))
-      .compile();
-
-    useContainer(module, { fallbackOnErrors: true });
-    app = module.createNestApplication();
-
-    await app.init();
-
-    codec = createURLCodec(app.get(SchemaRegistry));
-  }, 60_000);
-
-  beforeEach(async () => {
-    const dataSource = app.get(getDataSourceToken());
-    setDataSource(dataSource);
-    await runSeeders(dataSource);
-  });
-
-  afterAll(async () => {
-    await app.close();
-    await container.stop();
-  });
-
-  test('given a GET request to /order when no params are provided then it should return a paginated list', async () => {
+  test('given a GET request to /order when no params are provided then it should return a paginated list', async ({
+    app,
+  }) => {
     const response = await request(app.getHttpServer())
       .get('/order')
       .expect(HttpStatus.OK)
@@ -78,7 +27,7 @@ describe('OrderController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test.each([
+  test.for([
     [
       {
         filters: eq<Order>('shipCountry', 'Germany'),
@@ -110,7 +59,7 @@ describe('OrderController (e2e)', () => {
     ],
   ])(
     'given a GET request to /order when filters %j then it should return a pagination %o',
-    async (filters, meta) => {
+    async ([filters, meta], { app }) => {
       const query = defineQuery(filters);
       const response = await request(app.getHttpServer())
         .get('/order')
@@ -123,7 +72,9 @@ describe('OrderController (e2e)', () => {
     },
   );
 
-  test('given a POST request to /order when a valid order is provided then it should create and return the created order', async () => {
+  test('given a POST request to /order when a valid order is provided then it should create and return the created order', async ({
+    app,
+  }) => {
     const newOrder = {
       customer: 1,
       employee: 1,
@@ -161,28 +112,36 @@ describe('OrderController (e2e)', () => {
     });
   });
 
-  test('given a POST request to /order when customer is missing then it should return a bad request', async () => {
+  test('given a POST request to /order when customer is missing then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/order')
       .send({ employee: 1 })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /order when employee is missing then it should return a bad request', async () => {
+  test('given a POST request to /order when employee is missing then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/order')
       .send({ customer: 1 })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /order when freight is negative then it should return a bad request', async () => {
+  test('given a POST request to /order when freight is negative then it should return a bad request', async ({
+    app,
+  }) => {
     await request(app.getHttpServer())
       .post('/order')
       .send({ customer: 1, employee: 1, freight: -1 })
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a GET request to /order/:id when the order exists then it should return the order', async () => {
+  test('given a GET request to /order/:id when the order exists then it should return the order', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
 
     const response = await request(app.getHttpServer())
@@ -197,7 +156,9 @@ describe('OrderController (e2e)', () => {
     );
   });
 
-  test('given a PATCH request to /order/:id when the order exists then it should update and return the updated order', async () => {
+  test('given a PATCH request to /order/:id when the order exists then it should update and return the updated order', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
 
     const response = await request(app.getHttpServer())
@@ -211,7 +172,9 @@ describe('OrderController (e2e)', () => {
     expect(response.body).toHaveProperty('shipName', 'Updated Ship');
   });
 
-  test('given a DELETE request to /order/:id when the order exists then it should delete the order', async () => {
+  test('given a DELETE request to /order/:id when the order exists then it should delete the order', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
 
     await request(app.getHttpServer())
@@ -223,7 +186,9 @@ describe('OrderController (e2e)', () => {
       .expect(HttpStatus.NOT_FOUND);
   });
 
-  test('given a GET request to /order/:orderId/detail when no params are provided then it should return a paginated list', async () => {
+  test('given a GET request to /order/:orderId/detail when no params are provided then it should return a paginated list', async ({
+    app,
+  }) => {
     const orderId = 10248;
 
     const response = await request(app.getHttpServer())
@@ -238,7 +203,9 @@ describe('OrderController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test('given a GET request to /order/:orderId/detail when a filter is provided then it should return a paginated result', async () => {
+  test('given a GET request to /order/:orderId/detail when a filter is provided then it should return a paginated result', async ({
+    app,
+  }) => {
     const orderId = '10248';
     const query = defineQuery({
       filters: eq<OrderDetail>('quantity', 10),
@@ -260,7 +227,9 @@ describe('OrderController (e2e)', () => {
     });
   });
 
-  test('given a POST request to /order/:orderId/detail when a valid detail is provided then it should create it', async () => {
+  test('given a POST request to /order/:orderId/detail when a valid detail is provided then it should create it', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
 
     const newDetail = {
@@ -280,7 +249,9 @@ describe('OrderController (e2e)', () => {
     expect(response.body).toHaveProperty('productId', 1);
   });
 
-  test('given a PATCH request to /order/:orderId/detail/:productId when the detail exists then it should update it', async () => {
+  test('given a PATCH request to /order/:orderId/detail/:productId when the detail exists then it should update it', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
     const productId = 2;
 
@@ -299,7 +270,9 @@ describe('OrderController (e2e)', () => {
     expect(response.body).toHaveProperty('discount', 0.1);
   });
 
-  test('given a DELETE request to /order/:orderId/detail/:productId when the detail exists then it should delete it', async () => {
+  test('given a DELETE request to /order/:orderId/detail/:productId when the detail exists then it should delete it', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
     const productId = 2;
 
@@ -313,7 +286,9 @@ describe('OrderController (e2e)', () => {
       .expect(HttpStatus.OK);
   });
 
-  test('given a POST request to /order/:orderId/detail when quantity is less than 1 then it should return a bad request', async () => {
+  test('given a POST request to /order/:orderId/detail when quantity is less than 1 then it should return a bad request', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
 
     await request(app.getHttpServer())
@@ -322,7 +297,9 @@ describe('OrderController (e2e)', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /order/:orderId/detail when discount is out of range then it should return a bad request', async () => {
+  test('given a POST request to /order/:orderId/detail when discount is out of range then it should return a bad request', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
 
     await request(app.getHttpServer())
@@ -331,7 +308,9 @@ describe('OrderController (e2e)', () => {
       .expect(HttpStatus.BAD_REQUEST);
   });
 
-  test('given a POST request to /order/:orderId/detail when product does not exist then it should return a bad request', async () => {
+  test('given a POST request to /order/:orderId/detail when product does not exist then it should return a bad request', async ({
+    app,
+  }) => {
     const order = await useSeederFactory(Order).save();
 
     await request(app.getHttpServer())

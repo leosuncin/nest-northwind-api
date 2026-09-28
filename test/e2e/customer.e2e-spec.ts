@@ -1,66 +1,20 @@
-import { HttpStatus, type INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
+import { HttpStatus } from '@nestjs/common';
 import { createURLCodec } from '@rapiq/codec-url';
 import { defineQuery, QueryBuildInput } from '@rapiq/core';
-import {
-  MSSQLServerContainer,
-  type StartedMSSQLServerContainer,
-} from '@testcontainers/mssqlserver';
-import { useContainer } from 'class-validator';
 import request from 'supertest';
-import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
+import { useSeederFactory } from 'typeorm-extension';
 
-import { App } from 'supertest/types.js';
-import { AppModule } from '../../src/app.module.js';
-import typeormConfig from '../../src/config/typeorm.js';
-import { CreateCustomer } from '../../src/customer/dto/create-customer.dto.js';
+import type { CreateCustomer } from '../../src/customer/dto/create-customer.dto.js';
 import { Customer } from '../../src/customer/entities/customer.entity.js';
-import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
-import { buildTypeOrmOptions } from './helpers.js';
+import type { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
+import { test } from './extend-test.js';
 
 const codec = createURLCodec();
 
 describe('CustomerController (e2e)', () => {
-  let app: INestApplication<App>;
-  let container: StartedMSSQLServerContainer;
-
-  beforeAll(async () => {
-    container = await new MSSQLServerContainer(
-      'mcr.microsoft.com/mssql/server:2022-latest',
-    )
-      .acceptLicense()
-      .withEnvironment({ MSSQL_PID: 'Express' })
-      .withWaitForMessage(/.*Attribute synchronization manager initialized*/)
-      .start();
-
-    const module = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .overrideProvider(typeormConfig.KEY)
-      .useValue(await buildTypeOrmOptions(container))
-      .compile();
-
-    app = module.createNestApplication();
-
-    await app.init();
-
-    useContainer(app.select(AppModule), { fallbackOnErrors: true });
-  }, 60_000);
-
-  beforeEach(async () => {
-    const dataSource = app.get(getDataSourceToken());
-
-    setDataSource(dataSource);
-    await runSeeders(dataSource);
-  });
-
-  afterAll(async () => {
-    await app.close();
-    await container.stop();
-  });
-
-  test('given a GET request to /customer when no params are provided then it should return a paginated list', async () => {
+  test('given a GET request to /customer when no params are provided then it should return a paginated list', async ({
+    app,
+  }) => {
     const response = await request(app.getHttpServer())
       .get('/customer')
       .expect(HttpStatus.OK)
@@ -72,7 +26,7 @@ describe('CustomerController (e2e)', () => {
     expect(response.body).toHaveProperty('meta.currentPage', 1);
   });
 
-  test.each([
+  test.for([
     [
       {
         fields: ['code', 'companyName', 'contactName', 'contactTitle'],
@@ -131,10 +85,7 @@ describe('CustomerController (e2e)', () => {
     ],
   ])(
     'given a GET request to /customer when filters %o then it should return a pagination %o',
-    async (
-      filters: QueryBuildInput<Customer>,
-      meta: Pagination<Customer>['meta'],
-    ) => {
+    async ([filters, meta], { app }) => {
       const query = defineQuery<Customer>(filters);
       const response = await request(app.getHttpServer())
         .get('/customer')
@@ -157,7 +108,9 @@ describe('CustomerController (e2e)', () => {
     },
   );
 
-  test('given a POST request to /customer when a valid customer is provided then it should create and return the created customer', async () => {
+  test('given a POST request to /customer when a valid customer is provided then it should create and return the created customer', async ({
+    app,
+  }) => {
     const newCustomer: CreateCustomer = {
       code: 'TEST1',
       companyName: 'Test Company',
@@ -175,7 +128,9 @@ describe('CustomerController (e2e)', () => {
     expect(response.body).toMatchObject(expect.objectContaining(newCustomer));
   });
 
-  test('given a POST request to /customer when a customer with the same code is provided then it should abort the creation', async () => {
+  test('given a POST request to /customer when a customer with the same code is provided then it should abort the creation', async ({
+    app,
+  }) => {
     const newCustomer = await useSeederFactory(Customer).make({
       code: 'ANATR',
     });
@@ -197,7 +152,9 @@ describe('CustomerController (e2e)', () => {
     `);
   });
 
-  test('given a GET request to /customer/:id when the customer exists then it should return the customer', async () => {
+  test('given a GET request to /customer/:id when the customer exists then it should return the customer', async ({
+    app,
+  }) => {
     const customer = await useSeederFactory(Customer).save();
 
     const response = await request(app.getHttpServer())
@@ -208,7 +165,9 @@ describe('CustomerController (e2e)', () => {
     expect(response.body).toMatchObject(expect.objectContaining(customer));
   });
 
-  test('given a PATCH request to /customer/:id when the customer exists then it should update and return the updated customer', async () => {
+  test('given a PATCH request to /customer/:id when the customer exists then it should update and return the updated customer', async ({
+    app,
+  }) => {
     const customer = await useSeederFactory(Customer).save();
 
     const response = await request(app.getHttpServer())
@@ -221,7 +180,9 @@ describe('CustomerController (e2e)', () => {
     expect(response.body).toHaveProperty('companyName', 'Updated Company');
   });
 
-  test('given a PATCH request to /customer/:id when the code of other customer is provided then it should abort the update', async () => {
+  test('given a PATCH request to /customer/:id when the code of other customer is provided then it should abort the update', async ({
+    app,
+  }) => {
     const response = await request(app.getHttpServer())
       .patch('/customer/10')
       .send({ code: 'ANATR' })
@@ -239,7 +200,9 @@ describe('CustomerController (e2e)', () => {
     `);
   });
 
-  test('given a DELETE request to /customer/:id when the customer exists then it should delete the customer', async () => {
+  test('given a DELETE request to /customer/:id when the customer exists then it should delete the customer', async ({
+    app,
+  }) => {
     const customer = await useSeederFactory(Customer).save();
 
     await request(app.getHttpServer())
