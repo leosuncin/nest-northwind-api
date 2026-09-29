@@ -1,4 +1,3 @@
-import { Transform } from 'class-transformer';
 import {
   Check,
   Column,
@@ -11,6 +10,7 @@ import {
 
 import { Customer } from '../../customer/entities/customer.entity.js';
 import { Employee } from '../../employee/entities/employee.entity.js';
+import { moneyTransformer } from '../../shared/utils/money-transformer.js';
 import { Shipper } from '../../shipper/entities/shipper.entity.js';
 import { OrderDetail } from './order-detail.entity.js';
 
@@ -40,13 +40,13 @@ export class Order {
   @JoinColumn({ name: 'shipVia' })
   shipVia?: Shipper;
 
-  @Column({ type: 'money', nullable: true, default: 0 })
+  @Column({
+    type: 'money',
+    nullable: true,
+    default: 0,
+    transformer: moneyTransformer,
+  })
   @Check('freight >= 0')
-  @Transform(({ value }) =>
-    Number.isFinite(value)
-      ? Math.round((value + Number.EPSILON) * 100) / 100
-      : value,
-  )
   freight = 0;
 
   @Column({ length: 40, nullable: true })
