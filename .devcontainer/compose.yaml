@@ -1,8 +1,8 @@
 services:
   workspace:
-    image: mcr.microsoft.com/devcontainers/typescript-node:5-24-trixie@sha256:cba90c28e53ac2f5a8a5a0388b71b8e98bbe1a4711e0faaa6ef48b137037d4ae
+    image: ghcr.io/bare-devcontainer/mise:trixie@sha256:87c38ef200b9aa62b1ed41cfc02db6ab7525ac26b297b0097b0e57814f1c86b3
     command: sleep infinity
-    user: node
+    init: true
     volumes:
       - ..:/workspaces/nest-northwind-api:cached
   sql-server:
