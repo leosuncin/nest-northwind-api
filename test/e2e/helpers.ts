@@ -1,9 +1,8 @@
+import { ok } from 'node:assert/strict';
 import { glob } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import type { StartedMSSQLServerContainer } from '@testcontainers/mssqlserver';
 import type {
   DataSourceOptions,
   MigrationInterface,
@@ -19,14 +18,17 @@ type Migration = new () => MigrationInterface;
 type Subscriber = new () => EntitySubscriberInterface;
 type Seed = new () => Seeder;
 
-export async function buildTypeOrmOptions(
-  container: StartedMSSQLServerContainer,
+function assertStringArray(array: unknown): asserts array is [string] {
+  ok(Array.isArray(array) && typeof array[0] === 'string');
+}
+
+export async function loadFromDataSourceOptions(
+  options: DataSourceOptions & SeederOptions,
 ) {
   const migrations: Migration[] = [];
 
-  for await (const file of glob(
-    join(process.cwd(), 'src/database/migrations/*.ts'),
-  )) {
+  assertStringArray(options.migrations);
+  for await (const file of glob(join(process.cwd(), options.migrations[0]))) {
     const migration = (await import(pathToFileURL(file).href)) as Record<
       string,
       Migration
@@ -37,9 +39,8 @@ export async function buildTypeOrmOptions(
 
   const subscribers: Subscriber[] = [];
 
-  for await (const file of glob(
-    join(process.cwd(), 'src/**/*.subscriber.ts'),
-  )) {
+  assertStringArray(options.subscribers);
+  for await (const file of glob(join(process.cwd(), options.subscribers[0]))) {
     const subscriber = (await import(pathToFileURL(file).href)) as Record<
       string,
       Subscriber
@@ -50,9 +51,8 @@ export async function buildTypeOrmOptions(
 
   const seeds: Seed[] = [];
 
-  for await (const file of glob(
-    join(process.cwd(), 'src/database/seeds/*.seeder.ts'),
-  )) {
+  assertStringArray(options.seeds);
+  for await (const file of glob(join(process.cwd(), options.seeds[0]))) {
     const seed = (await import(pathToFileURL(file).href)) as {
       default: Seed;
       [fixture: string]: object;
@@ -63,9 +63,8 @@ export async function buildTypeOrmOptions(
 
   const factories: SeederFactoryItem[] = [];
 
-  for await (const file of glob(
-    join(process.cwd(), 'src/database/factories/*.factory.ts'),
-  )) {
+  assertStringArray(options.factories);
+  for await (const file of glob(join(process.cwd(), options.factories![0]))) {
     const factory = (await import(pathToFileURL(file).href)) as {
       default: SeederFactoryItem;
     };
@@ -74,23 +73,10 @@ export async function buildTypeOrmOptions(
   }
 
   return {
-    type: 'mssql',
-    host: container.getHost(),
-    port: container.getMappedPort(1433),
-    username: container.getUsername(),
-    password: container.getPassword(),
-    database: container.getDatabase(),
-    synchronize: false,
-    migrationsRun: true,
-    autoLoadEntities: true,
-    options: {
-      encrypt: false,
-      trustServerCertificate: true,
-      appName: 'Northwind Test',
-    },
-    subscribers,
+    ...options,
     migrations,
+    subscribers,
     seeds,
     factories,
-  } satisfies DataSourceOptions & TypeOrmModuleOptions & SeederOptions;
+  };
 }
