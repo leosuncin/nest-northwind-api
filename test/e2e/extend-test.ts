@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { useContainer } from 'class-validator';
 import type { App } from 'supertest/types.js';
-import { runSeeders, setDataSource } from 'typeorm-extension';
+import { setDataSource } from 'typeorm-extension';
 import { test as baseTest, inject } from 'vitest';
 
 import { AppModule } from '../../src/app.module.js';
@@ -33,7 +33,4 @@ export const test = baseTest
     });
 
     return app;
-  })
-  .extend('seeds', { auto: true }, async ({ app }) => {
-    await runSeeders(app.get(getDataSourceToken()));
   });
