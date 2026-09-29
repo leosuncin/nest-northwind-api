@@ -7,10 +7,10 @@ import {
   PrimaryColumn,
   type Relation,
 } from 'typeorm';
-import { Transform } from 'class-transformer';
 
-import { Order } from './order.entity.js';
 import { Product } from '../../product/entities/product.entity.js';
+import { moneyTransformer } from '../../shared/utils/money-transformer.js';
+import { Order } from './order.entity.js';
 
 @Entity()
 export class OrderDetail {
@@ -28,13 +28,8 @@ export class OrderDetail {
   @JoinColumn({ name: 'productId' })
   product!: Product;
 
-  @Column({ type: 'money', default: 0 })
+  @Column({ type: 'money', default: 0, transformer: moneyTransformer })
   @Check('unitPrice >= 0')
-  @Transform(({ value }) =>
-    Number.isFinite(value)
-      ? Math.round((value + Number.EPSILON) * 100) / 100
-      : value,
-  )
   unitPrice = 0;
 
   @Column({ type: 'smallint', default: 1 })

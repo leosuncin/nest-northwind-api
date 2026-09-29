@@ -6,9 +6,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Transform } from 'class-transformer';
 
 import { Category } from '../../category/entities/category.entity.js';
+import { moneyTransformer } from '../../shared/utils/money-transformer.js';
 import { Supplier } from '../../supplier/entities/supplier.entity.js';
 
 @Entity()
@@ -30,13 +30,13 @@ export class Product {
   @Column({ length: 20, nullable: true })
   quantityPerUnit?: string;
 
-  @Column({ type: 'money', nullable: true, default: 0 })
+  @Column({
+    type: 'money',
+    nullable: true,
+    default: 0,
+    transformer: moneyTransformer,
+  })
   @Check(`unitPrice">= 0`)
-  @Transform(({ value }) =>
-    Number.isFinite(value)
-      ? Math.round((value + Number.EPSILON) * 100) / 100
-      : value,
-  )
   unitPrice = 0;
 
   @Column({ type: 'int', nullable: true, default: 0 })
