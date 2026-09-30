@@ -118,6 +118,48 @@
           }
         }
       }
+    },
+    "zed": {
+      "extensions": [
+        "toml",
+        "git-firefly",
+        "dockerfile",
+        "editorconfig",
+        "oxc",
+        "github-actions"
+      ],
+      "settings": {
+        "file_types": {
+          "Git Attributes": ["**/{git,.git,.git/info}/attributes"],
+          "Git Config": [
+            "*.gitconfig",
+            "**/{git,.git,.git/modules,.git/modules/*}/config"
+          ],
+          "Git Ignore": ["**/{git,.git}/ignore", "**/.git/info/exclude"],
+          "GitHub Actions": [
+            ".github/workflows/*.yml",
+            ".github/workflows/*.yaml"
+          ]
+        },
+        "languages": {
+          "JavaScript": {
+            "format_on_save": "on",
+            "formatter": [
+              {
+                "code_action": "source.fixAll.oxc"
+              }
+            ]
+          },
+          "TypeScript": {
+            "format_on_save": "on",
+            "formatter": [
+              {
+                "code_action": "source.fixAll.oxc"
+              }
+            ]
+          }
+        }
+      }
     }
   }
 }
