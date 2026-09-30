@@ -58,5 +58,66 @@
   "mounts": [
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/dev/.ssh,readonly",
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/mise/age.txt,target=/home/dev/.config/mise/age.txt,readonly"
-  ]
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "johnpapa.vscode-cloak",
+        "bierner.comment-tagged-templates",
+        "mikestead.dotenv",
+        "usernamehw.errorlens",
+        "yoavbls.pretty-ts-errors",
+        "semanticdiff.semanticdiff",
+        "vscode-icons-team.vscode-icons",
+        "bruno-api-client.bruno",
+        "wmaurer.change-case",
+        "cucumberopen.cucumber-official",
+        "docker.docker",
+        "editorconfig.editorconfig",
+        "mitchdenny.ecdc",
+        "tamasfe.even-better-toml",
+        "pomber.git-file-history",
+        "github.vscode-github-actions",
+        "eamodio.gitlens",
+        "sburg.vscode-javascript-booster",
+        "hverlin.mise-vscode",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-mssql",
+        "drcallaway.vscode-surround-with",
+        "qcz.text-power-tools",
+        "tamj0rd2.ts-quickfixes-extension",
+        "orta.vscode-twoslash-queries",
+        "vitest.explorer",
+        "oxc.oxc-vscode"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "oxc.oxc-vscode",
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "editor.bracketPairColorization.enabled": true,
+        "editor.smoothScrolling": true,
+        "editor.cursorSmoothCaretAnimation": "on",
+        "editor.fontFamily": "'FiraCode Nerd Font Mono', Calibri",
+        "editor.fontLigatures": true,
+        "terminal.integrated.fontFamily": "'FiraCode Nerd Font Mono', Consolas",
+        "workbench.list.smoothScrolling": true,
+        "explorer.compactFolders": true,
+        "js/ts.tsdk.path": "node_modules/typescript/lib",
+        "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+        "editor.codeActionsOnSave": {
+          "source.addMissingImports.ts": "always",
+          "source.organizeImports": "always",
+          "source.format.oxc": "always",
+          "source.fixAll.oxc": "always"
+        },
+        "oxc.lint.customization": {
+          "no-unused-vars": {
+            "severity": "warning",
+            "autofix": false
+          }
+        }
+      }
+    }
+  }
 }
