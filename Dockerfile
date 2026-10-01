@@ -49,6 +49,8 @@ ARG PORT=3000
 
 WORKDIR /app
 
+COPY --from=11notes/distroless:localhealth@sha256:e15dd80e060e87a47885a68f296c5b80a3edb4570f6421672d31dfb71913aa48 /usr/local/bin/localhealth /usr/local/bin/localhealth
+
 COPY package.json .
 COPY --from=build /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/dist .
@@ -56,5 +58,7 @@ COPY --from=build /usr/src/app/dist .
 EXPOSE ${PORT}
 
 USER 65532
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD ["/usr/local/bin/localhealth", "http://localhost:${PORT}"]
 
 CMD ["main.js"]
