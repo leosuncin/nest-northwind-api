@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/leosuncin/nest-northwind-api/compare/v2.0.0...v2.1.0) (2026-10-01)
+
+
+### Bug Fixes
+
+* transform money columns by rounding them to two decimals ([9f3fe99](https://github.com/leosuncin/nest-northwind-api/commit/9f3fe999323d82ae1183abde1095fff588e47c0b))
+
+
+### Features
+
+* **customer:** add support to check if the customer exists by id or code ([a51c5d2](https://github.com/leosuncin/nest-northwind-api/commit/a51c5d2f3abda964d9d5585230687781c74e8d21))
+* **customer:** validate if the code doesn't belong to other customer when creating a new one ([56e6a77](https://github.com/leosuncin/nest-northwind-api/commit/56e6a7751ff4c10304430be1043612f5d7a09b1a))
+* **customer:** validate if the code doesn't belong to other customer when updating a customer ([0d75c52](https://github.com/leosuncin/nest-northwind-api/commit/0d75c523cc2824b907cad4b510355dc3116c0cbf))
+
 # [2.0.0](https://github.com/leosuncin/nest-northwind-api/compare/v1.0.0...v2.0.0) (2026-09-18)
 
 
