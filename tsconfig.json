@@ -15,6 +15,7 @@
     "strict": true,
     "types": ["node"],
     "module": "nodenext",
+    "lib": ["ESNext.Array"],
     "typeRoots": ["./node_modules/@types/"],
     "ignoreDeprecations": "6.0"
   }
