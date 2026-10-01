@@ -25,20 +25,22 @@ jobs:
         image: mcr.microsoft.com/mssql/server:2025-latest@sha256:2b5b581621126574f3d1f75e78d3eebe8d05aedb59ad0cfdf9aa42cb0634d726
         env:
           MSSQL_SA_PASSWORD: ${{ secrets.MSSQL_SA_PASSWORD }}
+          MSSQL_DB: northwind
+          MSSQL_USER: instnwnd
+          MSSQL_PASSWORD: ${{ secrets.MSSQL_PASSWORD }}
           ACCEPT_EULA: 'Y'
         ports:
           - '1433:1433'
         options: >-
           --health-cmd "/opt/mssql-tools18/bin/sqlcmd -h -1 -t 1 -C -b -U sa -P $MSSQL_SA_PASSWORD -Q 'SELECT 1'"
           --health-interval 20s
-          --health-timeout 10s
-          --health-start-period 15s
+          --health-timeout 15s
+          --health-start-period 20s
           --health-retries 10
     env:
       MSSQL_PORT: '1433'
-      MSSQL_DB: master
-      MSSQL_USER: sa
       MSSQL_SA_PASSWORD: ${{ secrets.MSSQL_SA_PASSWORD }}
+      MSSQL_PASSWORD: ${{ secrets.MSSQL_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
