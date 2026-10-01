@@ -65,6 +65,8 @@ jobs:
 
       - name: Run all checks
         run: hk check --all --no-fail-fast
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run migrations and seeders
         run: |
