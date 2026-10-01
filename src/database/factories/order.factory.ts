@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
-import { Order } from '../../order/entities/order.entity.js';
-import customerFixtures from '../seeds/customer.json';
-import employeeFixtures from '../seeds/employee.json';
-import shipperFixtures from '../seeds/shipper.json';
 import { Employee } from '../../employee/entities/employee.entity.js';
+import { Order } from '../../order/entities/order.entity.js';
+import customerFixtures from '../seeds/customer.json' with { type: 'json' };
+import employeeFixtures from '../seeds/employee.json' with { type: 'json' };
+import shipperFixtures from '../seeds/shipper.json' with { type: 'json' };
 
 const customers = Object.values(customerFixtures);
 const employees = Object.values(employeeFixtures);

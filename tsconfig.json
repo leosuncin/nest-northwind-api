@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "strict": true,
     "types": ["node"],
+    "module": "nodenext",
     "typeRoots": ["./node_modules/@types/"],
     "ignoreDeprecations": "6.0"
   }

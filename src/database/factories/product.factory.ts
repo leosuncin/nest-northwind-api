@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker';
 import { setSeederFactory } from 'typeorm-extension';
 
 import { Product } from '../../product/entities/product.entity.js';
-import categoryFixtures from '../seeds/category.json';
-import supplierFixtures from '../seeds/supplier.json';
+import categoryFixtures from '../seeds/category.json' with { type: 'json' };
+import supplierFixtures from '../seeds/supplier.json' with { type: 'json' };
 
 const suppliers = Object.values(supplierFixtures);
 const categories = Object.values(categoryFixtures);

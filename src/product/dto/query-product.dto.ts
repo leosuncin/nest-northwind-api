@@ -1,6 +1,6 @@
 import { defineSchema, eq } from '@rapiq/core';
 
-import type { Product } from '../entities/product.entity';
+import type { Product } from '../entities/product.entity.js';
 
 export const queryProductSchema = defineSchema<Product>({
   name: 'product',

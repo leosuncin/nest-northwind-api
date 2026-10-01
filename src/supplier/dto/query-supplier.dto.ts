@@ -1,6 +1,6 @@
 import { defineSchema } from '@rapiq/core';
 
-import type { Supplier } from '../entities/supplier.entity';
+import type { Supplier } from '../entities/supplier.entity.js';
 
 export const querySupplierSchema = defineSchema<Supplier>({
   name: 'supplier',

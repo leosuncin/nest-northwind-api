@@ -6,9 +6,9 @@ import {
   type StartedMSSQLServerContainer,
 } from '@testcontainers/mssqlserver';
 import request from 'supertest';
-import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
+import { App } from 'supertest/types.js';
 import { AppModule } from '../../src/app.module.js';
 import typeormConfig from '../../src/config/typeorm.js';
 import type { CreateShipper } from '../../src/shipper/dto/create-shipper.dto.js';

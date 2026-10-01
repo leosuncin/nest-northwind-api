@@ -8,15 +8,15 @@ import {
   type StartedMSSQLServerContainer,
 } from '@testcontainers/mssqlserver';
 import request from 'supertest';
-import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
+import { App } from 'supertest/types.js';
 import { AppModule } from '../../src/app.module.js';
 import typeormConfig from '../../src/config/typeorm.js';
 import { CreateCustomer } from '../../src/customer/dto/create-customer.dto.js';
 import { Customer } from '../../src/customer/entities/customer.entity.js';
-import { buildTypeOrmOptions } from './helpers.js';
 import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 const codec = createURLCodec();
 
