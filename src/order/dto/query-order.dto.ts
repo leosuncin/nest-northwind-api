@@ -1,6 +1,6 @@
 import { defineSchema } from '@rapiq/core';
 
-import type { Order } from '../entities/order.entity';
+import type { Order } from '../entities/order.entity.js';
 
 export const queryOrderSchema = defineSchema<Order>({
   name: 'order',

@@ -8,9 +8,9 @@ import {
   type StartedMSSQLServerContainer,
 } from '@testcontainers/mssqlserver';
 import request from 'supertest';
-import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
+import { App } from 'supertest/types.js';
 import { AppModule } from '../../src/app.module.js';
 import type { CreateCategory } from '../../src/category/dto/create-category.dto.js';
 import type { UpdateCategory } from '../../src/category/dto/update-category.dto.js';

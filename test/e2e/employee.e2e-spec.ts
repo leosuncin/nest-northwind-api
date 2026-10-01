@@ -2,13 +2,6 @@ import { HttpStatus, type INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 
-import {
-  MSSQLServerContainer,
-  type StartedMSSQLServerContainer,
-} from '@testcontainers/mssqlserver';
-import request from 'supertest';
-import type { App } from 'supertest/types';
-import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 import { createURLCodec, type URLCodec } from '@rapiq/codec-url';
 import {
   defineQuery,
@@ -17,14 +10,21 @@ import {
   SchemaRegistry,
   startsWith,
 } from '@rapiq/core';
+import {
+  MSSQLServerContainer,
+  type StartedMSSQLServerContainer,
+} from '@testcontainers/mssqlserver';
+import request from 'supertest';
+import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
+import { App } from 'supertest/types.js';
 import { AppModule } from '../../src/app.module.js';
 import typeormConfig from '../../src/config/typeorm.js';
 import type { CreateEmployee } from '../../src/employee/dto/create-employee.dto.js';
 import type { UpdateEmployee } from '../../src/employee/dto/update-employee.dto.js';
 import { Employee } from '../../src/employee/entities/employee.entity.js';
-import { buildTypeOrmOptions } from './helpers.js';
 import { Pagination } from '../../src/shared/interceptors/pagination.interceptor.js';
+import { buildTypeOrmOptions } from './helpers.js';
 
 describe('EmployeeController (e2e)', () => {
   let app: INestApplication<App>;

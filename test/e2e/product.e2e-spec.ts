@@ -18,9 +18,9 @@ import {
 } from '@testcontainers/mssqlserver';
 import { useContainer } from 'class-validator';
 import request from 'supertest';
-import type { App } from 'supertest/types';
 import { runSeeders, setDataSource, useSeederFactory } from 'typeorm-extension';
 
+import { App } from 'supertest/types.js';
 import { AppModule } from '../../src/app.module.js';
 import typeormConfig from '../../src/config/typeorm.js';
 import { CreateProduct } from '../../src/product/dto/create-product.dto.js';

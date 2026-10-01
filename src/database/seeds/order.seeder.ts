@@ -1,7 +1,7 @@
 import type { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
-import orderFixtures from './order.json';
+import orderFixtures from './order.json' with { type: 'json' };
 
 const { ordersJson, detailsJson } = (() => {
   const orders = orderFixtures.map(({ details: _details, ...order }) => order);

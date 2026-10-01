@@ -1,7 +1,7 @@
 import type { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
-import categoryFixtures from './category.json';
+import categoryFixtures from './category.json' with { type: 'json' };
 
 const categoryJsonFixtures = JSON.stringify(categoryFixtures, (_key, value) =>
   typeof value === 'boolean' ? (value ? 1 : 0) : (value as unknown),

@@ -1,6 +1,6 @@
 import { defineSchema } from '@rapiq/core';
 
-import type { Category } from '../entities/category.entity';
+import type { Category } from '../entities/category.entity.js';
 
 export const queryCategorySchema = defineSchema<Category>({
   name: 'category',
