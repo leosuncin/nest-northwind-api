@@ -41,6 +41,7 @@ jobs:
       MSSQL_PORT: '1433'
       MSSQL_SA_PASSWORD: ${{ secrets.MSSQL_SA_PASSWORD }}
       MSSQL_PASSWORD: ${{ secrets.MSSQL_PASSWORD }}
+      MISE_AGE_KEY: ${{ secrets.MISE_AGE_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
