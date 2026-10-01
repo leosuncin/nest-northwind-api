@@ -1,7 +1,4 @@
 import { ok } from 'node:assert/strict';
-import { glob } from 'node:fs/promises';
-import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 import { DataSource, type DataSourceOptions } from 'typeorm';
 import type {
@@ -9,6 +6,8 @@ import type {
   SeederFactoryItem,
   SeederOptions,
 } from 'typeorm-extension';
+
+import { load } from './test/e2e/helpers.js';
 
 const username = process.env.MSSQL_USER ?? 'instnwnd';
 ok(
@@ -21,19 +20,6 @@ const password =
   username === 'sa'
     ? process.env.MSSQL_SA_PASSWORD
     : process.env.MSSQL_PASSWORD;
-
-async function* load<M = Function>(
-  globPattern: string,
-): AsyncGenerator<M, void, unknown> {
-  for await (const file of glob(join(process.cwd(), globPattern))) {
-    const module = (await import(pathToFileURL(file).href)) as {
-      default: M;
-      [fixture: string]: M;
-    };
-
-    yield 'default' in module ? module.default : Object.values<M>(module)[0];
-  }
-}
 
 const options: DataSourceOptions & SeederOptions = {
   type: 'mssql',

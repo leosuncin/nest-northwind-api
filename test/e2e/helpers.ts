@@ -5,8 +5,8 @@ import { pathToFileURL } from 'node:url';
 
 import type {
   DataSourceOptions,
-  MigrationInterface,
   EntitySubscriberInterface,
+  MigrationInterface,
 } from 'typeorm';
 import type {
   Seeder,
@@ -22,54 +22,48 @@ function assertStringArray(array: unknown): asserts array is [string] {
   ok(Array.isArray(array) && typeof array[0] === 'string');
 }
 
+export async function* load<M = Function>(
+  globPattern: string,
+): AsyncGenerator<M, void, unknown> {
+  for await (const path of glob(join(process.cwd(), globPattern))) {
+    const module = (await import(pathToFileURL(path).href)) as {
+      default: M;
+      [fixture: string]: M;
+    };
+
+    yield 'default' in module ? module.default : Object.values<M>(module)[0];
+  }
+}
+
 export async function loadFromDataSourceOptions(
   options: DataSourceOptions & SeederOptions,
 ) {
   const migrations: Migration[] = [];
 
   assertStringArray(options.migrations);
-  for await (const file of glob(join(process.cwd(), options.migrations[0]))) {
-    const migration = (await import(pathToFileURL(file).href)) as Record<
-      string,
-      Migration
-    >;
-
-    migrations.push(Object.values(migration)[0]);
+  for await (const migration of load<Migration>(options.migrations[0])) {
+    migrations.push(migration);
   }
 
   const subscribers: Subscriber[] = [];
 
   assertStringArray(options.subscribers);
-  for await (const file of glob(join(process.cwd(), options.subscribers[0]))) {
-    const subscriber = (await import(pathToFileURL(file).href)) as Record<
-      string,
-      Subscriber
-    >;
-
-    subscribers.push(Object.values(subscriber)[0]);
+  for await (const subscriber of load<Subscriber>(options.subscribers[0])) {
+    subscribers.push(subscriber);
   }
 
   const seeds: Seed[] = [];
 
   assertStringArray(options.seeds);
-  for await (const file of glob(join(process.cwd(), options.seeds[0]))) {
-    const seed = (await import(pathToFileURL(file).href)) as {
-      default: Seed;
-      [fixture: string]: object;
-    };
-
-    seeds.push(seed.default);
+  for await (const seed of load<Seed>(options.seeds[0])) {
+    seeds.push(seed);
   }
 
   const factories: SeederFactoryItem[] = [];
 
   assertStringArray(options.factories);
-  for await (const file of glob(join(process.cwd(), options.factories![0]))) {
-    const factory = (await import(pathToFileURL(file).href)) as {
-      default: SeederFactoryItem;
-    };
-
-    factories.push(Object.values(factory)[0]);
+  for await (const factory of load<SeederFactoryItem>(options.factories![0])) {
+    factories.push(factory);
   }
 
   return {
