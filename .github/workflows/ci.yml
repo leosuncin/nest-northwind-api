@@ -95,7 +95,8 @@ jobs:
       - name: Reverse migrations
         run: |
           set -euo pipefail
-          COUNT=$(ls src/database/migrations/*.ts | wc -l)
-          for i in $(seq 1 "$COUNT"); do
+          MIGRATIONS=(src/database/migrations/*.ts)
+          for IDX in "${!MIGRATIONS[@]}"; do
+            echo "Reverting migration: ${MIGRATIONS[-1 - $IDX]}"
             pnpm typeorm migration:revert
           done
