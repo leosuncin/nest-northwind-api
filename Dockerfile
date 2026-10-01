@@ -55,4 +55,6 @@ COPY --from=build /usr/src/app/dist .
 
 EXPOSE ${PORT}
 
+USER 65532
+
 CMD ["main.js"]
