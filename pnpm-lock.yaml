@@ -239,8 +239,8 @@ importers:
         specifier: 3.1.1
         version: 3.1.1
       '@testcontainers/mssqlserver':
-        specifier: 12.1.0
-        version: 12.1.0
+        specifier: 12.2.0
+        version: 12.2.0
       '@types/express':
         specifier: 5.0.6
         version: 5.0.6
@@ -1090,8 +1090,8 @@ packages:
   '@tediousjs/connection-string@1.1.0':
     resolution: {integrity: sha512-z9ZBWEG+8pIB5V1zYzlRPXx0oRJ5H7coPnMQK8EZOw03UTPI9Umn6viL36f5w+CuqkKsnCM50RVStpjZmR0Bng==}
 
-  '@testcontainers/mssqlserver@12.1.0':
-    resolution: {integrity: sha512-DesPv/vgd6MBGzML5qWZyhIxREDdcdlzJ39WsH+lDgx6287mLZ38/v02GGeeOsv6P0Tw2TElp8lBieK5wH4Xhw==}
+  '@testcontainers/mssqlserver@12.2.0':
+    resolution: {integrity: sha512-TKqljdFoPiAPztyoHY5jRpkoMK7YrMz3g0/icJQ1bhMzwi7vo3TyDKjAbiPt0sPEdNmJSXapWw4o7On86arbgw==}
 
   '@tokenizer/inflate@0.4.1':
     resolution: {integrity: sha512-2mAv+8pkG6GIZiF1kNg1jAjh27IDxEPKwdGul3snfztFerfPGI1LjDezZp3i7BElXompqEtPmoPx6c2wgtWsOA==}
@@ -4057,7 +4057,7 @@ snapshots:
 
   '@tediousjs/connection-string@1.1.0': {}
 
-  '@testcontainers/mssqlserver@12.1.0':
+  '@testcontainers/mssqlserver@12.2.0':
     dependencies:
       testcontainers: 12.2.0
     transitivePeerDependencies:
