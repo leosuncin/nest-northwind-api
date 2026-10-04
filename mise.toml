@@ -6,7 +6,7 @@ hadolint = "latest"
 hk = { version = "latest", postinstall = "hk install --mise" }
 node = { version = "latest" }
 "npm:@usebruno/cli" = "latest"
-opencode = "latest"
+"npm:@opencode/cli" = { version = "latest", allow_builds = true }
 pitchfork = "latest"
 pnpm = "latest"
 watchexec = "latest"
