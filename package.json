@@ -50,7 +50,7 @@
     "@suites/unit": "3.1.1",
     "@testcontainers/mssqlserver": "12.2.0",
     "@types/express": "5.0.6",
-    "@types/node": "24.19.0",
+    "@types/node": "24.19.1",
     "@types/supertest": "7.2.1",
     "@vitest/coverage-v8": "5.0.3",
     "node-mocks-http": "1.18.1",
