@@ -252,7 +252,6 @@ url = "https://nodejs.org/dist/v26.10.0/node-v26.10.0-win-x64.zip"
 
 [[tools."npm:@opencode/cli"]]
 version = "2.0.22"
-aube = { path = ".mise/locks/npm-opencode-cli/2.0.22~cbb2c57c", digest = "sha256:ee9e1c2e66d9e59b120bdd976c7d6946e67eb0877ec453ce69deefef2f53619c" }
 backend = "npm:@opencode/cli"
 specifiers = ["latest"]
 
@@ -261,7 +260,6 @@ allow_builds = "true"
 
 [[tools."npm:@usebruno/cli"]]
 version = "4.2.0"
-aube = { path = ".mise/locks/npm-usebruno-cli/4.2.0", digest = "sha256:6050bb18b562710f959787c5a611852cbd2a43e6dad60681382c7ee155ace988" }
 backend = "npm:@usebruno/cli"
 specifiers = ["latest"]
 
