@@ -25,6 +25,7 @@ HK_MISE = 1
 experimental = true
 env_shell_expand = true
 lockfile = true
+npm.package_manager = "pnpm"
 
 [hooks]
 postinstall = { task = "pnpm-install" }
