@@ -1,4 +1,5 @@
 [tools]
+delta = "latest"
 "github:immanuwell/dockerfile-roast" = "latest"
 "github:kjanat/actionlint" = "latest"
 "github:tj/node-prune" = "latest"
@@ -88,3 +89,17 @@ depends = ["migrations", "seeding"]
 port = { expect = [3000], bump = 5 }
 ready_http = { url = "http://0.0.0.0:3000", timetout = "20s" }
 retry = 3
+
+[bootstrap.repos]
+"~/nerd-fonts-installer" = { url = "https://github.com/officialrajdeepsingh/nerd-fonts-installer.git", ref = "main" }
+"~/dotfiles" = { url = "https://gist.github.com/7fb12809933571729e9ff3f6f8837fd0.git", ref = "main" }
+
+[bootstrap.hooks]
+post-repos = { run = ["~/nerd-fonts-installer/install.sh FiraCode"] }
+
+[dotfiles]
+"~/.gitconfig" = { source = "~/dotfiles/.gitconfig" }
+"~/.zshrc/completions" = { block = '''
+eval "$(pnpm completion zsh)"
+eval "$(pitchfork completion zsh)"
+''' }
