@@ -60,7 +60,6 @@ node --run start:prod
 node --run start:dev
 {% endif %}
 """
-env = { PORT = "3000" }
 depends = "build"
 
 [tasks.test-api]
@@ -75,9 +74,17 @@ dir = "test/api"
 sources = ["**/*.yml"]
 outputs = ["results.html"]
 
+[daemons.migrations]
+run = "pnpm typeorm migration:run"
+oneshot = true
+
+[daemons.seeding]
+run = "pnpm typeorm-extension seed:run"
+oneshot = true
+
 [daemons.api]
-run = "mise run start-api"
-port = 3000
-env = { PORT = "3000", NODE_ENV = "production" }
+run = "pnpm start:dev"
+depends = ["migrations", "seeding"]
+port = { expect = [3000], bump = 5 }
 ready_http = { url = "http://0.0.0.0:3000", timetout = "20s" }
 retry = 3
