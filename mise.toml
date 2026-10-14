@@ -7,7 +7,7 @@ hadolint = "latest"
 hk = { version = "latest", postinstall = "hk install --mise" }
 node = { version = "latest" }
 "npm:@usebruno/cli" = "latest"
-"npm:@opencode/cli" = { version = "latest", allow_builds = true }
+"npm:@opencode/cli" = { version = "latest", allow_builds = ["@opencode/cli"] }
 pitchfork = "latest"
 pnpm = "latest"
 watchexec = "latest"
@@ -81,6 +81,7 @@ oneshot = true
 
 [daemons.seeding]
 run = "pnpm typeorm-extension seed:run"
+depends = ["migrations"]
 oneshot = true
 
 [daemons.api]
