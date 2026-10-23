@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/crates/oxc_linter/src/rules.rs",
+  "extends": [
+    "./node_modules/@ogs-gmbh/oxlint-presets/oxc-recommended.json",
+    "./node_modules/@ogs-gmbh/oxlint-presets/node-recommended.json",
+    "./node_modules/@ogs-gmbh/oxlint-presets/promise-recommended.json"
+  ],
+  "plugins": ["node", "promise"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-floating-promises": "warn"
+  },
+  "env": {
+    "node": true
+  }
+}
