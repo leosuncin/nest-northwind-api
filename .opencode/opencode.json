@@ -10,6 +10,26 @@
         "MISE_EXPERIMENTAL": "1"
       },
       "enabled": true
+    },
+    "gsd": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "-p",
+        "@opengsd/gsd-core",
+        "gsd-mcp-server",
+        "--no-prompts"
+      ],
+      "enabled": true
+    }
+  },
+  "permission": {
+    "read": {
+      "/home/leosuncin/Workspaces/github/nest-northwind-api/.opencode/gsd-core/*": "allow"
+    },
+    "external_directory": {
+      "/home/leosuncin/Workspaces/github/nest-northwind-api/.opencode/gsd-core/*": "allow"
     }
   }
 }
