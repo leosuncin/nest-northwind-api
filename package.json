@@ -14,6 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main",
+    "start:repl": "nest start --entryFile repl",
     "test": "vitest run --project UNIT",
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
