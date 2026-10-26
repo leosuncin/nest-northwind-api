@@ -1,0 +1,35 @@
+[settings]
+env_shell_expand = true
+experimental = true
+npm.package_manager = "pnpm"
+
+[tools]
+age = "latest"
+bitwarden = "latest"
+bitwarden-secrets-manager = "latest"
+delta = "latest"
+ghtkn = "latest"
+"github:Gaurav-Gosain/tuios" = "latest"
+hunk = "latest"
+micro = "latest"
+pitchfork = "latest"
+pkl = "latest"
+usage = "latest"
+watchexec = "latest"
+worktrunk = "latest"
+
+[bootstrap.repos]
+"~/nerd-fonts-installer" = { url = "https://github.com/officialrajdeepsingh/nerd-fonts-installer.git", ref = "main" }
+"~/dotfiles" = { url = "https://gist.github.com/7fb12809933571729e9ff3f6f8837fd0.git", ref = "main" }
+
+[bootstrap.hooks]
+post-repos = { run = ["~/nerd-fonts-installer/install.sh FiraCode"] }
+
+[dotfiles]
+"~/.gitconfig" = { source = "~/dotfiles/.gitconfig" }
+"~/.zshrc/completions" = { block = '''
+eval "$(fnox activate zsh)"
+eval "$(pitchfork completion zsh)"
+eval "$(pnpm completion zsh)"
+''' }
+"~/.zshenv/local-bin" = { line = 'export PATH="$HOME/.local/bin:$PATH"' }

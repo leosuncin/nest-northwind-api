@@ -6,7 +6,7 @@
   "runServices": ["sql-server"],
   "remoteUser": "dev",
   "updateRemoteUserUID": true,
-  "postCreateCommand": "mise trust --all && mise install --locked && mise bootstrap --yes",
+  "postCreateCommand": "mise bootstrap --yes && mise trust --all && mise install",
   "postAttachCommand": "mise daemons start api",
   "waitFor": "postStartCommand",
   "shutdownAction": "stopCompose",
@@ -55,6 +55,7 @@
     "MSSQL_SA_PASSWORD": "${containerEnv:MSSQL_SA_PASSWORD}"
   },
   "mounts": [
+    "type=bind,source=${localWorkspaceFolder}/.devcontainer/mise.toml,target=/home/dev/.config/mise/config.toml",
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/dev/.ssh,readonly",
     "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.config/mise/age.txt,target=/home/dev/.config/mise/age.txt,readonly"
   ],

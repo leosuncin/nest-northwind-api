@@ -232,7 +232,7 @@ repository_ids = { repository = "922514152" }
 checksum = "sha256:5b5d7021625d12825b3d44496b466ad65697e02651c8b9fe00117f5c25c73d0a"
 url = "https://github.com/jdx/hk/releases/download/v2.8.0/hk-x86_64-unknown-linux-gnu.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/hk/.github/workflows/release.yml"
-repository_ids = { repository = "922514152" }
+repository_ids = { repository = "922514152", owner = "216188" }
 
 [tools.hk."platforms.linux-x64-musl"]
 checksum = "sha256:5a9f2e4f8ff945d19da5f4c914ec7feb3f636aa3b2eac02de2b1c6cfe76fe385"
@@ -313,7 +313,7 @@ repository_ids = { repository = "899500793" }
 checksum = "sha256:83bb4742a8aa7dee8abfb3ac1a24f6da5c777a438024263cd8d25280fd0e469f"
 url = "https://github.com/jdx/pitchfork/releases/download/v2.32.1/pitchfork-x86_64-unknown-linux-gnu.tar.gz"
 signer = "sigstore-oidc:https://github.com/jdx/pitchfork/.github/workflows/release.yml"
-repository_ids = { repository = "899500793" }
+repository_ids = { repository = "899500793", owner = "216188" }
 
 [tools.pitchfork."platforms.macos-arm64"]
 checksum = "sha256:1b29158573448b6e21dc57a047b5bb8bdb8b925e7a46bc6968f56ea1b618ea3c"
