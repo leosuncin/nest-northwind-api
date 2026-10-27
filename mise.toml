@@ -87,5 +87,6 @@ oneshot = true
 run = "pnpm start:dev"
 depends = ["migrations", "seeding"]
 port = { expect = [3000], bump = 5 }
-ready_http = { url = "http://0.0.0.0:3000", timetout = "20s" }
+ready_http = { url = "http://0.0.0.0:3000", timeout = "20s" }
+health_http = { url = "http://0.0.0.0:3000/health", interval = "30s", timeout = "15s", retries = 3 }
 retry = 3
