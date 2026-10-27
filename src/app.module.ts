@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import typeormOptions from './config/typeorm.js';
@@ -13,11 +14,13 @@ import { SupplierModule } from './supplier/supplier.module.js';
 import { ShipperModule } from './shipper/shipper.module.js';
 import { ProductModule } from './product/product.module.js';
 import { OrderModule } from './order/order.module.js';
+import { HealthModule } from './health/health.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, expandVariables: true }),
     TypeOrmModule.forRootAsync(typeormOptions.asProvider()),
+    TerminusModule.forRoot(),
     EmployeeModule,
     SharedModule,
     CategoryModule,
@@ -26,6 +29,7 @@ import { OrderModule } from './order/order.module.js';
     ShipperModule,
     ProductModule,
     OrderModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
