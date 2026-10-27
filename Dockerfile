@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
 
-ARG PNPM_VERSION=12@sha256:77123fd40a39db0eb8be6bddfcf0cea15e000122b9221ccce2e4415be29050f2
+ARG PNPM_VERSION=12@sha256:d6148daf3ad2af8fa4ecd1aa06db73da32b2e37f63088987eea2fb375ee7f320
 
 FROM ghcr.io/pnpm/pnpm:${PNPM_VERSION} AS deps
 
@@ -43,13 +43,13 @@ ENTRYPOINT ["/pnpm/bin/node", "./node_modules/typeorm/cli.js"]
 
 CMD ["migration:run", "-d", "/typeorm/data-source.js"]
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:2ee7b2c54a3e37dfc248af81c9f6bcdcaa50abe4af44aa47a3388431031b9283
+FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:96455baef11b178fc135b32206e3922c515dbed2400676c94f907f8f84e6abf6
 
 ARG PORT=3000
 
 WORKDIR /app
 
-COPY --from=11notes/distroless:localhealth@sha256:e15dd80e060e87a47885a68f296c5b80a3edb4570f6421672d31dfb71913aa48 /usr/local/bin/localhealth /usr/local/bin/localhealth
+COPY --from=11notes/distroless:localhealth@sha256:74b5572209bec712bea16390633f250e53e43a5a3cbbb87d5637de6d48889861 /usr/local/bin/localhealth /usr/local/bin/localhealth
 
 COPY package.json .
 COPY --from=build /usr/src/app/node_modules ./node_modules
@@ -59,6 +59,6 @@ EXPOSE ${PORT}
 
 USER 65532
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD ["/usr/local/bin/localhealth", "http://localhost:${PORT}"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD ["/usr/local/bin/localhealth", "http://localhost:${PORT}/health"]
 
 CMD ["main.js"]
