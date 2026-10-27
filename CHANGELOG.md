@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/leosuncin/nest-northwind-api/compare/v2.1.0...v2.2.0) (2026-10-27)
+
+
+### Features
+
+* add REPL entry file ([0d6e6b8](https://github.com/leosuncin/nest-northwind-api/commit/0d6e6b8b67f554b1006a4e79c9748523d861abc1))
+* **health:** implement checking for health indicators ([894ede8](https://github.com/leosuncin/nest-northwind-api/commit/894ede8f460fb98c94460b0e2496441b03a9d2c9))
+
 # [2.1.0](https://github.com/leosuncin/nest-northwind-api/compare/v2.0.0...v2.1.0) (2026-10-01)
 
 
