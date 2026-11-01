@@ -43,7 +43,7 @@ ENTRYPOINT ["/pnpm/bin/node", "./node_modules/typeorm/cli.js"]
 
 CMD ["migration:run", "-d", "/typeorm/data-source.js"]
 
-FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:96455baef11b178fc135b32206e3922c515dbed2400676c94f907f8f84e6abf6
+FROM gcr.io/distroless/nodejs26-debian13:nonroot@sha256:9b945e92c1b5463a4b75f11e8417515e4bea7355f6adfd79ec220fbbe905dda8
 
 ARG PORT=3000
 
