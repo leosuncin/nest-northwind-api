@@ -49,7 +49,7 @@ ARG PORT=3000
 
 WORKDIR /app
 
-COPY --from=11notes/distroless:localhealth@sha256:74b5572209bec712bea16390633f250e53e43a5a3cbbb87d5637de6d48889861 /usr/local/bin/localhealth /usr/local/bin/localhealth
+COPY --from=11notes/distroless:localhealth@sha256:e34e725fb9b4e8f8878b2cc7322483462684e4f5c2e8f73818e98ff5ca79f695 /usr/local/bin/localhealth /usr/local/bin/localhealth
 
 COPY package.json .
 COPY --from=build /usr/src/app/node_modules ./node_modules
