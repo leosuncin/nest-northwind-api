@@ -16,7 +16,7 @@
     "3000": { "label": "API", "onAutoForward": "notify" }
   },
   "features": {
-    "ghcr.io/devcontainers/features/common-utils:2.7.0": {
+    "ghcr.io/devcontainers/features/common-utils:2.7.1": {
       "configureZshAsDefaultShell": true,
       "ohMyZshTheme": "amuse",
       "nonFreePackages": true
