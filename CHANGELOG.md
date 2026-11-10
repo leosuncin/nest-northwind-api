@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.5](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.4...v2.2.5) (2026-11-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @nestjs/typeorm to v12.0.3 ([6b10878](https://github.com/leosuncin/nest-northwind-api/commit/6b10878a0f02fc23841f2f34a6a275c68bf1964a))
+
 ## [2.2.4](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.3...v2.2.4) (2026-11-08)
 
 
