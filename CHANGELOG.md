@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.8](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.7...v2.2.8) (2026-11-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @rapiq/adapter-typeorm to v2.4.1 ([f736f4a](https://github.com/leosuncin/nest-northwind-api/commit/f736f4ae68f8cc7abcaa90e389fd3dae99c2afe9))
+
 ## [2.2.7](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.6...v2.2.7) (2026-11-12)
 
 
