@@ -191,13 +191,13 @@ importers:
         version: 12.0.3(@nestjs/common@12.4.2(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.4.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@1.1.2(mssql@12.7.14))
       '@rapiq/adapter-typeorm':
         specifier: 2.4.1
-        version: 2.4.1(@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.0))(@rapiq/core@2.4.0)(typeorm@1.1.2(mssql@12.7.14))
+        version: 2.4.1(@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.1))(@rapiq/core@2.4.1)(typeorm@1.1.2(mssql@12.7.14))
       '@rapiq/codec-url':
         specifier: 2.4.1
-        version: 2.4.1(@rapiq/core@2.4.0)(@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.0)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.0)))(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.0))
+        version: 2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1)))(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))
       '@rapiq/core':
-        specifier: 2.4.0
-        version: 2.4.0
+        specifier: 2.4.1
+        version: 2.4.1
       class-transformer:
         specifier: 0.5.1
         version: 0.5.1
@@ -1001,8 +1001,8 @@ packages:
       '@rapiq/parser-expression': ^2.4.1
       '@rapiq/parser-simple': ^2.4.1
 
-  '@rapiq/core@2.4.0':
-    resolution: {integrity: sha512-fplfdI8YPfXnIjVCtPPLGoT1BwvXJgfU5kASJ65qKxWcpRn7ZjawXnpmqCuakBN7XbYwwK5V7H5rr9Fsqg92mg==}
+  '@rapiq/core@2.4.1':
+    resolution: {integrity: sha512-NRSsB9RlVFKPtXlj/EwDIxsGq4hfY6qnWmzm2BftJbD9rwBze6yuybvaGeVaMb7jigIjQWbMz2z2i/sBGHrGTQ==}
 
   '@rapiq/parser-expression@2.4.1':
     resolution: {integrity: sha512-EzMg1wHvt8/JChOAxMU+tpGC7o7Vu+hxbB5sbTBmc3jgRX+4rwMAqyeHl+IOXbYWBe9spPmqZzNG3y+mgaV7Ig==}
@@ -4063,39 +4063,39 @@ snapshots:
 
   '@protobufjs/utf8@1.1.2': {}
 
-  '@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.0)':
+  '@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.1)':
     dependencies:
-      '@rapiq/core': 2.4.0
+      '@rapiq/core': 2.4.1
 
-  '@rapiq/adapter-typeorm@2.4.1(@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.0))(@rapiq/core@2.4.0)(typeorm@1.1.2(mssql@12.7.14))':
+  '@rapiq/adapter-typeorm@2.4.1(@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.1))(@rapiq/core@2.4.1)(typeorm@1.1.2(mssql@12.7.14))':
     dependencies:
-      '@rapiq/adapter-sql': 2.4.1(@rapiq/core@2.4.0)
-      '@rapiq/core': 2.4.0
+      '@rapiq/adapter-sql': 2.4.1(@rapiq/core@2.4.1)
+      '@rapiq/core': 2.4.1
       change-case: 5.4.4
       typeorm: 1.1.2(mssql@12.7.14)
 
-  '@rapiq/codec-url@2.4.1(@rapiq/core@2.4.0)(@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.0)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.0)))(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.0))':
+  '@rapiq/codec-url@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1)))(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))':
     dependencies:
       '@ebec/core': 1.3.2
-      '@rapiq/core': 2.4.0
-      '@rapiq/parser-expression': 2.4.1(@rapiq/core@2.4.0)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.0))
-      '@rapiq/parser-simple': 2.4.1(@rapiq/core@2.4.0)
+      '@rapiq/core': 2.4.1
+      '@rapiq/parser-expression': 2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))
+      '@rapiq/parser-simple': 2.4.1(@rapiq/core@2.4.1)
       pathtrace: 2.2.3
       qs: 6.17.1
 
-  '@rapiq/core@2.4.0':
+  '@rapiq/core@2.4.1':
     dependencies:
       '@ebec/core': 1.3.2
       pathtrace: 2.2.3
 
-  '@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.0)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.0))':
+  '@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))':
     dependencies:
-      '@rapiq/core': 2.4.0
-      '@rapiq/parser-simple': 2.4.1(@rapiq/core@2.4.0)
+      '@rapiq/core': 2.4.1
+      '@rapiq/parser-simple': 2.4.1(@rapiq/core@2.4.1)
 
-  '@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.0)':
+  '@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1)':
     dependencies:
-      '@rapiq/core': 2.4.0
+      '@rapiq/core': 2.4.1
 
   '@rolldown/binding-android-arm-eabi@1.2.18':
     optional: true
