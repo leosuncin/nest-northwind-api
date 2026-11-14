@@ -225,10 +225,10 @@ importers:
         version: 10.6.0
       '@nestjs/cli':
         specifier: 12.0.12
-        version: 12.0.12(@types/node@26.6.6)(prettier@3.9.10)
+        version: 12.0.12(@types/node@26.6.6)(prettier@3.10.0)
       '@nestjs/schematics':
         specifier: 12.0.13
-        version: 12.0.13(chokidar@5.0.0)(prettier@3.9.10)(typescript@6.0.3)
+        version: 12.0.13(chokidar@5.0.0)(prettier@3.10.0)(typescript@6.0.3)
       '@nestjs/testing':
         specifier: 12.4.2
         version: 12.4.2(@nestjs/common@12.4.2(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.4.2)(@nestjs/platform-express@12.4.2)
@@ -272,8 +272,8 @@ importers:
         specifier: 3.9.1
         version: 3.9.1(debug@4.4.3)
       prettier:
-        specifier: 3.9.10
-        version: 3.9.10
+        specifier: 3.10.0
+        version: 3.10.0
       source-map-support:
         specifier: 0.5.21
         version: 0.5.21
@@ -2807,8 +2807,8 @@ packages:
     resolution: {integrity: sha512-C+y9x90UElAddDZmV4qOx9W53B61PO7cIqWz2dQsWlwswuq4mr8NEwytdGKboYbQlGZ3awrkTeNvcZiZNHnQ8A==}
     engines: {node: '>=20'}
 
-  prettier@3.9.10:
-    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
+  prettier@3.10.0:
+    resolution: {integrity: sha512-mBi4765LgjO1PFjlEs7pUeK0nb1bw71c+N4/ItfeUWNdY5cV2pRKaFpbbFRYmDJMO+5ZwzGxHRqHxFZna7iv5w==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -3833,13 +3833,13 @@ snapshots:
 
   '@lukeed/csprng@1.1.0': {}
 
-  '@nestjs/cli@12.0.12(@types/node@26.6.6)(prettier@3.9.10)':
+  '@nestjs/cli@12.0.12(@types/node@26.6.6)(prettier@3.10.0)':
     dependencies:
       '@angular-devkit/core': 22.2.6(chokidar@5.0.0)
       '@angular-devkit/schematics': 22.2.6(chokidar@5.0.0)
       '@angular-devkit/schematics-cli': 22.2.6(@types/node@26.6.6)(chokidar@5.0.0)
       '@inquirer/prompts': 8.7.5(@types/node@26.6.6)
-      '@nestjs/schematics': 12.0.13(chokidar@5.0.0)(prettier@3.9.10)(typescript@6.0.3)
+      '@nestjs/schematics': 12.0.13(chokidar@5.0.0)(prettier@3.10.0)(typescript@6.0.3)
       ansis: 4.5.0
       chokidar: 5.0.0
       cli-table3: 0.6.5
@@ -3913,7 +3913,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@nestjs/schematics@12.0.13(chokidar@5.0.0)(prettier@3.9.10)(typescript@6.0.3)':
+  '@nestjs/schematics@12.0.13(chokidar@5.0.0)(prettier@3.10.0)(typescript@6.0.3)':
     dependencies:
       '@angular-devkit/core': 22.2.6(chokidar@5.0.0)
       '@angular-devkit/schematics': 22.2.6(chokidar@5.0.0)
@@ -3922,7 +3922,7 @@ snapshots:
       pluralize: 8.0.0
       typescript: 6.0.3
     optionalDependencies:
-      prettier: 3.9.10
+      prettier: 3.10.0
     transitivePeerDependencies:
       - chokidar
 
@@ -5614,7 +5614,7 @@ snapshots:
 
   powershell-utils@0.2.1: {}
 
-  prettier@3.9.10: {}
+  prettier@3.10.0: {}
 
   process-nextick-args@2.0.1: {}
 
