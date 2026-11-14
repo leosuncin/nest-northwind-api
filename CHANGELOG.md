@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.9](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.8...v2.2.9) (2026-11-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @rapiq/codec-url to v2.4.1 ([36f708c](https://github.com/leosuncin/nest-northwind-api/commit/36f708c105fe879f2e1dce834830b472cbb3b81a))
+
 ## [2.2.8](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.7...v2.2.8) (2026-11-14)
 
 
