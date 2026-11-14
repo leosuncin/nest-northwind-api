@@ -190,8 +190,8 @@ importers:
         specifier: 12.0.3
         version: 12.0.3(@nestjs/common@12.4.2(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.4.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@1.1.2(mssql@12.7.14))
       '@rapiq/adapter-typeorm':
-        specifier: 2.4.0
-        version: 2.4.0(@rapiq/adapter-sql@2.4.0(@rapiq/core@2.4.0))(@rapiq/core@2.4.0)(typeorm@1.1.2(mssql@12.7.14))
+        specifier: 2.4.1
+        version: 2.4.1(@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.0))(@rapiq/core@2.4.0)(typeorm@1.1.2(mssql@12.7.14))
       '@rapiq/codec-url':
         specifier: 2.4.0
         version: 2.4.0(@rapiq/core@2.4.0)(@rapiq/parser-expression@2.4.0(@rapiq/core@2.4.0)(@rapiq/parser-simple@2.4.0(@rapiq/core@2.4.0)))(@rapiq/parser-simple@2.4.0(@rapiq/core@2.4.0))
@@ -974,22 +974,22 @@ packages:
   '@protobufjs/utf8@1.1.2':
     resolution: {integrity: sha512-b1UQwcEZ4yCnMCD8DAL1VlbvBJE9/IX4FTIp7BG1xYpf29SLazLSrqUkj4w7Y5y7cCVP6E5tcqqcI0xemPkHug==}
 
-  '@rapiq/adapter-sql@2.4.0':
-    resolution: {integrity: sha512-2X5JgBmFFERNCvLoXZ/luH6Ni5y/VCFwPGxIELv2yvSZYUzcU+LRiyiJMFrKJk7ltkuMdFOY+RjtzQOQmpA9ww==}
+  '@rapiq/adapter-sql@2.4.1':
+    resolution: {integrity: sha512-CE7ZdPQ4/YnExrn0eLz+CTZl1PTZK5tHlKYZ4X/gR16wkHCHcIINrPyB9XXRIq9/OVTIwEeEBkNCu/wQuFTv7w==}
     peerDependencies:
-      '@rapiq/adapter-memory': ^2.4.0
-      '@rapiq/core': ^2.4.0
+      '@rapiq/adapter-memory': ^2.4.1
+      '@rapiq/core': ^2.4.1
     peerDependenciesMeta:
       '@rapiq/adapter-memory':
         optional: true
 
-  '@rapiq/adapter-typeorm@2.4.0':
-    resolution: {integrity: sha512-0s4a8zgNjBjRcpGT+F2XC+vrfH6IVditKSWjFXqVc2YPT8q96uHLsltnEQH2saiJyi+xb7T8yaQz9zn0dTzeXw==}
+  '@rapiq/adapter-typeorm@2.4.1':
+    resolution: {integrity: sha512-9Vf1fj8NHc002y8LqCo0Byc511VuGqZrNf2NPyFu8o2csTHShsIZsZCMzQmAtfzj7HQO5WkEI2tlJNniy/9Qhw==}
     peerDependencies:
-      '@rapiq/adapter-memory': ^2.4.0
-      '@rapiq/adapter-sql': ^2.4.0
-      '@rapiq/core': ^2.4.0
-      typeorm: ^1.1.1
+      '@rapiq/adapter-memory': ^2.4.1
+      '@rapiq/adapter-sql': ^2.4.1
+      '@rapiq/core': ^2.4.1
+      typeorm: ^1.1.2
     peerDependenciesMeta:
       '@rapiq/adapter-memory':
         optional: true
@@ -4063,13 +4063,13 @@ snapshots:
 
   '@protobufjs/utf8@1.1.2': {}
 
-  '@rapiq/adapter-sql@2.4.0(@rapiq/core@2.4.0)':
+  '@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.0)':
     dependencies:
       '@rapiq/core': 2.4.0
 
-  '@rapiq/adapter-typeorm@2.4.0(@rapiq/adapter-sql@2.4.0(@rapiq/core@2.4.0))(@rapiq/core@2.4.0)(typeorm@1.1.2(mssql@12.7.14))':
+  '@rapiq/adapter-typeorm@2.4.1(@rapiq/adapter-sql@2.4.1(@rapiq/core@2.4.0))(@rapiq/core@2.4.0)(typeorm@1.1.2(mssql@12.7.14))':
     dependencies:
-      '@rapiq/adapter-sql': 2.4.0(@rapiq/core@2.4.0)
+      '@rapiq/adapter-sql': 2.4.1(@rapiq/core@2.4.0)
       '@rapiq/core': 2.4.0
       change-case: 5.4.4
       typeorm: 1.1.2(mssql@12.7.14)
