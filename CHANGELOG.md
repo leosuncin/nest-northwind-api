@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.12](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.11...v2.2.12) (2026-11-15)
+
+
+### Bug Fixes
+
+* **deps:** update nest monorepo to v12.5.0 ([f2dddab](https://github.com/leosuncin/nest-northwind-api/commit/f2dddab12a6bcb19276b989ec42b5180c1e29ebf))
+
 ## [2.2.11](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.10...v2.2.11) (2026-11-15)
 
 
