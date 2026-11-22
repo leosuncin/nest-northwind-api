@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.13](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.12...v2.2.13) (2026-11-22)
+
+### Bug Fixes
+
+* **deps:** update dependency mssql to v12.7.15 ([eca0915](https://github.com/leosuncin/nest-northwind-api/commit/eca0915bc91da2e879f9d91371ceed42ab70933d))
+
 ## [2.2.12](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.11...v2.2.12) (2026-11-15)
 
 
