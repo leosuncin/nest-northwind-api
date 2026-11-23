@@ -284,8 +284,8 @@ importers:
         specifier: 0.32.0
         version: 0.32.0
       typeorm-extension:
-        specifier: 4.4.0
-        version: 4.4.0(typeorm@1.1.3(mssql@12.7.16))
+        specifier: 4.5.0
+        version: 4.5.0(typeorm@1.1.3(mssql@12.7.16))
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -3198,12 +3198,12 @@ packages:
     resolution: {integrity: sha512-faYHw0anBbc/kWF3zFTEnxSFOAGUX9GFbOBthvDdLsIlEoWOFOtS0zgCiQYwIskL9iGXZL3kAXD8OoZ4GmMATA==}
     engines: {node: '>= 18'}
 
-  typeorm-extension@4.4.0:
-    resolution: {integrity: sha512-mvFp25MBTRSvY6hQ+cNgnKGaOO4xuoJF2NwAnOlfZ/TsoAwH8tlQfmMvdbjZr8/cI/kxyldgYjyxgCP0BZwFXQ==}
+  typeorm-extension@4.5.0:
+    resolution: {integrity: sha512-lqoUK3aILYJN1p+JpA/ZYzi9kmUcsAd7OeCxcs9dN3986jnNLhT/xL2XnnyZiatFg8L6+WRKoFmPpOBFvfN1ZA==}
     engines: {node: '>=22.0.0'}
     hasBin: true
     peerDependencies:
-      typeorm: ^1.1.2
+      typeorm: ^1.1.3
 
   typeorm@1.1.3:
     resolution: {integrity: sha512-zpBWklzlWjoPFKZ5Frf1TWT9OzXqtJaej7HvdGGvx0TQLsKgSoG2HeKVbORXZhJNWhJ8BNFK+WqsogyuMGN2dQ==}
@@ -6165,7 +6165,7 @@ snapshots:
       media-typer: 1.1.1
       mime-types: 3.0.2
 
-  typeorm-extension@4.4.0(typeorm@1.1.3(mssql@12.7.16)):
+  typeorm-extension@4.5.0(typeorm@1.1.3(mssql@12.7.16)):
     dependencies:
       citty: 0.2.2
       envix: 1.5.0
