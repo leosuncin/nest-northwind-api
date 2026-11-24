@@ -193,8 +193,8 @@ importers:
         specifier: 2.5.0
         version: 2.5.0(@rapiq/adapter-sql@2.5.1(@rapiq/core@2.4.1))(@rapiq/core@2.4.1)(typeorm@1.1.3(mssql@12.8.0))
       '@rapiq/codec-url':
-        specifier: 2.4.1
-        version: 2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1)))(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))
+        specifier: 2.5.0
+        version: 2.5.0(@rapiq/core@2.4.1)(@rapiq/parser-expression@2.5.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.5.1(@rapiq/core@2.4.1)))(@rapiq/parser-simple@2.5.1(@rapiq/core@2.4.1))
       '@rapiq/core':
         specifier: 2.4.1
         version: 2.4.1
@@ -1010,26 +1010,26 @@ packages:
       '@rapiq/adapter-memory':
         optional: true
 
-  '@rapiq/codec-url@2.4.1':
-    resolution: {integrity: sha512-HW0avIafrKemy88b1toU0AAoOD9pTldGO4xjX/a6fevRa3HLK4yALpM9mx5232UBFDUShcuBUjpUR8r8DCHYjw==}
+  '@rapiq/codec-url@2.5.0':
+    resolution: {integrity: sha512-lZ4C3I3QcY3rCMMzo8MluBNZoWbeO16Utb1i+lGm5xv6eniw9iIWpkJipboe9efQ7o6XroRSlLdcCUr2Pr1i4w==}
     peerDependencies:
-      '@rapiq/core': ^2.4.1
-      '@rapiq/parser-expression': ^2.4.1
-      '@rapiq/parser-simple': ^2.4.1
+      '@rapiq/core': ^2.5.0
+      '@rapiq/parser-expression': ^2.5.0
+      '@rapiq/parser-simple': ^2.5.0
 
   '@rapiq/core@2.4.1':
     resolution: {integrity: sha512-NRSsB9RlVFKPtXlj/EwDIxsGq4hfY6qnWmzm2BftJbD9rwBze6yuybvaGeVaMb7jigIjQWbMz2z2i/sBGHrGTQ==}
 
-  '@rapiq/parser-expression@2.4.1':
-    resolution: {integrity: sha512-EzMg1wHvt8/JChOAxMU+tpGC7o7Vu+hxbB5sbTBmc3jgRX+4rwMAqyeHl+IOXbYWBe9spPmqZzNG3y+mgaV7Ig==}
+  '@rapiq/parser-expression@2.5.1':
+    resolution: {integrity: sha512-qYzgMxR2skv/7MfcpU0sP3I9Qm1BWR7rgrCVCzcYCjJtqew5lexHMPGkvK90ERUfMhU1tupCUrd5Q7DI0qEQCQ==}
     peerDependencies:
-      '@rapiq/core': ^2.4.1
-      '@rapiq/parser-simple': ^2.4.1
+      '@rapiq/core': ^2.5.1
+      '@rapiq/parser-simple': ^2.5.1
 
-  '@rapiq/parser-simple@2.4.1':
-    resolution: {integrity: sha512-Xirg+Bpnh/2nLpErGnmnj8H3NUgnG8m+dzB493nymp88V2X7pTY1wamMs+6/Nx6PwL/N4SnqIkoZ1qzewhy1cg==}
+  '@rapiq/parser-simple@2.5.1':
+    resolution: {integrity: sha512-PrnLQlkar3mWEOgM3FgKs8KJC8vDqHx7GKRoom7OpWpusxuSz8X+SjKIl1BXcVCWcaWVJITF/G//z1RR/JdmXA==}
     peerDependencies:
-      '@rapiq/core': ^2.4.1
+      '@rapiq/core': ^2.5.1
 
   '@rolldown/binding-android-arm-eabi@1.2.19':
     resolution: {integrity: sha512-e+Ebe0WT+9tbXmNKPIiC8YrWAHYwug3m6i4p3rZGGulfZri1jtI4HslT+OZnFf/OIHowWF71DTlHwXBP2SiA7A==}
@@ -4126,12 +4126,12 @@ snapshots:
       change-case: 5.4.4
       typeorm: 1.1.3(mssql@12.8.0)
 
-  '@rapiq/codec-url@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1)))(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))':
+  '@rapiq/codec-url@2.5.0(@rapiq/core@2.4.1)(@rapiq/parser-expression@2.5.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.5.1(@rapiq/core@2.4.1)))(@rapiq/parser-simple@2.5.1(@rapiq/core@2.4.1))':
     dependencies:
       '@ebec/core': 1.3.2
       '@rapiq/core': 2.4.1
-      '@rapiq/parser-expression': 2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))
-      '@rapiq/parser-simple': 2.4.1(@rapiq/core@2.4.1)
+      '@rapiq/parser-expression': 2.5.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.5.1(@rapiq/core@2.4.1))
+      '@rapiq/parser-simple': 2.5.1(@rapiq/core@2.4.1)
       pathtrace: 2.2.3
       qs: 6.17.1
 
@@ -4140,12 +4140,12 @@ snapshots:
       '@ebec/core': 1.3.2
       pathtrace: 2.2.3
 
-  '@rapiq/parser-expression@2.4.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1))':
+  '@rapiq/parser-expression@2.5.1(@rapiq/core@2.4.1)(@rapiq/parser-simple@2.5.1(@rapiq/core@2.4.1))':
     dependencies:
       '@rapiq/core': 2.4.1
-      '@rapiq/parser-simple': 2.4.1(@rapiq/core@2.4.1)
+      '@rapiq/parser-simple': 2.5.1(@rapiq/core@2.4.1)
 
-  '@rapiq/parser-simple@2.4.1(@rapiq/core@2.4.1)':
+  '@rapiq/parser-simple@2.5.1(@rapiq/core@2.4.1)':
     dependencies:
       '@rapiq/core': 2.4.1
 
