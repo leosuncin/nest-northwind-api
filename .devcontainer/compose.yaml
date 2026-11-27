@@ -1,6 +1,6 @@
 services:
   workspace:
-    image: ghcr.io/bare-devcontainer/mise:trixie@sha256:cf9f47ad3d6197813a8852960c60ff4f20654b4007cdea56a4a9ed0745436992
+    image: ghcr.io/bare-devcontainer/mise:trixie@sha256:ac4c005a81c384274c724ef76bc545af53ac2fc66466d965b22d7cd465060a10
     command: sleep infinity
     init: true
     volumes:
