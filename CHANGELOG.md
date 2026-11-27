@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.21](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.20...v2.2.21) (2026-11-27)
+
+### Bug Fixes
+
+* **deps:** update dependency @rapiq/core to v2.5.1 ([aab6118](https://github.com/leosuncin/nest-northwind-api/commit/aab61188556973102ef3ddd399faad9b34e20d55))
+
 ## [2.2.20](https://github.com/leosuncin/nest-northwind-api/compare/v2.2.19...v2.2.20) (2026-11-27)
 
 ### Bug Fixes
