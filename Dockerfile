@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1@sha256:572cebbc2b15e6f84c077742952674889cb63cd5e9b80abdffcbe587b6f19183
 
-ARG PNPM_VERSION=12@sha256:349c846c6c9dab76b2f6fbf4b2df14d5a8c9b2a0fce92fc7e5c2eec3f437e801
+ARG PNPM_VERSION=12@sha256:4f92e7dc6a1f6c3475c5fc7c4fdd22818e61adb59c75bef9e87aa0a6bf7cd61f
 
 FROM ghcr.io/pnpm/pnpm:${PNPM_VERSION} AS deps
 
