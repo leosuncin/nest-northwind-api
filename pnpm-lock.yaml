@@ -190,8 +190,8 @@ importers:
         specifier: 12.0.3
         version: 12.0.3(@nestjs/common@12.5.0(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.5.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)(typeorm@1.1.3(mssql@12.8.1))
       '@rapiq/adapter-typeorm':
-        specifier: 2.5.0
-        version: 2.5.0(@rapiq/adapter-sql@2.5.1(@rapiq/core@2.5.1))(@rapiq/core@2.5.1)(typeorm@1.1.3(mssql@12.8.1))
+        specifier: 2.5.1
+        version: 2.5.1(@rapiq/adapter-sql@2.5.1(@rapiq/core@2.5.1))(@rapiq/core@2.5.1)(typeorm@1.1.3(mssql@12.8.1))
       '@rapiq/codec-url':
         specifier: 2.5.1
         version: 2.5.1(@rapiq/core@2.5.1)(@rapiq/parser-expression@2.5.1(@rapiq/core@2.5.1)(@rapiq/parser-simple@2.5.1(@rapiq/core@2.5.1)))(@rapiq/parser-simple@2.5.1(@rapiq/core@2.5.1))
@@ -999,12 +999,12 @@ packages:
       '@rapiq/adapter-memory':
         optional: true
 
-  '@rapiq/adapter-typeorm@2.5.0':
-    resolution: {integrity: sha512-l9ueYxcJ1UiEzJhmpNuPGJ2/prGUYbCSxlwOLHMgvmzLv0YkIphUu3pgXeCMHxx8wDUzEWcA5xjMalxNyhoeiQ==}
+  '@rapiq/adapter-typeorm@2.5.1':
+    resolution: {integrity: sha512-+Aj2rpGEO9dhUPibYTuRU7Fb2f+OW3x5ESx1O/3CB9EYoIsYhGQzv/PiEuIIagTpl7kltZCMe73LoA9GnyApaQ==}
     peerDependencies:
-      '@rapiq/adapter-memory': ^2.5.0
-      '@rapiq/adapter-sql': ^2.5.0
-      '@rapiq/core': ^2.5.0
+      '@rapiq/adapter-memory': ^2.5.1
+      '@rapiq/adapter-sql': ^2.5.1
+      '@rapiq/core': ^2.5.1
       typeorm: ^1.1.3
     peerDependenciesMeta:
       '@rapiq/adapter-memory':
@@ -4119,7 +4119,7 @@ snapshots:
     dependencies:
       '@rapiq/core': 2.5.1
 
-  '@rapiq/adapter-typeorm@2.5.0(@rapiq/adapter-sql@2.5.1(@rapiq/core@2.5.1))(@rapiq/core@2.5.1)(typeorm@1.1.3(mssql@12.8.1))':
+  '@rapiq/adapter-typeorm@2.5.1(@rapiq/adapter-sql@2.5.1(@rapiq/core@2.5.1))(@rapiq/core@2.5.1)(typeorm@1.1.3(mssql@12.8.1))':
     dependencies:
       '@rapiq/adapter-sql': 2.5.1(@rapiq/core@2.5.1)
       '@rapiq/core': 2.5.1
